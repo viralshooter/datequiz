@@ -32,8 +32,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const result = await getLink(slug);
   if (!result) return { title: "Yeslink" };
 
-  const title = `${result.link.match_name}, ho una domanda per te 💌`;
-  const description = "30 secondi, zero impegno. Promesso. (Quasi.)";
+  const title = `${result.link.match_name}, I've got a question for you 💌`;
+  const description = "30 seconds, no strings attached. Promise. (Almost.)";
 
   return {
     title,

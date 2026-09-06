@@ -15,7 +15,7 @@ export function SignOutButton() {
 
   return (
     <button type="button" onClick={signOut} className="text-sm font-semibold text-neutral-400 hover:text-white">
-      Esci
+      Log out
     </button>
   );
 }

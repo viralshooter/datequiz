@@ -100,7 +100,7 @@ export function EvasiveAskOut({ matchName, onYes }: EvasiveAskOutProps) {
         }}
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white"
       >
-        SÌ
+        YES
       </motion.button>
 
       <motion.button
@@ -127,7 +127,7 @@ export function EvasiveAskOut({ matchName, onYes }: EvasiveAskOutProps) {
       </motion.button>
 
       <p className="absolute bottom-10 left-1/2 -translate-x-1/2 text-xs text-neutral-400">
-        (occhio, il NO è un po&apos; scivoloso 😏)
+        (careful, NO is a little slippery 😏)
       </p>
     </div>
   );

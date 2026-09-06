@@ -12,59 +12,60 @@ export default function PrivacyPage() {
       <Nav />
       <div className="mx-auto max-w-2xl px-6 py-10">
         <div className="mb-8 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-300">
-          Questa è una bozza standard, non ancora rivista da un legale. Va
-          verificata e adattata prima di un lancio reale.
+          This is a standard draft, not yet reviewed by a lawyer. It should
+          be checked and adapted before a real launch.
         </div>
 
         <h1 className="text-2xl font-extrabold">Privacy Policy</h1>
-        <p className="mt-1 text-sm text-neutral-500">Ultimo aggiornamento: {new Date().toLocaleDateString("it-IT")}</p>
+        <p className="mt-1 text-sm text-neutral-500">Last updated: {new Date().toLocaleDateString("en-US")}</p>
 
-        <Section title="Chi siamo">
-          Yeslink è un servizio che permette di creare un link personalizzato per
-          invitare qualcuno a un appuntamento e raccogliere la sua risposta.
+        <Section title="Who we are">
+          Yeslink is a service that lets you create a personalized link to
+          invite someone on a date and collect their answer.
         </Section>
 
-        <Section title="Dati che raccogliamo">
+        <Section title="Data we collect">
           <ul className="list-disc space-y-1 pl-5">
-            <li>La tua email, quando crei un account o un link (per avvisarti via email delle risposte).</li>
-            <li>Il nome che inserisci per la persona che inviti.</li>
-            <li>Le risposte fornite dalla persona invitata (attività scelte, giorni disponibili) — non richiediamo alcun dato di identificazione a lei.</li>
-            <li>Dati tecnici minimi legati all&apos;uso del servizio (es. eventi di utilizzo del funnel), senza cookie di profilazione o tracciamento pubblicitario di terze parti.</li>
+            <li>Your email, when you create an account or a link (to notify you of answers).</li>
+            <li>The name you enter for the person you're inviting.</li>
+            <li>The answers given by the invited person (activities picked, days available) — we don't ask her for any identifying data.</li>
+            <li>Minimal technical data tied to using the service (e.g. funnel usage events), with no profiling cookies or third-party ad tracking.</li>
           </ul>
         </Section>
 
-        <Section title="Perché li raccogliamo">
-          Per fornire il servizio (generare link, salvare risposte), inviarti le
-          notifiche via email quando qualcuno risponde, gestire eventuali
-          pagamenti ed eventuali comunicazioni relative all&apos;account.
+        <Section title="Why we collect it">
+          To provide the service (generate links, save answers), send you
+          email notifications when someone answers, handle any payments,
+          and any account-related communication.
         </Section>
 
-        <Section title="Con chi li condividiamo">
+        <Section title="Who we share it with">
           <ul className="list-disc space-y-1 pl-5">
-            <li><strong>Supabase</strong> — hosting del database e autenticazione.</li>
-            <li><strong>Vercel</strong> — hosting dell&apos;applicazione.</li>
-            <li><strong>Stripe</strong> — elaborazione dei pagamenti (non vediamo né conserviamo i dati della tua carta).</li>
-            <li><strong>Resend</strong> — invio delle email di notifica.</li>
+            <li><strong>Supabase</strong> — database hosting and authentication.</li>
+            <li><strong>Vercel</strong> — application hosting.</li>
+            <li><strong>Stripe</strong> — payment processing (we never see or store your card details).</li>
+            <li><strong>Resend</strong> — sending notification emails.</li>
           </ul>
-          Non vendiamo né condividiamo i tuoi dati con terzi per finalità di marketing.
+          We don't sell or share your data with third parties for marketing purposes.
         </Section>
 
-        <Section title="Conservazione">
-          Conserviamo i dati finché il tuo account resta attivo, o finché
-          necessario per le finalità sopra indicate.
+        <Section title="Retention">
+          We keep data for as long as your account stays active, or as
+          needed for the purposes above.
         </Section>
 
-        <Section title="I tuoi diritti">
-          Puoi chiedere accesso, correzione o cancellazione dei tuoi dati in
-          qualsiasi momento scrivendo all&apos;indirizzo di contatto indicato sul sito.
+        <Section title="Your rights">
+          You can request access to, correction of, or deletion of your
+          data at any time by writing to the contact address listed on
+          the site.
         </Section>
 
-        <Section title="Contatti">
-          Per qualsiasi domanda su questa policy, scrivici tramite i canali indicati sul sito.
+        <Section title="Contact">
+          For any questions about this policy, reach us through the channels listed on the site.
         </Section>
 
         <Link href="/" className="mt-10 inline-block text-sm font-semibold text-brand">
-          ← Torna alla home
+          ← Back to home
         </Link>
       </div>
       </div>

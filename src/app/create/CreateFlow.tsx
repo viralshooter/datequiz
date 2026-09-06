@@ -35,9 +35,9 @@ export function CreateFlow() {
     setError(null);
 
     try {
-      // Best-effort: aggancia l'email alla sessione anonima per il login
-      // futuro (magic link). Se fallisce (es. email già di un altro
-      // account) non deve bloccare la creazione del link.
+      // Best-effort: attach the email to the anonymous session for
+      // future login (magic link). If it fails (e.g. email already
+      // belongs to another account) it must not block link creation.
       try {
         const supabase = createSupabaseBrowserClient();
         await supabase.auth.updateUser({ email: notifyEmail.trim() });
@@ -62,7 +62,7 @@ export function CreateFlow() {
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Qualcosa è andato storto, riprova.");
+        setError(data.error ?? "Something went wrong, please try again.");
         setStep("days");
         return;
       }
@@ -70,7 +70,7 @@ export function CreateFlow() {
       setSlug(data.slug);
       setStep("result");
     } catch {
-      setError("Qualcosa è andato storto, riprova.");
+      setError("Something went wrong, please try again.");
       setStep("days");
     }
   }
@@ -91,18 +91,18 @@ export function CreateFlow() {
       <AnimatePresence mode="wait">
         {step === "name" && (
           <StepCard key="name">
-            <h1 className="text-3xl font-extrabold">Chi è la fortunata? 😏</h1>
+            <h1 className="text-3xl font-extrabold">Who's the lucky one? 😏</h1>
             <p className="mt-2 text-neutral-400">
-              Un invito lampo: le chiedi di uscire, lei sceglie cosa fare e quando.
+              A quick invite: you ask her out, she picks what to do and when.
             </p>
             <label className="mt-8 block text-sm font-semibold text-neutral-300">
-              Come si chiama?
+              What's her name?
             </label>
             <input
               autoFocus
               value={matchName}
               onChange={(e) => setMatchName(e.target.value)}
-              placeholder="Es. Giulia"
+              placeholder="e.g. Emma"
               className="mt-2 w-full rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
             />
             <button
@@ -111,16 +111,16 @@ export function CreateFlow() {
               onClick={() => setStep("days")}
               className="mt-6 w-full rounded-full bg-brand px-8 py-4 text-lg font-bold text-ink shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform active:scale-95 disabled:opacity-40"
             >
-              Continua →
+              Continue →
             </button>
           </StepCard>
         )}
 
         {step === "days" && (
           <StepCard key="days">
-            <h1 className="text-2xl font-extrabold">Quando sei libero?</h1>
+            <h1 className="text-2xl font-extrabold">When are you free?</h1>
             <p className="mt-2 text-neutral-400">
-              Seleziona i giorni da proporre: lei sceglierà tra questi.
+              Pick the days to offer her: she'll choose one of these.
             </p>
 
             <div className="mt-6 flex max-h-72 flex-wrap gap-2 overflow-y-auto pr-1">
@@ -144,13 +144,13 @@ export function CreateFlow() {
             </div>
 
             <label className="mt-6 block text-sm font-semibold text-neutral-300">
-              La tua email (per avvisarti appena risponde)
+              Your email (to notify you the moment she answers)
             </label>
             <input
               type="email"
               value={notifyEmail}
               onChange={(e) => setNotifyEmail(e.target.value)}
-              placeholder="tuo@email.com"
+              placeholder="you@email.com"
               className="mt-2 w-full rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
             />
 
@@ -162,7 +162,7 @@ export function CreateFlow() {
               onClick={generateLink}
               className="mt-6 w-full rounded-full bg-brand px-8 py-4 text-lg font-bold text-ink shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform active:scale-95 disabled:opacity-40"
             >
-              Genera link →
+              Generate link →
             </button>
           </StepCard>
         )}
@@ -171,7 +171,7 @@ export function CreateFlow() {
           <StepCard key="generating">
             <div className="flex flex-col items-center gap-4 py-16 text-center">
               <div className="text-5xl">⚡</div>
-              <p className="font-semibold text-neutral-400">Genero il tuo link…</p>
+              <p className="font-semibold text-neutral-400">Generating your link…</p>
             </div>
           </StepCard>
         )}
@@ -184,9 +184,9 @@ export function CreateFlow() {
 
         {step === "result" && slug && (
           <StepCard key="result">
-            <h1 className="text-2xl font-extrabold">Fatto. Palla a lei 🎯</h1>
+            <h1 className="text-2xl font-extrabold">Done. Ball's in her court 🎯</h1>
             <p className="mt-2 text-neutral-400">
-              Manda questo link a {matchName}: vedrà una pagina giocosa, poi la fatidica domanda.
+              Send this link to {matchName}: she'll see a playful page, then the big question.
             </p>
 
             <div className="mt-6 rounded-xl border border-white/10 bg-ink-2 p-3">
@@ -197,24 +197,24 @@ export function CreateFlow() {
               <CopyButton text={fullLink} />
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(
-                  `Ehi ${matchName}! Ho una domanda per te 👀 ${fullLink}`
+                  `Hey ${matchName}! I've got a question for you 👀 ${fullLink}`
                 )}`}
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-center font-bold text-ink shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform active:scale-95"
               >
-                Invia su WhatsApp
+                Send on WhatsApp
               </a>
               <a
                 href={`/r/${slug}`}
                 className="rounded-full border-2 border-white/15 px-6 py-3 text-center font-semibold text-neutral-300"
               >
-                Vai alla pagina risultato
+                Go to the results page
               </a>
             </div>
 
             <button type="button" onClick={reset} className="mt-6 w-full text-sm font-semibold text-brand">
-              + Crea un altro link
+              + Create another link
             </button>
           </StepCard>
         )}
@@ -248,7 +248,7 @@ function CopyButton({ text }: { text: string }) {
       }}
       className="rounded-full border-2 border-white/15 px-6 py-3 font-semibold text-neutral-200 transition-transform active:scale-95"
     >
-      {copied ? "Copiato ✅" : "Copia link"}
+      {copied ? "Copied ✅" : "Copy link"}
     </button>
   );
 }

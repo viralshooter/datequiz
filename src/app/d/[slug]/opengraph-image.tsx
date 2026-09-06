@@ -18,7 +18,7 @@ export default async function Image({ params }: ImageProps) {
     .eq("slug", slug)
     .maybeSingle();
 
-  const matchName = link?.match_name ?? "tu";
+  const matchName = link?.match_name ?? "you";
 
   return new ImageResponse(
     (
@@ -46,7 +46,7 @@ export default async function Image({ params }: ImageProps) {
             display: "flex",
           }}
         >
-          {matchName}, ho una domanda per te
+          {matchName}, I've got a question for you
         </div>
         <div
           style={{
@@ -57,7 +57,7 @@ export default async function Image({ params }: ImageProps) {
             display: "flex",
           }}
         >
-          30 secondi · Yeslink
+          30 seconds · Yeslink
         </div>
       </div>
     ),

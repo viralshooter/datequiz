@@ -64,10 +64,10 @@ export default async function Image() {
             display: "flex",
           }}
         >
-          Chiediglielo prima che risponda un altro
+          Ask her out before someone else does
         </div>
         <div style={{ marginTop: 20, fontSize: 26, color: "#22c55e", display: "flex" }}>
-          Il link che non si può ignorare
+          The link that can't be ignored
         </div>
       </div>
     ),

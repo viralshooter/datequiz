@@ -206,7 +206,7 @@ function Hero({ matchName, onStart }: { matchName: string; onStart: () => void }
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
       >
-        Ehi {matchName} 👋
+        Hey {matchName} 👋
       </motion.h1>
       <motion.p
         className="max-w-xs text-neutral-600"
@@ -214,7 +214,7 @@ function Hero({ matchName, onStart }: { matchName: string; onStart: () => void }
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
       >
-        Ho una domanda veloce per te. Ci metti 30 secondi, promesso.
+        I've got a quick question for you. 30 seconds, promise.
       </motion.p>
 
       <motion.button
@@ -230,7 +230,7 @@ function Hero({ matchName, onStart }: { matchName: string; onStart: () => void }
         whileTap={{ scale: 0.95 }}
         className="mt-4 w-full max-w-xs rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white"
       >
-        Dai, vai →
+        Let's go →
       </motion.button>
     </motion.div>
   );

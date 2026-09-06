@@ -26,7 +26,7 @@ export function ConfirmSummary({ activities, days, submitting, onConfirm }: Conf
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 15 }}
       >
-        Tutto ok? 👀
+        Everything look right? 👀
       </motion.h1>
 
       <motion.div
@@ -35,7 +35,7 @@ export function ConfirmSummary({ activities, days, submitting, onConfirm }: Conf
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Voglia di</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">In the mood for</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {activityLabels.map((a, i) => (
             <motion.span
@@ -57,7 +57,7 @@ export function ConfirmSummary({ activities, days, submitting, onConfirm }: Conf
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">I tuoi giorni</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Your days</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {days.map((day, i) => (
             <motion.span
@@ -83,7 +83,7 @@ export function ConfirmSummary({ activities, days, submitting, onConfirm }: Conf
         whileTap={{ scale: 0.95 }}
         className="w-full max-w-xs rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-lg shadow-brand/30 disabled:opacity-60"
       >
-        {submitting ? "Un attimo…" : "Ok, ci sto"}
+        {submitting ? "One sec…" : "I'm in"}
       </motion.button>
     </motion.div>
   );

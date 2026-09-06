@@ -45,22 +45,21 @@ export default async function DashboardPage() {
       <div className="relative z-10">
         <Nav />
         <div className="mx-auto max-w-2xl px-6 py-8">
-        <h1 className="text-2xl font-extrabold">I tuoi link</h1>
+        <h1 className="text-2xl font-extrabold">Your links</h1>
         <p className="mt-1 text-neutral-400">
-          {user.email} · {profile?.credits ?? 0} credit{profile?.credits === 1 ? "o" : "i"} residu
-          {profile?.credits === 1 ? "o" : "i"}
+          {user.email} · {profile?.credits ?? 0} credit{profile?.credits === 1 ? "" : "s"} left
         </p>
 
         <Link
           href="/create"
           className="mt-6 inline-block rounded-full bg-brand px-6 py-3 text-sm font-bold text-ink shadow-[0_0_20px_rgba(34,197,94,0.35)]"
         >
-          + Crea un nuovo link
+          + Create a new link
         </Link>
 
         <div className="mt-8 flex flex-col gap-3">
           {(!links || links.length === 0) && (
-            <p className="text-neutral-500">Non hai ancora creato nessun link.</p>
+            <p className="text-neutral-500">You haven't created any links yet.</p>
           )}
 
           {(links as LinkRow[] | null)?.map((link) => {
@@ -78,7 +77,7 @@ export default async function DashboardPage() {
                       answerRow ? "bg-brand/15 text-brand" : "bg-white/10 text-neutral-400"
                     }`}
                   >
-                    {answerRow ? "Ha risposto" : "In attesa"}
+                    {answerRow ? "Answered" : "Waiting"}
                   </span>
                 </div>
 
@@ -92,7 +91,7 @@ export default async function DashboardPage() {
                   href={`/r/${link.slug}`}
                   className="mt-3 inline-block text-sm font-semibold text-brand"
                 >
-                  Vedi dettagli →
+                  View details →
                 </Link>
               </div>
             );
@@ -102,7 +101,7 @@ export default async function DashboardPage() {
         {purchases && purchases.length > 0 && (
           <>
             <h2 className="mt-10 text-sm font-semibold uppercase tracking-wide text-neutral-500">
-              Acquisti
+              Purchases
             </h2>
             <div className="mt-3 flex flex-col gap-2">
               {purchases.map((p, i) => (
@@ -112,7 +111,7 @@ export default async function DashboardPage() {
                 >
                   <span className="font-semibold text-neutral-200">{p.package}</span>
                   <span className={p.status === "completed" ? "text-brand" : "text-neutral-500"}>
-                    {p.status === "completed" ? "Completato" : "In sospeso"}
+                    {p.status === "completed" ? "Completed" : "Pending"}
                   </span>
                 </div>
               ))}

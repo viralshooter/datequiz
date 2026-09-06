@@ -11,8 +11,8 @@ export default async function LandingPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Chi ha già un account vero non deve rivedere il pitch "primo link
-  // gratis": va dritto alla sua dashboard.
+  // Anyone with a real account shouldn't see the "first link free"
+  // pitch again: send them straight to their dashboard.
   if (user && user.is_anonymous === false) {
     redirect("/dashboard");
   }
@@ -37,15 +37,15 @@ export default async function LandingPage() {
 function AnnouncementBar() {
   return (
     <div className="bg-brand px-4 py-2 text-center text-sm font-bold text-ink">
-      🎁 Il primo link è gratis — nessuna carta richiesta
+      🎁 Your first link is free — no card required
     </div>
   );
 }
 
 const MINI_STEPS = [
-  { emoji: "✍️", label: "Scrivi il link" },
-  { emoji: "👀", label: "Lei risponde" },
-  { emoji: "📬", label: "Tu lo sai subito" },
+  { emoji: "✍️", label: "Write the link" },
+  { emoji: "👀", label: "She answers" },
+  { emoji: "📬", label: "You find out instantly" },
 ];
 
 function Hero() {
@@ -53,34 +53,34 @@ function Hero() {
     <section className="mx-auto flex max-w-2xl flex-col items-center px-6 pb-16 pt-12 text-center">
       <div className="flex flex-wrap items-center justify-center gap-2">
         <span className="rounded-full border border-brand/30 bg-brand/10 px-4 py-1 text-xs font-bold uppercase tracking-widest text-brand">
-          Il wingman digitale
+          The digital wingman
         </span>
         <span className="rounded-full bg-brand px-4 py-1 text-xs font-bold uppercase tracking-widest text-ink">
-          🎁 Primo link gratis
+          🎁 First link free
         </span>
       </div>
       <h1 className="mt-6 text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-6xl">
-        Chiediglielo prima che risponda un altro
+        Ask her out before someone else does
       </h1>
       <p className="mt-5 max-w-lg text-lg text-neutral-400">
-        Le mandi un link. Lei prova a dirti di no — non ci riesce, letteralmente — e finisce
-        per scegliere lei cosa fare e quando. Tu ti godi la vittoria.
+        You send a link. She tries to say no — she literally can't — and ends up picking
+        what to do and when. You get to enjoy the win.
       </p>
       <div className="mt-9 flex flex-col gap-3 sm:flex-row">
         <Link
           href="/create"
           className="rounded-full bg-brand px-8 py-4 text-lg font-bold text-ink shadow-[0_0_30px_rgba(34,197,94,0.35)] transition-transform active:scale-95"
         >
-          Crea il tuo primo Yeslink gratis →
+          Create your first Yeslink free →
         </Link>
         <Link
           href="/login"
           className="rounded-full border-2 border-white/15 px-8 py-4 text-lg font-semibold text-white hover:border-white/30"
         >
-          Ho già un account
+          I already have an account
         </Link>
       </div>
-      <p className="mt-4 text-sm text-neutral-500">Nessuna carta richiesta. Paghi solo se continui a usarlo.</p>
+      <p className="mt-4 text-sm text-neutral-500">No card required. You only pay if you keep using it.</p>
 
       <div className="mt-12 flex w-full flex-wrap items-center justify-center gap-x-2 gap-y-4">
         {MINI_STEPS.map((step, i) => (
@@ -100,18 +100,18 @@ function Hero() {
 const STEPS = [
   {
     number: "01",
-    title: "Scrivi il link",
-    description: "Il suo nome, i giorni in cui sei libero, la tua email. Meno di un minuto.",
+    title: "Write the link",
+    description: "Her name, the days you're free, your email. Under a minute.",
   },
   {
     number: "02",
-    title: "Il NO non regge",
-    description: "Letteralmente scappa dal dito. Lei finisce per dire sì e scegliere cosa fare.",
+    title: "The NO doesn't hold up",
+    description: "It literally runs from her finger. She ends up saying yes and picking what to do.",
   },
   {
     number: "03",
-    title: "Incassi",
-    description: "Ti arriva una mail appena risponde. Zero ansia da doppia spunta blu.",
+    title: "You cash in",
+    description: "You get an email the moment she answers. Zero anxiety over left-on-read texts.",
   },
 ];
 
@@ -119,7 +119,7 @@ function HowItWorks() {
   return (
     <section className="border-t border-white/10 bg-ink-2/40 py-20">
       <div className="mx-auto max-w-4xl px-6">
-        <h2 className="text-center text-2xl font-extrabold sm:text-3xl">Come funziona</h2>
+        <h2 className="text-center text-2xl font-extrabold sm:text-3xl">How it works</h2>
         <div className="mt-10 grid gap-6 sm:grid-cols-3">
           {STEPS.map((step) => (
             <div key={step.title} className="rounded-2xl border border-white/10 bg-ink p-6">
@@ -135,9 +135,9 @@ function HowItWorks() {
 }
 
 const TRUST_ITEMS = [
-  { emoji: "🕵️", text: "A lei non chiediamo niente: nessuna registrazione, nessun dato." },
-  { emoji: "🎭", text: "La pagina che apre è chiaramente giocosa, non un finto quiz spam." },
-  { emoji: "🎚️", text: "Puoi togliere il badge Yeslink quando vuoi (opzionale, a pagamento)." },
+  { emoji: "🕵️", text: "We don't ask her for anything: no sign-up, no data." },
+  { emoji: "🎭", text: "The page she opens is obviously playful, not a shady quiz." },
+  { emoji: "🎚️", text: "You can remove the Yeslink badge whenever you want (paid, optional)." },
 ];
 
 function TrustBar() {
@@ -159,16 +159,16 @@ function Pricing() {
   return (
     <section className="border-t border-white/10 bg-ink-2/40 py-20">
       <div className="mx-auto max-w-4xl px-6">
-        <h2 className="text-center text-2xl font-extrabold sm:text-3xl">Prezzi senza sorprese</h2>
+        <h2 className="text-center text-2xl font-extrabold sm:text-3xl">Pricing, no surprises</h2>
         <p className="mt-2 text-center text-neutral-400">
-          Il primo è gratis. Gli altri te li guadagni.
+          The first one's free. The rest you earn.
         </p>
 
         <div className="mt-10 grid gap-6 sm:grid-cols-3">
           <div className="rounded-2xl border-2 border-brand bg-brand/10 p-6 text-center">
-            <p className="text-sm font-bold uppercase tracking-wide text-brand">Per iniziare</p>
-            <p className="mt-2 text-3xl font-extrabold text-white">Gratis</p>
-            <p className="mt-1 text-sm text-neutral-400">1 link, nessuna carta richiesta</p>
+            <p className="text-sm font-bold uppercase tracking-wide text-brand">To get started</p>
+            <p className="mt-2 text-3xl font-extrabold text-white">Free</p>
+            <p className="mt-1 text-sm text-neutral-400">1 link, no card required</p>
           </div>
 
           {PRICING_PACKAGES.map((pkg) => (
@@ -186,27 +186,27 @@ function Pricing() {
 
 const FAQ_ITEMS = [
   {
-    q: "Lei deve scaricare un'app o registrarsi?",
-    a: "No. Apre il link, risponde, fine. Zero registrazione dal suo lato.",
+    q: "Does she need to download an app or sign up?",
+    a: "No. She opens the link, answers, done. Zero sign-up on her end.",
   },
   {
-    q: "Non sembra uno scam?",
-    a: "La pagina è pensata apposta per essere chiaramente giocosa fin dal primo secondo. Non un finto quiz, non una landing anonima.",
+    q: "Doesn't it look like a scam?",
+    a: "The page is designed to be obviously playful from the first second. Not a fake quiz, not an anonymous landing page.",
   },
   {
-    q: "Posso togliere la scritta \"creato con Yeslink\"?",
-    a: "Sì, con il pacchetto rimozione watermark diventa una pagina completamente tua.",
+    q: 'Can I remove the "made with Yeslink" badge?',
+    a: "Yes, the watermark removal package makes it entirely your own page.",
   },
   {
-    q: "Come faccio a sapere se ha risposto?",
-    a: "Ti mandiamo una email appena risponde. Tutto è comunque anche nella tua dashboard.",
+    q: "How do I know if she answered?",
+    a: "We email you the moment she does. It's also always in your dashboard.",
   },
 ];
 
 function Faq() {
   return (
     <section className="mx-auto max-w-2xl px-6 py-20">
-      <h2 className="text-center text-2xl font-extrabold sm:text-3xl">Domande che ti stai facendo</h2>
+      <h2 className="text-center text-2xl font-extrabold sm:text-3xl">Questions you're probably asking</h2>
       <div className="mt-8 flex flex-col gap-4">
         {FAQ_ITEMS.map((item) => (
           <div key={item.q} className="rounded-2xl border border-white/10 bg-ink-2 p-5">
@@ -227,7 +227,7 @@ function Footer() {
           Privacy
         </Link>
         <Link href="/terms" className="hover:text-neutral-300">
-          Termini
+          Terms
         </Link>
       </div>
       <p>© {new Date().getFullYear()} Yeslink</p>

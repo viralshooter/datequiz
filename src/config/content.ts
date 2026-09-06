@@ -1,33 +1,35 @@
 import type { DateActivity } from "@/types/content";
 
 /**
- * Le 6 attività tra cui lei sceglie (selezione multipla) dopo aver
- * detto sì. File pensato per essere editato facilmente: aggiungi,
- * rimuovi o rinomina le card senza toccare la logica altrove.
+ * The 6 activities she picks from (multi-select) after saying yes.
+ * Built to be edited freely: add, remove, or rename cards without
+ * touching the logic anywhere else. The `id` values are stored in the
+ * database (see ActivityId) — safe to change label/emoji/description,
+ * but changing an `id` needs a matching DB migration.
  */
 export const ACTIVITIES: DateActivity[] = [
-  { id: "cena", label: "Cena", emoji: "🍝", description: "Tavolo, calma, chiacchiere" },
-  { id: "drink", label: "Drink", emoji: "🥂", description: "Aperitivo, musica, gente" },
-  { id: "sport", label: "Sport", emoji: "🏋️", description: "Energia, movimento, sfida" },
-  { id: "esperienza", label: "Esperienza", emoji: "🎯", description: "Qualcosa mai fatto prima" },
-  { id: "cultura", label: "Cultura", emoji: "🖼️", description: "Musei, mostre, ispirazione" },
-  { id: "outdoor", label: "Outdoor", emoji: "🏞️", description: "Aria aperta, sole, natura" },
+  { id: "cena", label: "Dinner", emoji: "🍝", description: "Table, no rush, real talk" },
+  { id: "drink", label: "Drinks", emoji: "🥂", description: "Cocktails, music, people" },
+  { id: "sport", label: "Sport", emoji: "🏋️", description: "Energy, movement, a challenge" },
+  { id: "esperienza", label: "Experience", emoji: "🎯", description: "Something you've never done" },
+  { id: "cultura", label: "Culture", emoji: "🖼️", description: "Museums, shows, inspiration" },
+  { id: "outdoor", label: "Outdoor", emoji: "🏞️", description: "Fresh air, sun, nature" },
 ];
 
-export const ASK_OUT_QUESTION = "Esci con me?";
+export const ASK_OUT_QUESTION = "Will you go out with me?";
 
-/** Messaggi mostrati (a rotazione casuale) nell'animazione di celebrazione dopo il SÌ. */
+/** Messages shown (picked at random) in the celebration animation after YES. */
 export const CELEBRATION_MESSAGES = [
-  "Lo sapevo! 🎉",
-  "Ottima scelta 😍",
+  "Knew it! 🎉",
+  "Great choice 😍",
   "Yes!!! 🙌",
-  "Non vedo l'ora 💌",
-  "Top, dai 🔥",
+  "Can't wait 💌",
+  "Let's go 🔥",
 ];
 
 /**
- * Tuning del bottone SÌ che cresce ad ogni fuga del NO.
- * scale parte da `base` e sale di `step` per ogni fuga, fino a `max`.
+ * Tuning for the YES button, which grows every time NO escapes.
+ * Scale starts at `base` and climbs by `step` per escape, up to `max`.
  */
 export const YES_GROWTH = {
   base: 1,
@@ -35,5 +37,5 @@ export const YES_GROWTH = {
   max: 1.8,
 };
 
-/** Raggio (px) entro cui il mouse fa scattare la fuga del NO. */
+/** Radius (px) within which the mouse makes NO run away. */
 export const NO_PROXIMITY_RADIUS = 110;

@@ -21,7 +21,7 @@ export function AdminLogin() {
     });
 
     if (!res.ok) {
-      setError("Password errata.");
+      setError("Wrong password.");
       setLoading(false);
       return;
     }
@@ -47,7 +47,7 @@ export function AdminLogin() {
           disabled={loading || !password}
           className="rounded-lg bg-[var(--series-1)] px-4 py-3 font-semibold text-black disabled:opacity-50"
         >
-          {loading ? "…" : "Entra"}
+          {loading ? "…" : "Log in"}
         </button>
       </form>
     </div>

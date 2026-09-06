@@ -8,13 +8,13 @@ import { AdminLogin } from "./AdminLogin";
 export const dynamic = "force-dynamic";
 
 const STEP_LABELS: Record<EventType, string> = {
-  link_created: "Link creati",
-  link_opened: "Link aperti",
-  answered_yes: "Hanno detto sì",
-  activities_selected: "Attività scelte",
-  badge_clicked: "Click sul badge",
-  checkout_started: "Checkout avviati",
-  purchase_completed: "Acquisti completati",
+  link_created: "Links created",
+  link_opened: "Links opened",
+  answered_yes: "Said yes",
+  activities_selected: "Activities picked",
+  badge_clicked: "Badge clicks",
+  checkout_started: "Checkouts started",
+  purchase_completed: "Purchases completed",
 };
 
 async function countEvent(
@@ -51,19 +51,19 @@ export default async function AdminPage() {
           className="rounded-full border px-3 py-1 text-xs font-semibold"
           style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}
         >
-          Pagamenti: {PAYMENTS_ENABLED ? "attivi" : "disattivati (validazione)"}
+          Payments: {PAYMENTS_ENABLED ? "live" : "off (validation)"}
         </span>
       </div>
 
       <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatTile label="Link creati" value={funnel[0]?.count ?? 0} />
-        <StatTile label="Sì" value={funnel.find((f) => f.type === "answered_yes")?.count ?? 0} />
-        <StatTile label="Attività scelte" value={funnel.find((f) => f.type === "activities_selected")?.count ?? 0} />
-        <StatTile label="Acquisti" value={funnel.find((f) => f.type === "purchase_completed")?.count ?? 0} />
+        <StatTile label="Links created" value={funnel[0]?.count ?? 0} />
+        <StatTile label="Yes" value={funnel.find((f) => f.type === "answered_yes")?.count ?? 0} />
+        <StatTile label="Activities picked" value={funnel.find((f) => f.type === "activities_selected")?.count ?? 0} />
+        <StatTile label="Purchases" value={funnel.find((f) => f.type === "purchase_completed")?.count ?? 0} />
       </div>
 
       <h2 className="mt-10 text-sm font-semibold uppercase tracking-wide" style={{ color: "var(--text-secondary)" }}>
-        Funnel di conversione
+        Conversion funnel
       </h2>
 
       <div className="mt-4 flex flex-col gap-4">
@@ -82,9 +82,9 @@ export default async function AdminPage() {
                 <span style={{ color: "var(--text-secondary)" }}>
                   {step.count}
                   {pctOfPrev !== null && (
-                    <span style={{ color: "var(--muted)" }}> · {pctOfPrev}% del passo precedente</span>
+                    <span style={{ color: "var(--muted)" }}> · {pctOfPrev}% of previous step</span>
                   )}
-                  <span style={{ color: "var(--muted)" }}> · {pctOfFirst}% del totale</span>
+                  <span style={{ color: "var(--muted)" }}> · {pctOfFirst}% of total</span>
                 </span>
               </div>
               <div

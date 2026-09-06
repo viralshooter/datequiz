@@ -38,14 +38,14 @@ export async function Nav() {
           </>
         ) : (
           <Link href="/login" className="text-sm font-semibold text-neutral-300 hover:text-white">
-            Accedi
+            Log in
           </Link>
         )}
         <Link
           href="/create"
           className="rounded-full bg-brand px-4 py-2 text-sm font-bold text-ink shadow-[0_0_20px_rgba(34,197,94,0.35)] transition-transform active:scale-95"
         >
-          Crea un link
+          Create a link
         </Link>
       </div>
     </nav>

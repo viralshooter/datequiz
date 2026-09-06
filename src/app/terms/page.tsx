@@ -3,7 +3,7 @@ import { Nav } from "@/components/Nav";
 import { AmbientBackground } from "@/components/AmbientBackground";
 import { PRICING_PACKAGES } from "@/config/pricing";
 
-export const metadata = { title: "Termini di servizio — Yeslink" };
+export const metadata = { title: "Terms of Service — Yeslink" };
 
 export default function TermsPage() {
   return (
@@ -13,58 +13,57 @@ export default function TermsPage() {
       <Nav />
       <div className="mx-auto max-w-2xl px-6 py-10">
         <div className="mb-8 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-300">
-          Questa è una bozza standard, non ancora rivista da un legale. Va
-          verificata e adattata prima di un lancio reale.
+          This is a standard draft, not yet reviewed by a lawyer. It should
+          be checked and adapted before a real launch.
         </div>
 
-        <h1 className="text-2xl font-extrabold">Termini di servizio</h1>
-        <p className="mt-1 text-sm text-neutral-500">Ultimo aggiornamento: {new Date().toLocaleDateString("it-IT")}</p>
+        <h1 className="text-2xl font-extrabold">Terms of Service</h1>
+        <p className="mt-1 text-sm text-neutral-500">Last updated: {new Date().toLocaleDateString("en-US")}</p>
 
-        <Section title="Il servizio">
-          Yeslink permette di creare un link personalizzato per invitare qualcuno
-          a un appuntamento e raccogliere la sua risposta. Il primo link è
-          gratuito; l&apos;uso oltre il limite gratuito richiede l&apos;acquisto di uno dei
-          pacchetti disponibili.
+        <Section title="The service">
+          Yeslink lets you create a personalized link to invite someone on
+          a date and collect their answer. The first link is free; use
+          beyond the free limit requires purchasing one of the available
+          packages.
         </Section>
 
-        <Section title="Account e crediti">
-          Ogni account riceve 1 credito gratuito (1 link). I crediti aggiuntivi si
-          acquistano tramite i pacchetti mostrati sul sito:{" "}
-          {PRICING_PACKAGES.map((p) => `${p.label} (${p.priceLabel})`).join(", ")}. I
-          crediti non hanno scadenza ma non sono rimborsabili una volta usati per
-          creare un link.
+        <Section title="Accounts and credits">
+          Every account gets 1 free credit (1 link). Additional credits are
+          purchased through the packages shown on the site:{" "}
+          {PRICING_PACKAGES.map((p) => `${p.label} (${p.priceLabel})`).join(", ")}. Credits
+          don't expire but aren't refundable once used to create a link.
         </Section>
 
-        <Section title="Pagamenti">
-          I pagamenti sono gestiti da Stripe. Non conserviamo i dati della tua
-          carta. In caso di problemi con un acquisto, contattaci: valutiamo i
-          rimborsi caso per caso.
+        <Section title="Payments">
+          Payments are handled by Stripe. We don't store your card details.
+          If you have an issue with a purchase, contact us: we review
+          refunds case by case.
         </Section>
 
-        <Section title="Uso consentito">
-          Ti impegni a non usare il servizio per inviare contenuti offensivi,
-          molesti, illegali o rivolti a persone che non hanno acconsentito a
-          essere contattate. Ci riserviamo il diritto di sospendere account che
-          violano queste condizioni.
+        <Section title="Acceptable use">
+          You agree not to use the service to send offensive, harassing,
+          illegal content, or to reach people who haven't consented to be
+          contacted. We reserve the right to suspend accounts that violate
+          these terms.
         </Section>
 
-        <Section title="Limitazione di responsabilità">
-          Il servizio è fornito &ldquo;così com&apos;è&rdquo;. Non garantiamo che una risposta
-          arrivi entro un certo tempo, né siamo responsabili delle interazioni
-          che ne derivano tra gli utenti.
+        <Section title="Limitation of liability">
+          The service is provided "as is." We don't guarantee that an
+          answer will arrive within a given time, nor are we responsible
+          for the interactions that result between users.
         </Section>
 
-        <Section title="Modifiche">
-          Possiamo aggiornare questi termini nel tempo; le modifiche rilevanti
-          saranno comunicate tramite il sito.
+        <Section title="Changes">
+          We may update these terms over time; material changes will be
+          announced on the site.
         </Section>
 
-        <Section title="Contatti">
-          Per domande su questi termini, scrivici tramite i canali indicati sul sito.
+        <Section title="Contact">
+          For questions about these terms, reach us through the channels listed on the site.
         </Section>
 
         <Link href="/" className="mt-10 inline-block text-sm font-semibold text-brand">
-          ← Torna alla home
+          ← Back to home
         </Link>
       </div>
       </div>

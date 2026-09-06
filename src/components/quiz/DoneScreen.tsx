@@ -23,7 +23,7 @@ export function DoneScreen() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        Fatto!
+        Done!
       </motion.h1>
       <motion.p
         className="max-w-xs text-neutral-600"
@@ -31,8 +31,8 @@ export function DoneScreen() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        Gli è arrivato tutto: cosa ti va di fare e quando sei libera. Ora deve solo
-        organizzarsi 😏
+        He's got it all now: what you're up for and when you're free. His move to
+        organize it 😏
       </motion.p>
     </motion.div>
   );

@@ -23,9 +23,9 @@ export function DayPicker({ availableDays, onContinue }: DayPickerProps) {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <h1 className="text-2xl font-extrabold text-neutral-900">Quando ti va? 📅</h1>
+      <h1 className="text-2xl font-extrabold text-neutral-900">When works for you? 📅</h1>
       <p className="max-w-xs text-neutral-600">
-        Spunta i giorni in cui sei libera tra questi:
+        Check off the days you're free among these:
       </p>
 
       <div className="flex w-full max-w-xs flex-col gap-3">
@@ -74,7 +74,7 @@ export function DayPicker({ availableDays, onContinue }: DayPickerProps) {
         transition={{ duration: 0.3 }}
         className="mt-2 w-full max-w-xs rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-lg shadow-brand/30 disabled:opacity-40"
       >
-        Continua →
+        Continue →
       </motion.button>
     </motion.div>
   );

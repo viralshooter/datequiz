@@ -27,9 +27,9 @@ export function ActivityGrid({ onConfirm }: ActivityGridProps) {
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        Cosa ti va di fare? 🎈
+        What are you in the mood for? 🎈
       </motion.h1>
-      <p className="text-sm text-neutral-600">Puoi sceglierne anche più di una.</p>
+      <p className="text-sm text-neutral-600">You can pick more than one.</p>
 
       <div className="grid w-full max-w-sm grid-cols-2 gap-3">
         {ACTIVITIES.map((activity, i) => {
@@ -89,7 +89,7 @@ export function ActivityGrid({ onConfirm }: ActivityGridProps) {
         transition={{ duration: 0.3 }}
         className="mt-2 w-full max-w-sm rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-lg shadow-brand/30 disabled:opacity-40"
       >
-        Continua →
+        Continue →
       </motion.button>
     </motion.div>
   );

@@ -7,9 +7,9 @@ interface AnswerNotificationParams {
 }
 
 /**
- * Notifica via email a "lui" quando lei risponde. Best-effort: chi la
- * chiama deve avvolgerla in try/catch e non far fallire il salvataggio
- * della risposta se l'invio fallisce.
+ * Email notification to "him" when she answers. Best-effort: callers
+ * must wrap it in try/catch and never let a send failure break saving
+ * the answer.
  */
 export async function sendAnswerNotification({ to, matchName, slug }: AnswerNotificationParams) {
   const apiKey = process.env.RESEND_API_KEY;
@@ -22,11 +22,11 @@ export async function sendAnswerNotification({ to, matchName, slug }: AnswerNoti
   await resend.emails.send({
     from: "Yeslink <onboarding@resend.dev>",
     to,
-    subject: `${matchName} ha risposto! 🎉`,
+    subject: `${matchName} answered! 🎉`,
     html: `
-      <p>Ciao,</p>
-      <p><strong>${matchName}</strong> ha risposto al tuo invito su Yeslink.</p>
-      <p><a href="${resultUrl}">Guarda cosa ha scelto →</a></p>
+      <p>Hey,</p>
+      <p><strong>${matchName}</strong> answered your invite on Yeslink.</p>
+      <p><a href="${resultUrl}">See what she picked →</a></p>
     `,
   });
 }

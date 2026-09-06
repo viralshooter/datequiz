@@ -26,21 +26,21 @@ export function Paywall({ userId, onCancel }: PaywallProps) {
       });
       const data = await res.json();
       if (!res.ok || !data.url) {
-        setError(data.error ?? "Checkout non disponibile al momento.");
+        setError(data.error ?? "Checkout isn't available right now.");
         setLoadingPackage(null);
         return;
       }
       window.location.href = data.url;
     } catch {
-      setError("Checkout non disponibile al momento.");
+      setError("Checkout isn't available right now.");
       setLoadingPackage(null);
     }
   }
 
   return (
     <div>
-      <h1 className="text-2xl font-extrabold text-white">Hai finito i link gratuiti ✋</h1>
-      <p className="mt-2 text-neutral-400">Scegli un pacchetto per continuare a creare link.</p>
+      <h1 className="text-2xl font-extrabold text-white">You're out of free links ✋</h1>
+      <p className="mt-2 text-neutral-400">Pick a package to keep creating links.</p>
 
       <div className="mt-6 flex flex-col gap-3">
         {PRICING_PACKAGES.map((pkg) => (
@@ -65,7 +65,7 @@ export function Paywall({ userId, onCancel }: PaywallProps) {
       {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
 
       <button type="button" onClick={onCancel} className="mt-6 text-sm font-semibold text-neutral-500">
-        ← Torna indietro
+        ← Go back
       </button>
     </div>
   );

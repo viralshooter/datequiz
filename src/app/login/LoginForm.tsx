@@ -27,7 +27,7 @@ export function LoginForm() {
     });
     setLoading(false);
     if (error) {
-      setError("Qualcosa è andato storto, riprova.");
+      setError("Something went wrong, please try again.");
       return;
     }
     setSent(true);
@@ -43,17 +43,17 @@ export function LoginForm() {
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="text-5xl">📬</div>
-          <h1 className="mt-4 text-2xl font-extrabold">Controlla la tua posta</h1>
+          <h1 className="mt-4 text-2xl font-extrabold">Check your inbox</h1>
           <p className="mt-2 text-neutral-400">
-            Ti abbiamo mandato un link a <strong className="text-white">{email}</strong>. Clicca su
-            quello e sei dentro.
+            We sent a link to <strong className="text-white">{email}</strong>. Click it and
+            you're in.
           </p>
           <button
             type="button"
             onClick={() => setSent(false)}
             className="mt-6 text-sm font-semibold text-brand"
           >
-            Usa un&apos;altra email
+            Use a different email
           </button>
         </motion.div>
       </div>
@@ -80,15 +80,15 @@ export function LoginForm() {
             />
           </svg>
         </span>
-        <h1 className="mt-4 text-2xl font-extrabold">Accedi a Yeslink</h1>
-        <p className="mt-2 text-neutral-400">Niente password: ti mandiamo un link, clicchi ed entri.</p>
+        <h1 className="mt-4 text-2xl font-extrabold">Log in to Yeslink</h1>
+        <p className="mt-2 text-neutral-400">No password: we send you a link, you click it, you're in.</p>
 
         <input
           autoFocus
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="tuo@email.com"
+          placeholder="you@email.com"
           className="mt-6 w-full rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
         />
 
@@ -100,7 +100,7 @@ export function LoginForm() {
           onClick={sendMagicLink}
           className="mt-4 w-full rounded-full bg-brand px-8 py-4 text-lg font-bold text-ink shadow-[0_0_30px_rgba(34,197,94,0.3)] transition-transform active:scale-95 disabled:opacity-40"
         >
-          {loading ? "Un attimo…" : "Invia magic link →"}
+          {loading ? "One sec…" : "Send magic link →"}
         </button>
       </motion.div>
     </div>

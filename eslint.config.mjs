@@ -14,6 +14,14 @@ const eslintConfig = [
   {
     ignores: [".next/**", "out/**", "build/**", "next-env.d.ts"],
   },
+  {
+    rules: {
+      // Apostrophes and quotes are everywhere in English copy and render
+      // fine in JSX; only keep the check for the genuinely ambiguous
+      // characters that can silently break markup.
+      "react/no-unescaped-entities": ["error", { forbid: [">", "}"] }],
+    },
+  },
 ];
 
 export default eslintConfig;
