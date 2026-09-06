@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel
+.env*
+
+# strumenti CLI scaricati localmente (es. stripe.exe), tunnel debug logs
+.tools/
+*.log
