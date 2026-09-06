@@ -5,6 +5,7 @@ import { PRICING_PACKAGES } from "@/config/pricing";
 export default function LandingPage() {
   return (
     <div className="min-h-dvh bg-ink text-white">
+      <AnnouncementBar />
       <Nav />
       <Hero />
       <HowItWorks />
@@ -16,12 +17,31 @@ export default function LandingPage() {
   );
 }
 
+function AnnouncementBar() {
+  return (
+    <div className="bg-brand px-4 py-2 text-center text-sm font-bold text-ink">
+      🎁 Il primo link è gratis — nessuna carta richiesta
+    </div>
+  );
+}
+
+const MINI_STEPS = [
+  { emoji: "✍️", label: "Scrivi il link" },
+  { emoji: "👀", label: "Lei risponde" },
+  { emoji: "📬", label: "Tu lo sai subito" },
+];
+
 function Hero() {
   return (
-    <section className="mx-auto flex max-w-2xl flex-col items-center px-6 pb-20 pt-14 text-center">
-      <span className="rounded-full border border-brand/30 bg-brand/10 px-4 py-1 text-xs font-bold uppercase tracking-widest text-brand">
-        Il wingman digitale
-      </span>
+    <section className="mx-auto flex max-w-2xl flex-col items-center px-6 pb-16 pt-12 text-center">
+      <div className="flex flex-wrap items-center justify-center gap-2">
+        <span className="rounded-full border border-brand/30 bg-brand/10 px-4 py-1 text-xs font-bold uppercase tracking-widest text-brand">
+          Il wingman digitale
+        </span>
+        <span className="rounded-full bg-brand px-4 py-1 text-xs font-bold uppercase tracking-widest text-ink">
+          🎁 Primo link gratis
+        </span>
+      </div>
       <h1 className="mt-6 text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-6xl">
         Chiediglielo prima che risponda un altro
       </h1>
@@ -43,7 +63,19 @@ function Hero() {
           Ho già un account
         </Link>
       </div>
-      <p className="mt-4 text-sm text-neutral-500">Gratis il primo giro. Nessuna carta richiesta.</p>
+      <p className="mt-4 text-sm text-neutral-500">Nessuna carta richiesta. Paghi solo se continui a usarlo.</p>
+
+      <div className="mt-12 flex w-full flex-wrap items-center justify-center gap-x-2 gap-y-4">
+        {MINI_STEPS.map((step, i) => (
+          <div key={step.label} className="flex items-center gap-2">
+            <div className="flex flex-col items-center gap-1 rounded-xl border border-white/10 bg-ink-2/60 px-4 py-3">
+              <span className="text-2xl">{step.emoji}</span>
+              <span className="text-xs font-semibold text-neutral-300">{step.label}</span>
+            </div>
+            {i < MINI_STEPS.length - 1 && <span className="text-lg text-neutral-600">→</span>}
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
