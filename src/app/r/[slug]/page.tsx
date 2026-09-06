@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { AmbientBackground } from "@/components/AmbientBackground";
 import { ACTIVITIES } from "@/config/content";
 import type { ActivityId } from "@/types/content";
 
@@ -89,8 +90,11 @@ export default async function ResultPage({ params }: PageProps) {
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center bg-ink px-6 py-10 text-center text-white">
-      {children}
+    <div className="relative min-h-dvh text-white">
+      <AmbientBackground />
+      <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 py-10 text-center">
+        {children}
+      </div>
     </div>
   );
 }

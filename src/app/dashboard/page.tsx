@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Nav } from "@/components/Nav";
+import { AmbientBackground } from "@/components/AmbientBackground";
 import { ACTIVITIES } from "@/config/content";
 import type { ActivityId } from "@/types/content";
 
@@ -39,9 +40,11 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <div className="min-h-dvh bg-ink text-white">
-      <Nav />
-      <div className="mx-auto max-w-2xl px-6 py-8">
+    <div className="relative min-h-dvh text-white">
+      <AmbientBackground />
+      <div className="relative z-10">
+        <Nav />
+        <div className="mx-auto max-w-2xl px-6 py-8">
         <h1 className="text-2xl font-extrabold">I tuoi link</h1>
         <p className="mt-1 text-neutral-400">
           {user.email} · {profile?.credits ?? 0} credit{profile?.credits === 1 ? "o" : "i"} residu
@@ -116,6 +119,7 @@ export default async function DashboardPage() {
             </div>
           </>
         )}
+        </div>
       </div>
     </div>
   );

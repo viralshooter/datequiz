@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { Nav } from "@/components/Nav";
+import { AmbientBackground } from "@/components/AmbientBackground";
 import { PRICING_PACKAGES } from "@/config/pricing";
 
 export const metadata = { title: "Termini di servizio — Yeslink" };
 
 export default function TermsPage() {
   return (
-    <div className="min-h-dvh bg-ink text-white">
+    <div className="relative min-h-dvh text-white">
+      <AmbientBackground />
+      <div className="relative z-10">
       <Nav />
       <div className="mx-auto max-w-2xl px-6 py-10">
         <div className="mb-8 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-300">
@@ -63,6 +66,7 @@ export default function TermsPage() {
         <Link href="/" className="mt-10 inline-block text-sm font-semibold text-brand">
           ← Torna alla home
         </Link>
+      </div>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Nav } from "@/components/Nav";
+import { AmbientBackground } from "@/components/AmbientBackground";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { PRICING_PACKAGES } from "@/config/pricing";
 
@@ -17,15 +18,18 @@ export default async function LandingPage() {
   }
 
   return (
-    <div className="min-h-dvh bg-ink text-white">
-      <AnnouncementBar />
-      <Nav />
-      <Hero />
-      <HowItWorks />
-      <TrustBar />
-      <Pricing />
-      <Faq />
-      <Footer />
+    <div className="relative min-h-dvh text-white">
+      <AmbientBackground />
+      <div className="relative z-10">
+        <AnnouncementBar />
+        <Nav />
+        <Hero />
+        <HowItWorks />
+        <TrustBar />
+        <Pricing />
+        <Faq />
+        <Footer />
+      </div>
     </div>
   );
 }
