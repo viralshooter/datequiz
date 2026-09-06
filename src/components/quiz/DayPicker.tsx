@@ -29,34 +29,53 @@ export function DayPicker({ availableDays, onContinue }: DayPickerProps) {
       </p>
 
       <div className="flex w-full max-w-xs flex-col gap-3">
-        {availableDays.map((day) => {
+        {availableDays.map((day, i) => {
           const active = selected.includes(day);
           return (
-            <button
+            <motion.button
               key={day}
               type="button"
               onClick={() => toggle(day)}
-              className={`rounded-2xl border-2 px-5 py-3 text-left text-lg font-semibold transition-colors ${
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.05, type: "spring", stiffness: 260, damping: 22 }}
+              whileTap={{ scale: 0.97 }}
+              className={`flex items-center gap-3 rounded-2xl border-2 px-5 py-3 text-left text-lg font-semibold ${
                 active
                   ? "border-brand-dark bg-brand/10 text-brand-dark"
                   : "border-neutral-200 bg-white text-neutral-700"
               }`}
             >
-              <span className="mr-2">{active ? "✅" : "⬜"}</span>
+              <motion.span
+                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 text-xs text-white ${
+                  active ? "border-brand-dark bg-brand-dark" : "border-neutral-300 bg-white"
+                }`}
+                animate={active ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                {active && (
+                  <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}>
+                    ✓
+                  </motion.span>
+                )}
+              </motion.span>
               {day}
-            </button>
+            </motion.button>
           );
         })}
       </div>
 
-      <button
+      <motion.button
         type="button"
         disabled={selected.length === 0}
         onClick={() => onContinue(selected)}
-        className="mt-2 w-full max-w-xs rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-lg shadow-brand/30 transition-transform active:scale-95 disabled:opacity-40"
+        whileTap={{ scale: 0.95 }}
+        animate={selected.length > 0 ? { scale: [1, 1.04, 1] } : { scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="mt-2 w-full max-w-xs rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-lg shadow-brand/30 disabled:opacity-40"
       >
         Continua →
-      </button>
+      </motion.button>
     </motion.div>
   );
 }

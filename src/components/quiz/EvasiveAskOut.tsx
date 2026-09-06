@@ -18,6 +18,8 @@ export function EvasiveAskOut({ matchName, onYes }: EvasiveAskOutProps) {
 
   const [noPos, setNoPos] = useState({ xPct: 62, yPct: 60 });
   const [escapes, setEscapes] = useState(0);
+  const [puff, setPuff] = useState<{ xPct: number; yPct: number; id: number } | null>(null);
+  const puffIdRef = useRef(0);
 
   const evade = useCallback(() => {
     const now = Date.now();
@@ -28,7 +30,11 @@ export function EvasiveAskOut({ matchName, onYes }: EvasiveAskOutProps) {
     const xPct = marginPct + Math.random() * (100 - marginPct * 2);
     const yPct = 22 + Math.random() * (100 - 22 - 16);
 
-    setNoPos({ xPct, yPct });
+    setNoPos((prev) => {
+      puffIdRef.current += 1;
+      setPuff({ xPct: prev.xPct, yPct: prev.yPct, id: puffIdRef.current });
+      return { xPct, yPct };
+    });
     setEscapes((e) => e + 1);
   }, []);
 
@@ -59,12 +65,40 @@ export function EvasiveAskOut({ matchName, onYes }: EvasiveAskOutProps) {
         {matchName}, {ASK_OUT_QUESTION.toLowerCase()}
       </motion.p>
 
+      {puff && (
+        <motion.span
+          key={puff.id}
+          className="pointer-events-none absolute text-3xl"
+          style={{
+            left: `${puff.xPct}%`,
+            top: `${puff.yPct}%`,
+            translateX: "-50%",
+            translateY: "-50%",
+          }}
+          initial={{ opacity: 0.9, scale: 0.8 }}
+          animate={{ opacity: 0, scale: 1.8 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
+          💨
+        </motion.span>
+      )}
+
       <motion.button
         type="button"
         onClick={onYes}
-        animate={{ scale: yesScale }}
-        transition={{ type: "spring", stiffness: 300, damping: 16 }}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand/30"
+        animate={{
+          scale: yesScale,
+          boxShadow: [
+            "0 10px 30px rgba(22,163,74,0.3)",
+            "0 10px 45px rgba(22,163,74,0.55)",
+            "0 10px 30px rgba(22,163,74,0.3)",
+          ],
+        }}
+        transition={{
+          scale: { type: "spring", stiffness: 300, damping: 16 },
+          boxShadow: { duration: 1.6, repeat: Infinity, ease: "easeInOut" },
+        }}
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white"
       >
         SÌ
       </motion.button>
@@ -76,8 +110,16 @@ export function EvasiveAskOut({ matchName, onYes }: EvasiveAskOutProps) {
         onMouseEnter={evade}
         onTouchStart={evade}
         onClick={evade}
-        animate={{ left: `${noPos.xPct}%`, top: `${noPos.yPct}%` }}
-        transition={{ type: "spring", stiffness: 260, damping: 14 }}
+        animate={{
+          left: `${noPos.xPct}%`,
+          top: `${noPos.yPct}%`,
+          rotate: escapes === 0 ? [0, -4, 4, -4, 0] : 0,
+        }}
+        transition={{
+          left: { type: "spring", stiffness: 260, damping: 14 },
+          top: { type: "spring", stiffness: 260, damping: 14 },
+          rotate: { duration: 1.2, repeat: Infinity, repeatDelay: 0.6 },
+        }}
         style={{ position: "absolute", translateX: "-50%", translateY: "-50%" }}
         className="rounded-full border-2 border-neutral-200 bg-white px-8 py-4 text-lg font-bold text-neutral-500 select-none"
       >

@@ -20,44 +20,71 @@ export function ConfirmSummary({ activities, days, submitting, onConfirm }: Conf
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <h1 className="text-2xl font-extrabold text-neutral-900">Tutto ok? 👀</h1>
+      <motion.h1
+        className="text-2xl font-extrabold text-neutral-900"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+      >
+        Tutto ok? 👀
+      </motion.h1>
 
-      <div className="w-full max-w-xs rounded-2xl border border-neutral-200 bg-neutral-50 p-4 text-left">
+      <motion.div
+        className="w-full max-w-xs rounded-2xl border border-neutral-200 bg-neutral-50 p-4 text-left"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
         <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Voglia di</p>
         <div className="mt-2 flex flex-wrap gap-2">
-          {activityLabels.map((a) => (
-            <span
+          {activityLabels.map((a, i) => (
+            <motion.span
               key={a.id}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 + i * 0.06, type: "spring", stiffness: 300 }}
               className="rounded-full bg-brand/15 px-3 py-1 text-sm font-semibold text-brand-dark"
             >
               {a.emoji} {a.label}
-            </span>
+            </motion.span>
           ))}
         </div>
-      </div>
+      </motion.div>
 
-      <div className="w-full max-w-xs rounded-2xl border border-neutral-200 bg-neutral-50 p-4 text-left">
+      <motion.div
+        className="w-full max-w-xs rounded-2xl border border-neutral-200 bg-neutral-50 p-4 text-left"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
         <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">I tuoi giorni</p>
         <div className="mt-2 flex flex-wrap gap-2">
-          {days.map((day) => (
-            <span
+          {days.map((day, i) => (
+            <motion.span
               key={day}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 + i * 0.06, type: "spring", stiffness: 300 }}
               className="rounded-full bg-brand/15 px-3 py-1 text-sm font-semibold text-brand-dark"
             >
               {day}
-            </span>
+            </motion.span>
           ))}
         </div>
-      </div>
+      </motion.div>
 
-      <button
+      <motion.button
         type="button"
         disabled={submitting}
         onClick={onConfirm}
-        className="w-full max-w-xs rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-lg shadow-brand/30 transition-transform active:scale-95 disabled:opacity-60"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        whileTap={{ scale: 0.95 }}
+        className="w-full max-w-xs rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-lg shadow-brand/30 disabled:opacity-60"
       >
         {submitting ? "Un attimo…" : "Ok, ci sto"}
-      </button>
+      </motion.button>
     </motion.div>
   );
 }

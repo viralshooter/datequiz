@@ -13,6 +13,8 @@ import type { ActivityId } from "@/types/content";
 
 type Step = "hero" | "askOut" | "celebration" | "activities" | "days" | "confirm" | "done";
 
+const STEP_ORDER: Step[] = ["hero", "askOut", "celebration", "activities", "days", "confirm", "done"];
+
 interface DateFlowProps {
   slug: string;
   matchName: string;
@@ -71,30 +73,109 @@ export function DateFlow({ slug, matchName, availableDays, alreadyAnswered }: Da
     setStep("done");
   }
 
+  const progress = STEP_ORDER.indexOf(step) / (STEP_ORDER.length - 1);
+
   return (
-    <div className="mx-auto flex h-dvh w-full max-w-md flex-col bg-gradient-to-b from-cream via-white to-white">
-      {step === "hero" && <Hero matchName={matchName} onStart={() => setStep("askOut")} />}
+    <div className="relative mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-gradient-to-b from-cream via-white to-white">
+      <FloatingBackground />
 
-      {step === "askOut" && <EvasiveAskOut matchName={matchName} onYes={handleYes} />}
-
-      {step === "celebration" && <CelebrationScreen />}
-
-      {step === "activities" && <ActivityGrid onConfirm={handleActivitiesConfirm} />}
-
-      {step === "days" && (
-        <DayPicker availableDays={availableDays} onContinue={handleDaysContinue} />
-      )}
-
-      {step === "confirm" && (
-        <ConfirmSummary
-          activities={selectedActivities}
-          days={selectedDays}
-          submitting={submitting}
-          onConfirm={handleFinalConfirm}
+      <div className="relative z-10 h-1.5 w-full bg-black/5">
+        <motion.div
+          className="h-full bg-brand-dark"
+          initial={false}
+          animate={{ width: `${progress * 100}%` }}
+          transition={{ type: "spring", stiffness: 120, damping: 20 }}
         />
-      )}
+      </div>
 
-      {step === "done" && <DoneScreen />}
+      <div className="relative z-10 flex flex-1 flex-col overflow-hidden">
+        <AnimatePresence mode="wait">
+          {step === "hero" && (
+            <StepTransition key="hero">
+              <Hero matchName={matchName} onStart={() => setStep("askOut")} />
+            </StepTransition>
+          )}
+
+          {step === "askOut" && (
+            <StepTransition key="askOut">
+              <EvasiveAskOut matchName={matchName} onYes={handleYes} />
+            </StepTransition>
+          )}
+
+          {step === "celebration" && (
+            <StepTransition key="celebration">
+              <CelebrationScreen />
+            </StepTransition>
+          )}
+
+          {step === "activities" && (
+            <StepTransition key="activities">
+              <ActivityGrid onConfirm={handleActivitiesConfirm} />
+            </StepTransition>
+          )}
+
+          {step === "days" && (
+            <StepTransition key="days">
+              <DayPicker availableDays={availableDays} onContinue={handleDaysContinue} />
+            </StepTransition>
+          )}
+
+          {step === "confirm" && (
+            <StepTransition key="confirm">
+              <ConfirmSummary
+                activities={selectedActivities}
+                days={selectedDays}
+                submitting={submitting}
+                onConfirm={handleFinalConfirm}
+              />
+            </StepTransition>
+          )}
+
+          {step === "done" && (
+            <StepTransition key="done">
+              <DoneScreen />
+            </StepTransition>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
+function StepTransition({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      className="flex h-full w-full flex-1"
+      initial={{ opacity: 0, x: 24 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -24 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/** Blob morbide e sfocate che fluttuano piano sullo sfondo: danno vita
+ * a una UI altrimenti statica senza distrarre dal contenuto. */
+function FloatingBackground() {
+  return (
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <motion.div
+        className="absolute -left-16 -top-16 h-64 w-64 rounded-full bg-brand/20 blur-3xl"
+        animate={{ x: [0, 30, 0], y: [0, 20, 0] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute -bottom-24 -right-10 h-72 w-72 rounded-full bg-amber-200/40 blur-3xl"
+        animate={{ x: [0, -20, 0], y: [0, -30, 0] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute left-1/3 top-1/2 h-48 w-48 rounded-full bg-brand/10 blur-3xl"
+        animate={{ x: [0, 15, 0], y: [0, -15, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
     </div>
   );
 }
@@ -106,31 +187,51 @@ function Hero({ matchName, onStart }: { matchName: string; onStart: () => void }
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <AnimatePresence>
-        <motion.div
-          className="text-6xl"
-          initial={{ scale: 0, rotate: -20 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: "spring", stiffness: 260, damping: 14 }}
-        >
-          💌
-        </motion.div>
-      </AnimatePresence>
+      <motion.div
+        className="text-7xl"
+        initial={{ scale: 0, rotate: -20 }}
+        animate={{ scale: 1, rotate: 0, y: [0, -10, 0] }}
+        transition={{
+          scale: { type: "spring", stiffness: 260, damping: 14 },
+          rotate: { type: "spring", stiffness: 260, damping: 14 },
+          y: { duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 0.6 },
+        }}
+      >
+        💌
+      </motion.div>
 
-      <h1 className="text-3xl font-extrabold leading-tight text-neutral-900">
+      <motion.h1
+        className="text-3xl font-extrabold leading-tight text-neutral-900"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+      >
         Ehi {matchName} 👋
-      </h1>
-      <p className="max-w-xs text-neutral-600">
+      </motion.h1>
+      <motion.p
+        className="max-w-xs text-neutral-600"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+      >
         Ho una domanda veloce per te. Ci metti 30 secondi, promesso.
-      </p>
+      </motion.p>
 
-      <button
+      <motion.button
         type="button"
         onClick={onStart}
-        className="mt-4 w-full max-w-xs rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-lg shadow-brand/30 transition-transform active:scale-95"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0, boxShadow: ["0 10px 30px rgba(22,163,74,0.25)", "0 10px 40px rgba(22,163,74,0.45)", "0 10px 30px rgba(22,163,74,0.25)"] }}
+        transition={{
+          opacity: { delay: 0.35 },
+          y: { delay: 0.35 },
+          boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+        }}
+        whileTap={{ scale: 0.95 }}
+        className="mt-4 w-full max-w-xs rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white"
       >
         Dai, vai →
-      </button>
+      </motion.button>
     </motion.div>
   );
 }
