@@ -101,3 +101,5 @@ Ogni step del funnel scrive una riga in `public.events` (vedi
 `src/lib/events.ts` per l'elenco completo). `/admin` mostra i conteggi e
 i tassi di conversione tra uno step e il successivo; il login è protetto
 da `ADMIN_DASHBOARD_PASSWORD`.
+
+Deploy automatico attivo tramite GitHub + Vercel.
