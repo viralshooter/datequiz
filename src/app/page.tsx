@@ -1,8 +1,21 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Nav } from "@/components/Nav";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { PRICING_PACKAGES } from "@/config/pricing";
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Chi ha già un account vero non deve rivedere il pitch "primo link
+  // gratis": va dritto alla sua dashboard.
+  if (user && user.is_anonymous === false) {
+    redirect("/dashboard");
+  }
+
   return (
     <div className="min-h-dvh bg-ink text-white">
       <AnnouncementBar />
