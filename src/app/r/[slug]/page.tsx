@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { ACTIVITIES } from "@/config/content";
 import type { ActivityId } from "@/types/content";
 
@@ -14,7 +13,7 @@ export default async function ResultPage({ params }: PageProps) {
   const admin = createSupabaseAdminClient();
   const { data: link } = await admin
     .from("links")
-    .select("id, match_name, creator_id")
+    .select("id, match_name")
     .eq("slug", slug)
     .maybeSingle();
 
@@ -22,21 +21,10 @@ export default async function ResultPage({ params }: PageProps) {
     return <Shell><p className="text-neutral-400">Questo link non esiste (più).</p></Shell>;
   }
 
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user || user.id !== link.creator_id) {
-    return (
-      <Shell>
-        <p className="text-neutral-400">
-          Questa pagina è privata: solo chi ha creato il link può vedere la risposta.
-        </p>
-      </Shell>
-    );
-  }
-
+  // Nessun controllo di sessione qui: come per /d/[slug], lo slug (casuale
+  // e non indovinabile) è già la chiave d'accesso. Serve perché il link
+  // nella email di notifica deve funzionare anche da un altro dispositivo
+  // o prima che l'email dell'account sia confermata.
   const { data: answer } = await admin
     .from("answers")
     .select("selected_activities, selected_days, responded_at")
