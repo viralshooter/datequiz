@@ -20,12 +20,12 @@ export async function sendAnswerNotification({ to, matchName, slug }: AnswerNoti
 
   const resend = new Resend(apiKey);
   await resend.emails.send({
-    from: "DateQuiz <onboarding@resend.dev>",
+    from: "Yeslink <onboarding@resend.dev>",
     to,
     subject: `${matchName} ha risposto! 🎉`,
     html: `
       <p>Ciao,</p>
-      <p><strong>${matchName}</strong> ha risposto al tuo invito su DateQuiz.</p>
+      <p><strong>${matchName}</strong> ha risposto al tuo invito su Yeslink.</p>
       <p><a href="${resultUrl}">Guarda cosa ha scelto →</a></p>
     `,
   });

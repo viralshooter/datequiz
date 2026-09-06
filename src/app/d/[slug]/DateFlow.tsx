@@ -79,7 +79,7 @@ export function DateFlow({
   }
 
   return (
-    <div className="mx-auto flex h-dvh w-full max-w-md flex-col bg-gradient-to-b from-rose-50 via-white to-white">
+    <div className="mx-auto flex h-dvh w-full max-w-md flex-col bg-gradient-to-b from-cream via-white to-white">
       {step === "hero" && <Hero matchName={matchName} onStart={() => setStep("askOut")} />}
 
       {step === "askOut" && <EvasiveAskOut matchName={matchName} onYes={handleYes} />}
@@ -134,7 +134,7 @@ function Hero({ matchName, onStart }: { matchName: string; onStart: () => void }
       <button
         type="button"
         onClick={onStart}
-        className="mt-4 w-full max-w-xs rounded-full bg-rose-500 px-8 py-4 text-lg font-bold text-white shadow-lg shadow-rose-200 transition-transform active:scale-95"
+        className="mt-4 w-full max-w-xs rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-lg shadow-brand/30 transition-transform active:scale-95"
       >
         Dai, vai →
       </button>

@@ -28,7 +28,7 @@ export function ConfirmSummary({ activities, days, submitting, onConfirm }: Conf
           {activityLabels.map((a) => (
             <span
               key={a.id}
-              className="rounded-full bg-rose-100 px-3 py-1 text-sm font-semibold text-rose-600"
+              className="rounded-full bg-brand/15 px-3 py-1 text-sm font-semibold text-brand-dark"
             >
               {a.emoji} {a.label}
             </span>
@@ -42,7 +42,7 @@ export function ConfirmSummary({ activities, days, submitting, onConfirm }: Conf
           {days.map((day) => (
             <span
               key={day}
-              className="rounded-full bg-rose-100 px-3 py-1 text-sm font-semibold text-rose-600"
+              className="rounded-full bg-brand/15 px-3 py-1 text-sm font-semibold text-brand-dark"
             >
               {day}
             </span>
@@ -54,7 +54,7 @@ export function ConfirmSummary({ activities, days, submitting, onConfirm }: Conf
         type="button"
         disabled={submitting}
         onClick={onConfirm}
-        className="w-full max-w-xs rounded-full bg-rose-500 px-8 py-4 text-lg font-bold text-white shadow-lg shadow-rose-200 transition-transform active:scale-95 disabled:opacity-60"
+        className="w-full max-w-xs rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-lg shadow-brand/30 transition-transform active:scale-95 disabled:opacity-60"
       >
         {submitting ? "Un attimo…" : "Ok, ci sto"}
       </button>

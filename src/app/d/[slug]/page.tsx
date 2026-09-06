@@ -30,7 +30,7 @@ async function getLink(slug: string) {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const result = await getLink(slug);
-  if (!result) return { title: "DateQuiz" };
+  if (!result) return { title: "Yeslink" };
 
   const title = `${result.link.match_name}, ho una domanda per te 💌`;
   const description = "30 secondi, zero impegno. Promesso. (Quasi.)";
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function DateQuizPage({ params }: PageProps) {
+export default async function YeslinkPage({ params }: PageProps) {
   const { slug } = await params;
   const result = await getLink(slug);
   if (!result) notFound();

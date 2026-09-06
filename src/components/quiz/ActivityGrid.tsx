@@ -38,7 +38,7 @@ export function ActivityGrid({ onConfirm }: ActivityGridProps) {
               transition={{ type: "spring", stiffness: 300, damping: 18 }}
               className={`relative flex flex-col items-center gap-1 rounded-2xl border-2 px-3 py-5 text-center shadow-sm ${
                 active
-                  ? "border-rose-500 bg-rose-50"
+                  ? "border-brand-dark bg-brand/10"
                   : "border-neutral-200 bg-white"
               }`}
             >
@@ -46,7 +46,7 @@ export function ActivityGrid({ onConfirm }: ActivityGridProps) {
                 <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-xs text-white"
+                  className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-brand-dark text-xs text-white"
                 >
                   ✓
                 </motion.span>
@@ -63,7 +63,7 @@ export function ActivityGrid({ onConfirm }: ActivityGridProps) {
         type="button"
         disabled={selected.length === 0}
         onClick={() => onConfirm(selected)}
-        className="mt-2 w-full max-w-sm rounded-full bg-rose-500 px-8 py-4 text-lg font-bold text-white shadow-lg shadow-rose-200 transition-transform active:scale-95 disabled:opacity-40"
+        className="mt-2 w-full max-w-sm rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-lg shadow-brand/30 transition-transform active:scale-95 disabled:opacity-40"
       >
         Continua →
       </button>

@@ -39,8 +39,8 @@ export function Paywall({ userId, onCancel }: PaywallProps) {
 
   return (
     <div>
-      <h1 className="text-2xl font-extrabold text-neutral-900">Hai finito i link gratuiti ✋</h1>
-      <p className="mt-2 text-neutral-600">Scegli un pacchetto per continuare a creare link.</p>
+      <h1 className="text-2xl font-extrabold text-white">Hai finito i link gratuiti ✋</h1>
+      <p className="mt-2 text-neutral-400">Scegli un pacchetto per continuare a creare link.</p>
 
       <div className="mt-6 flex flex-col gap-3">
         {PRICING_PACKAGES.map((pkg) => (
@@ -49,22 +49,22 @@ export function Paywall({ userId, onCancel }: PaywallProps) {
             type="button"
             disabled={loadingPackage !== null}
             onClick={() => buy(pkg.id)}
-            className="flex items-center justify-between rounded-xl border-2 border-neutral-200 px-5 py-4 text-left transition-colors hover:border-rose-400 disabled:opacity-50"
+            className="flex items-center justify-between rounded-xl border-2 border-white/15 bg-ink-2 px-5 py-4 text-left transition-colors hover:border-brand disabled:opacity-50"
           >
             <span>
-              <span className="block font-bold text-neutral-900">{pkg.label}</span>
-              <span className="block text-sm text-neutral-500">{pkg.description}</span>
+              <span className="block font-bold text-white">{pkg.label}</span>
+              <span className="block text-sm text-neutral-400">{pkg.description}</span>
             </span>
-            <span className="font-extrabold text-rose-500">
+            <span className="font-extrabold text-brand">
               {loadingPackage === pkg.id ? "…" : pkg.priceLabel}
             </span>
           </button>
         ))}
       </div>
 
-      {error && <p className="mt-3 text-sm text-red-500">{error}</p>}
+      {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
 
-      <button type="button" onClick={onCancel} className="mt-6 text-sm font-semibold text-neutral-400">
+      <button type="button" onClick={onCancel} className="mt-6 text-sm font-semibold text-neutral-500">
         ← Torna indietro
       </button>
     </div>

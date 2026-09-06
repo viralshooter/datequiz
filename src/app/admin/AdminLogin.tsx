@@ -31,7 +31,7 @@ export function AdminLogin() {
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-sm flex-col justify-center px-6">
-      <h1 className="text-xl font-bold text-[var(--text-primary)]">DateQuiz · Admin</h1>
+      <h1 className="text-xl font-bold text-[var(--text-primary)]">Yeslink · Admin</h1>
       <form onSubmit={submit} className="mt-6 flex flex-col gap-3">
         <input
           type="password"
@@ -45,7 +45,7 @@ export function AdminLogin() {
         <button
           type="submit"
           disabled={loading || !password}
-          className="rounded-lg bg-[var(--series-1)] px-4 py-3 font-semibold text-white disabled:opacity-50"
+          className="rounded-lg bg-[var(--series-1)] px-4 py-3 font-semibold text-black disabled:opacity-50"
         >
           {loading ? "…" : "Entra"}
         </button>

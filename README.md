@@ -1,4 +1,4 @@
-# DateQuiz 💌
+# Yeslink
 
 Un ragazzo genera un link personalizzato per un match; lei apre il link,
 le viene chiesto "Esci con me?" (il NO scappa dal cursore/dito, l'unica

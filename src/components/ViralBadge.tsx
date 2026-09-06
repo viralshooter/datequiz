@@ -24,10 +24,10 @@ export function ViralBadge({ slug, utmSource, className }: ViralBadgeProps) {
       onClick={() => trackEvent("badge_clicked", slug, { utm_source: utmSource })}
       className={
         className ??
-        "inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white/80 px-4 py-2 text-xs font-semibold text-neutral-500 backdrop-blur transition-colors hover:border-rose-300 hover:text-rose-500"
+        "inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white/80 px-4 py-2 text-xs font-semibold text-neutral-500 backdrop-blur transition-colors hover:border-brand-dark hover:text-brand-dark"
       }
     >
-      💘 creato con DateQuiz — provalo anche tu
+      ✅ creato con Yeslink — provalo anche tu
     </Link>
   );
 }

@@ -35,7 +35,7 @@ export const PRICING_PACKAGES: PricingPackage[] = [
   {
     id: "remove_watermark",
     label: "Rimuovi watermark",
-    description: 'Togli il badge "creato con DateQuiz" dai tuoi link',
+    description: 'Togli il badge "creato con Yeslink" dai tuoi link',
     priceLabel: "€2,99",
     priceCents: 299,
     credits: 0,

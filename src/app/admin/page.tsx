@@ -46,7 +46,7 @@ export default async function AdminPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-extrabold">DateQuiz · Admin</h1>
+        <h1 className="text-2xl font-extrabold">Yeslink · Admin</h1>
         <span
           className="rounded-full border px-3 py-1 text-xs font-semibold"
           style={{ borderColor: "var(--border)", color: "var(--text-secondary)" }}

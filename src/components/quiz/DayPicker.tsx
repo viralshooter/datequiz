@@ -38,7 +38,7 @@ export function DayPicker({ availableDays, onContinue }: DayPickerProps) {
               onClick={() => toggle(day)}
               className={`rounded-2xl border-2 px-5 py-3 text-left text-lg font-semibold transition-colors ${
                 active
-                  ? "border-rose-500 bg-rose-50 text-rose-600"
+                  ? "border-brand-dark bg-brand/10 text-brand-dark"
                   : "border-neutral-200 bg-white text-neutral-700"
               }`}
             >
@@ -53,7 +53,7 @@ export function DayPicker({ availableDays, onContinue }: DayPickerProps) {
         type="button"
         disabled={selected.length === 0}
         onClick={() => onContinue(selected)}
-        className="mt-2 w-full max-w-xs rounded-full bg-rose-500 px-8 py-4 text-lg font-bold text-white shadow-lg shadow-rose-200 transition-transform active:scale-95 disabled:opacity-40"
+        className="mt-2 w-full max-w-xs rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-lg shadow-brand/30 transition-transform active:scale-95 disabled:opacity-40"
       >
         Continua →
       </button>

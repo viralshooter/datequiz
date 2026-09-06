@@ -19,7 +19,7 @@ export default async function ResultPage({ params }: PageProps) {
     .maybeSingle();
 
   if (!link) {
-    return <Shell><p className="text-neutral-600">Questo link non esiste (più).</p></Shell>;
+    return <Shell><p className="text-neutral-400">Questo link non esiste (più).</p></Shell>;
   }
 
   const supabase = await createSupabaseServerClient();
@@ -30,7 +30,7 @@ export default async function ResultPage({ params }: PageProps) {
   if (!user || user.id !== link.creator_id) {
     return (
       <Shell>
-        <p className="text-neutral-600">
+        <p className="text-neutral-400">
           Questa pagina è privata: solo chi ha creato il link può vedere la risposta.
         </p>
       </Shell>
@@ -47,12 +47,10 @@ export default async function ResultPage({ params }: PageProps) {
     return (
       <Shell>
         <div className="text-5xl">⏳</div>
-        <h1 className="mt-4 text-2xl font-extrabold text-neutral-900">
+        <h1 className="mt-4 text-2xl font-extrabold text-white">
           In attesa della risposta di {link.match_name}
         </h1>
-        <p className="mt-2 text-neutral-600">
-          Torna su questa pagina quando avrà risposto.
-        </p>
+        <p className="mt-2 text-neutral-400">Torna su questa pagina quando avrà risposto.</p>
       </Shell>
     );
   }
@@ -64,44 +62,38 @@ export default async function ResultPage({ params }: PageProps) {
 
   return (
     <Shell>
-      <p className="text-sm font-semibold uppercase tracking-wide text-rose-400">
+      <p className="text-sm font-semibold uppercase tracking-wide text-brand">
         Risposta di {link.match_name}
       </p>
 
       <div className="mt-3 text-6xl">🎉</div>
 
-      <h1 className="mt-3 text-2xl font-extrabold text-neutral-900">Ha detto sì!</h1>
+      <h1 className="mt-3 text-2xl font-extrabold text-white">Ha detto sì!</h1>
 
-      <div className="mt-6 w-full rounded-2xl border border-neutral-200 bg-neutral-50 p-5 text-left">
-        <p className="text-sm font-semibold text-neutral-500">Le va di fare</p>
+      <div className="mt-6 w-full rounded-2xl border border-white/10 bg-ink-2 p-5 text-left">
+        <p className="text-sm font-semibold text-neutral-400">Le va di fare</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {selectedActivities.map((a) => (
-            <span
-              key={a.id}
-              className="rounded-full bg-rose-100 px-3 py-1 text-sm font-semibold text-rose-600"
-            >
+            <span key={a.id} className="rounded-full bg-brand/15 px-3 py-1 text-sm font-semibold text-brand">
               {a.emoji} {a.label}
             </span>
           ))}
         </div>
       </div>
 
-      <div className="mt-4 w-full rounded-2xl border border-neutral-200 bg-neutral-50 p-5 text-left">
-        <p className="text-sm font-semibold text-neutral-500">Giorni in comune</p>
+      <div className="mt-4 w-full rounded-2xl border border-white/10 bg-ink-2 p-5 text-left">
+        <p className="text-sm font-semibold text-neutral-400">Giorni in comune</p>
         <ul className="mt-2 flex flex-wrap gap-2">
           {selectedDays.map((day) => (
-            <li
-              key={day}
-              className="rounded-full bg-rose-100 px-3 py-1 text-sm font-semibold text-rose-600"
-            >
+            <li key={day} className="rounded-full bg-brand/15 px-3 py-1 text-sm font-semibold text-brand">
               {day}
             </li>
           ))}
         </ul>
       </div>
 
-      <Link href="/create" className="mt-8 text-sm font-semibold text-rose-500">
-        + Crea un altro DateQuiz
+      <Link href="/create" className="mt-8 text-sm font-semibold text-brand">
+        + Crea un altro Yeslink
       </Link>
     </Shell>
   );
@@ -109,7 +101,7 @@ export default async function ResultPage({ params }: PageProps) {
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 py-10 text-center">
+    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center bg-ink px-6 py-10 text-center text-white">
       {children}
     </div>
   );

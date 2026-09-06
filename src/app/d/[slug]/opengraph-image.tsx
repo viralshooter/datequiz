@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
-export const alt = "DateQuiz";
+export const alt = "Yeslink";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -30,16 +30,16 @@ export default async function Image({ params }: ImageProps) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #fff1f2 0%, #ffe4e6 45%, #fecdd3 100%)",
+          background: "linear-gradient(135deg, #fff9f2 0%, #fef3e2 100%)",
           fontFamily: "sans-serif",
         }}
       >
-        <div style={{ fontSize: 140, display: "flex", marginBottom: 12 }}>💌</div>
+        <div style={{ fontSize: 140, display: "flex", marginBottom: 12 }}>👀</div>
         <div
           style={{
             fontSize: 64,
             fontWeight: 800,
-            color: "#881337",
+            color: "#0a0a0b",
             textAlign: "center",
             maxWidth: 980,
             lineHeight: 1.15,
@@ -52,11 +52,12 @@ export default async function Image({ params }: ImageProps) {
           style={{
             marginTop: 28,
             fontSize: 32,
-            color: "#e11d48",
+            color: "#16a34a",
+            fontWeight: 700,
             display: "flex",
           }}
         >
-          30 secondi · DateQuiz
+          30 secondi · Yeslink
         </div>
       </div>
     ),

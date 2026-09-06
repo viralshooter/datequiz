@@ -1,23 +1,23 @@
 import Link from "next/link";
 import { Nav } from "@/components/Nav";
 
-export const metadata = { title: "Privacy Policy — DateQuiz" };
+export const metadata = { title: "Privacy Policy — Yeslink" };
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-ink text-white">
       <Nav />
       <div className="mx-auto max-w-2xl px-6 py-10">
-        <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+        <div className="mb-8 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-300">
           Questa è una bozza standard, non ancora rivista da un legale. Va
           verificata e adattata prima di un lancio reale.
         </div>
 
-        <h1 className="text-2xl font-extrabold text-neutral-900">Privacy Policy</h1>
-        <p className="mt-1 text-sm text-neutral-400">Ultimo aggiornamento: {new Date().toLocaleDateString("it-IT")}</p>
+        <h1 className="text-2xl font-extrabold">Privacy Policy</h1>
+        <p className="mt-1 text-sm text-neutral-500">Ultimo aggiornamento: {new Date().toLocaleDateString("it-IT")}</p>
 
         <Section title="Chi siamo">
-          DateQuiz è un servizio che permette di creare un link personalizzato per
+          Yeslink è un servizio che permette di creare un link personalizzato per
           invitare qualcuno a un appuntamento e raccogliere la sua risposta.
         </Section>
 
@@ -60,7 +60,7 @@ export default function PrivacyPage() {
           Per qualsiasi domanda su questa policy, scrivici tramite i canali indicati sul sito.
         </Section>
 
-        <Link href="/" className="mt-10 inline-block text-sm font-semibold text-rose-500">
+        <Link href="/" className="mt-10 inline-block text-sm font-semibold text-brand">
           ← Torna alla home
         </Link>
       </div>
@@ -71,8 +71,8 @@ export default function PrivacyPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mt-8">
-      <h2 className="text-lg font-bold text-neutral-900">{title}</h2>
-      <div className="mt-2 text-sm leading-relaxed text-neutral-600">{children}</div>
+      <h2 className="text-lg font-bold text-white">{title}</h2>
+      <div className="mt-2 text-sm leading-relaxed text-neutral-400">{children}</div>
     </section>
   );
 }

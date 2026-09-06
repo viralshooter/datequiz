@@ -39,18 +39,18 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <div className="min-h-dvh bg-gradient-to-b from-rose-50 via-white to-white">
+    <div className="min-h-dvh bg-ink text-white">
       <Nav />
       <div className="mx-auto max-w-2xl px-6 py-8">
-        <h1 className="text-2xl font-extrabold text-neutral-900">I tuoi link</h1>
-        <p className="mt-1 text-neutral-600">
+        <h1 className="text-2xl font-extrabold">I tuoi link</h1>
+        <p className="mt-1 text-neutral-400">
           {user.email} · {profile?.credits ?? 0} credit{profile?.credits === 1 ? "o" : "i"} residu
           {profile?.credits === 1 ? "o" : "i"}
         </p>
 
         <Link
           href="/create"
-          className="mt-6 inline-block rounded-full bg-rose-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-rose-200"
+          className="mt-6 inline-block rounded-full bg-brand px-6 py-3 text-sm font-bold text-ink shadow-[0_0_20px_rgba(34,197,94,0.35)]"
         >
           + Crea un nuovo link
         </Link>
@@ -67,15 +67,12 @@ export default async function DashboardPage() {
             );
 
             return (
-              <div
-                key={link.slug}
-                className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm"
-              >
+              <div key={link.slug} className="rounded-2xl border border-white/10 bg-ink-2 p-4">
                 <div className="flex items-center justify-between">
-                  <p className="font-bold text-neutral-900">{link.match_name}</p>
+                  <p className="font-bold text-white">{link.match_name}</p>
                   <span
                     className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                      answerRow ? "bg-rose-100 text-rose-600" : "bg-neutral-100 text-neutral-500"
+                      answerRow ? "bg-brand/15 text-brand" : "bg-white/10 text-neutral-400"
                     }`}
                   >
                     {answerRow ? "Ha risposto" : "In attesa"}
@@ -83,14 +80,14 @@ export default async function DashboardPage() {
                 </div>
 
                 {activities.length > 0 && (
-                  <p className="mt-2 text-sm text-neutral-600">
+                  <p className="mt-2 text-sm text-neutral-400">
                     {activities.map((a) => `${a.emoji} ${a.label}`).join(" · ")}
                   </p>
                 )}
 
                 <Link
                   href={`/r/${link.slug}`}
-                  className="mt-3 inline-block text-sm font-semibold text-rose-500"
+                  className="mt-3 inline-block text-sm font-semibold text-brand"
                 >
                   Vedi dettagli →
                 </Link>
@@ -108,12 +105,10 @@ export default async function DashboardPage() {
               {purchases.map((p, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm"
+                  className="flex items-center justify-between rounded-xl border border-white/10 bg-ink-2 px-4 py-3 text-sm"
                 >
-                  <span className="font-semibold text-neutral-800">{p.package}</span>
-                  <span
-                    className={p.status === "completed" ? "text-rose-600" : "text-neutral-400"}
-                  >
+                  <span className="font-semibold text-neutral-200">{p.package}</span>
+                  <span className={p.status === "completed" ? "text-brand" : "text-neutral-500"}>
                     {p.status === "completed" ? "Completato" : "In sospeso"}
                   </span>
                 </div>

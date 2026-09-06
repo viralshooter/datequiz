@@ -1,4 +1,4 @@
--- DateQuiz — schema Postgres/Supabase
+-- Yeslink — schema Postgres/Supabase
 -- Esegui questo file nel SQL editor di Supabase (o via `supabase db push`).
 
 create extension if not exists "pgcrypto";

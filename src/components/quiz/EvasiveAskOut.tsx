@@ -64,7 +64,7 @@ export function EvasiveAskOut({ matchName, onYes }: EvasiveAskOutProps) {
         onClick={onYes}
         animate={{ scale: yesScale }}
         transition={{ type: "spring", stiffness: 300, damping: 16 }}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-rose-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-rose-200"
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-dark px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand/30"
       >
         SÌ
       </motion.button>
