@@ -12,7 +12,7 @@ async function getLink(slug: string) {
   const admin = createSupabaseAdminClient();
   const { data: link } = await admin
     .from("links")
-    .select("id, slug, match_name, available_days, watermark_enabled")
+    .select("id, slug, match_name, available_days")
     .eq("slug", slug)
     .maybeSingle();
 
@@ -66,7 +66,6 @@ export default async function YeslinkPage({ params }: PageProps) {
       slug={slug}
       matchName={link.match_name}
       availableDays={link.available_days as string[]}
-      watermarkEnabled={link.watermark_enabled}
       alreadyAnswered={alreadyAnswered}
     />
   );

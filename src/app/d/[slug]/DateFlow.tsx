@@ -17,17 +17,10 @@ interface DateFlowProps {
   slug: string;
   matchName: string;
   availableDays: string[];
-  watermarkEnabled: boolean;
   alreadyAnswered: boolean;
 }
 
-export function DateFlow({
-  slug,
-  matchName,
-  availableDays,
-  watermarkEnabled,
-  alreadyAnswered,
-}: DateFlowProps) {
+export function DateFlow({ slug, matchName, availableDays, alreadyAnswered }: DateFlowProps) {
   const [step, setStep] = useState<Step>(alreadyAnswered ? "done" : "hero");
   const [selectedActivities, setSelectedActivities] = useState<ActivityId[]>([]);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
@@ -101,7 +94,7 @@ export function DateFlow({
         />
       )}
 
-      {step === "done" && <DoneScreen slug={slug} watermarkEnabled={watermarkEnabled} />}
+      {step === "done" && <DoneScreen />}
     </div>
   );
 }
