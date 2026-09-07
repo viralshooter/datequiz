@@ -64,10 +64,10 @@ export default async function Image() {
             display: "flex",
           }}
         >
-          Ask her out before someone else does
+          Turn that match into an actual date
         </div>
         <div style={{ marginTop: 20, fontSize: 26, color: "#22c55e", display: "flex" }}>
-          The link that can't be ignored
+          For your Hinge, Tinder & Bumble matches
         </div>
       </div>
     ),

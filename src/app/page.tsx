@@ -24,6 +24,7 @@ export default async function LandingPage() {
         <AnnouncementBar />
         <Nav />
         <Hero />
+        <BuiltForDatingApps />
         <HowItWorks />
         <TrustBar />
         <Pricing />
@@ -53,18 +54,19 @@ function Hero() {
     <section className="mx-auto flex max-w-2xl flex-col items-center px-6 pb-16 pt-12 text-center">
       <div className="flex flex-wrap items-center justify-center gap-2">
         <span className="rounded-full border border-brand/30 bg-brand/10 px-4 py-1 text-xs font-bold uppercase tracking-widest text-brand">
-          The digital wingman
+          For your Hinge, Tinder & Bumble matches
         </span>
         <span className="rounded-full bg-brand px-4 py-1 text-xs font-bold uppercase tracking-widest text-ink">
           🎁 First link free
         </span>
       </div>
       <h1 className="mt-6 text-4xl font-extrabold leading-[1.1] tracking-tight sm:text-6xl">
-        Ask her out before someone else does
+        Turn that match into an actual date
       </h1>
       <p className="mt-5 max-w-lg text-lg text-neutral-400">
-        You send a link. She tries to say no — she literally can't — and ends up picking
-        what to do and when. You get to enjoy the win.
+        That match you've been texting for two weeks? Drop a Yeslink in the chat instead of
+        another "we should hang out sometime." She tries to say no — she literally can't —
+        and ends up picking what to do and when.
       </p>
       <div className="mt-9 flex flex-col gap-3 sm:flex-row">
         <Link
@@ -82,6 +84,20 @@ function Hero() {
       </div>
       <p className="mt-4 text-sm text-neutral-500">No card required. You only pay if you keep using it.</p>
 
+      <p className="mt-8 text-xs uppercase tracking-widest text-neutral-500">
+        Works anywhere you can paste a link
+      </p>
+      <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+        {["Hinge", "Tinder", "Bumble", "Instagram DMs", "iMessage"].map((app) => (
+          <span
+            key={app}
+            className="rounded-full border border-white/10 bg-ink-2/60 px-3 py-1 text-sm font-semibold text-neutral-300"
+          >
+            {app}
+          </span>
+        ))}
+      </div>
+
       <div className="mt-12 flex w-full flex-wrap items-center justify-center gap-x-2 gap-y-4">
         {MINI_STEPS.map((step, i) => (
           <div key={step.label} className="flex items-center gap-2">
@@ -97,6 +113,53 @@ function Hero() {
   );
 }
 
+const DATING_APP_PROBLEMS = [
+  {
+    emoji: "🥶",
+    problem: "The match goes cold",
+    solution:
+      "You matched, you chatted, then nothing. A Yeslink restarts it with something she actually has to answer.",
+  },
+  {
+    emoji: "🌀",
+    problem: '"We should get drinks sometime"',
+    solution:
+      "That sentence never becomes a plan. This one ends with an activity and a day already picked.",
+  },
+  {
+    emoji: "🥱",
+    problem: "You look like everyone else",
+    solution:
+      "Her inbox is 20 guys typing \"hey, how's your week going?\". You're the one who sent something she'll screenshot.",
+  },
+];
+
+function BuiltForDatingApps() {
+  return (
+    <section className="border-t border-white/10 py-20">
+      <div className="mx-auto max-w-4xl px-6">
+        <h2 className="text-center text-2xl font-extrabold sm:text-3xl">
+          Built for the apps you're already on
+        </h2>
+        <p className="mx-auto mt-3 max-w-xl text-center text-neutral-400">
+          Yeslink is made for Hinge, Tinder and Bumble matches: the ones stuck in the chat that
+          never turn into a real date. You paste one link — the rest happens on its own.
+        </p>
+
+        <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          {DATING_APP_PROBLEMS.map((item) => (
+            <div key={item.problem} className="rounded-2xl border border-white/10 bg-ink-2 p-6">
+              <div className="text-3xl">{item.emoji}</div>
+              <p className="mt-3 text-lg font-bold text-white">{item.problem}</p>
+              <p className="mt-2 text-sm text-neutral-400">{item.solution}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const STEPS = [
   {
     number: "01",
@@ -105,8 +168,8 @@ const STEPS = [
   },
   {
     number: "02",
-    title: "The NO doesn't hold up",
-    description: "It literally runs from her finger. She ends up saying yes and picking what to do.",
+    title: "You paste it in the chat",
+    description: "Straight into your Hinge, Tinder or Bumble conversation. She opens it, the NO runs from her finger.",
   },
   {
     number: "03",
@@ -185,6 +248,10 @@ function Pricing() {
 }
 
 const FAQ_ITEMS = [
+  {
+    q: "Does this work with Hinge, Tinder and Bumble?",
+    a: "Yes — that's exactly what it's for. It's just a link, so you paste it into any chat: Hinge, Tinder, Bumble, Instagram DMs, iMessage, wherever you're already talking to her.",
+  },
   {
     q: "Does she need to download an app or sign up?",
     a: "No. She opens the link, answers, done. Zero sign-up on her end.",

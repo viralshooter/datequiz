@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: "Yeslink",
-  description: "Ask her out before someone else does. The link that can't be ignored.",
+  description:
+    "Turn that Hinge, Tinder or Bumble match into an actual date. One link she can't say no to.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
