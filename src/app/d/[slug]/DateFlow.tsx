@@ -21,6 +21,8 @@ interface DateFlowProps {
   matchName: string;
   availableDays: string[];
   instagramHandle: string;
+  senderName: string;
+  personalNote: string;
   alreadyAnswered: boolean;
 }
 
@@ -29,6 +31,8 @@ export function DateFlow({
   matchName,
   availableDays,
   instagramHandle,
+  senderName,
+  personalNote,
   alreadyAnswered,
 }: DateFlowProps) {
   const [step, setStep] = useState<Step>(alreadyAnswered ? "done" : "hero");
@@ -103,6 +107,8 @@ export function DateFlow({
               <Hero
                 matchName={matchName}
                 instagramHandle={instagramHandle}
+                senderName={senderName}
+                personalNote={personalNote}
                 onStart={() => setStep("askOut")}
               />
             </StepTransition>
@@ -195,10 +201,14 @@ function FloatingBackground() {
 function Hero({
   matchName,
   instagramHandle,
+  senderName,
+  personalNote,
   onStart,
 }: {
   matchName: string;
   instagramHandle: string;
+  senderName: string;
+  personalNote: string;
   onStart: () => void;
 }) {
   return (
@@ -243,12 +253,29 @@ function Hero({
         transition={{ delay: 0.15 }}
       >
         Hey {matchName} 👋
+        {senderName && (
+          <span className="mt-1 block text-xl font-bold text-neutral-500">
+            it's {senderName}
+          </span>
+        )}
       </motion.h1>
+
+      {personalNote && (
+        <motion.div
+          className="relative max-w-xs rounded-2xl rounded-bl-sm border border-neutral-200 bg-white px-5 py-4 text-left text-[15px] leading-relaxed text-neutral-700 shadow-sm"
+          initial={{ opacity: 0, y: 12, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.3, type: "spring", stiffness: 260, damping: 20 }}
+        >
+          {personalNote}
+        </motion.div>
+      )}
+
       <motion.p
         className="max-w-xs text-neutral-600"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25 }}
+        transition={{ delay: 0.4 }}
       >
         I've got a quick question for you. 30 seconds, promise.
       </motion.p>

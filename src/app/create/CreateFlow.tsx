@@ -19,6 +19,8 @@ export function CreateFlow() {
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [notifyEmail, setNotifyEmail] = useState("");
   const [instagramHandle, setInstagramHandle] = useState("");
+  const [senderName, setSenderName] = useState("");
+  const [personalNote, setPersonalNote] = useState("");
   const [slug, setSlug] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -54,6 +56,8 @@ export function CreateFlow() {
           available_days: selectedDays,
           notify_email: notifyEmail.trim(),
           instagram_handle: instagramHandle.trim(),
+          sender_name: senderName.trim(),
+          personal_note: personalNote.trim(),
         }),
       });
 
@@ -82,12 +86,24 @@ export function CreateFlow() {
     setSelectedDays([]);
     setNotifyEmail("");
     setInstagramHandle("");
+    setSenderName("");
+    setPersonalNote("");
     setSlug(null);
     setError(null);
     setStep("name");
   }
 
   const canGenerate = selectedDays.length > 0 && EMAIL_RE.test(notifyEmail.trim()) && !sessionLoading;
+
+  // Whatever he already told us goes into the message, so what lands in her
+  // chat reads like him rather than a bare URL.
+  const shareMessage = [
+    senderName.trim() ? `Hey ${matchName}, it's ${senderName.trim()}!` : `Hey ${matchName}!`,
+    personalNote.trim(),
+    `I've got a question for you 👀 ${fullLink}`,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-6 py-10">
@@ -108,6 +124,25 @@ export function CreateFlow() {
               placeholder="e.g. Emma"
               className="mt-2 w-full rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
             />
+
+            <label className="mt-6 block text-sm font-semibold text-neutral-300">
+              Say something only she'd get
+            </label>
+            <textarea
+              value={personalNote}
+              onChange={(e) => setPersonalNote(e.target.value.slice(0, 180))}
+              rows={3}
+              placeholder="Still thinking about your take on pineapple pizza. Settle this in person?"
+              className="mt-2 w-full resize-none rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-base text-white outline-none placeholder:text-neutral-500 focus:border-brand"
+            />
+            <div className="mt-2 flex items-start justify-between gap-3">
+              <p className="text-xs text-neutral-500">
+                One line from your actual conversation. This is what makes it read as you and not
+                as spam.
+              </p>
+              <span className="shrink-0 text-xs text-neutral-600">{personalNote.length}/180</span>
+            </div>
+
             <button
               type="button"
               disabled={!matchName.trim()}
@@ -165,6 +200,17 @@ export function CreateFlow() {
             </p>
 
             <label className="mt-8 block text-sm font-semibold text-neutral-300">
+              Your first name
+            </label>
+            <input
+              autoFocus
+              value={senderName}
+              onChange={(e) => setSenderName(e.target.value.slice(0, 40))}
+              placeholder="e.g. Marco"
+              className="mt-2 w-full rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
+            />
+
+            <label className="mt-6 block text-sm font-semibold text-neutral-300">
               Your Instagram
             </label>
             <div className="relative mt-2">
@@ -172,7 +218,6 @@ export function CreateFlow() {
                 @
               </span>
               <input
-                autoFocus
                 value={instagramHandle}
                 onChange={(e) => setInstagramHandle(e.target.value)}
                 placeholder="yourhandle"
@@ -241,14 +286,19 @@ export function CreateFlow() {
               <p className="break-all text-sm font-mono text-neutral-300">{fullLink}</p>
             </div>
 
+            <div className="mt-4 rounded-xl border border-amber-500/25 bg-amber-500/10 p-4 text-sm text-amber-200/90">
+              <p className="font-bold text-amber-200">Send it on WhatsApp or IG, not in the app</p>
+              <p className="mt-1">
+                Dating apps flag links dropped early in a chat as spam, and the preview doesn't
+                render there anyway. Wait until you've moved to WhatsApp or Instagram — that's
+                where she'll see your handle and the preview card.
+              </p>
+            </div>
+
             <div className="mt-4 flex flex-col gap-3">
               <CopyButton text={fullLink} />
               <a
-                href={`https://wa.me/?text=${encodeURIComponent(
-                  instagramHandle.trim()
-                    ? `Hey ${matchName}! It's @${instagramHandle.trim().replace(/^@/, "")} — I've got a question for you 👀 ${fullLink}`
-                    : `Hey ${matchName}! I've got a question for you 👀 ${fullLink}`
-                )}`}
+                href={`https://wa.me/?text=${encodeURIComponent(shareMessage)}`}
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-center font-bold text-ink shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform active:scale-95"

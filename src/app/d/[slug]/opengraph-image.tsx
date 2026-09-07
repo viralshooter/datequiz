@@ -14,12 +14,13 @@ export default async function Image({ params }: ImageProps) {
   const admin = createSupabaseAdminClient();
   const { data: link } = await admin
     .from("links")
-    .select("match_name, instagram_handle")
+    .select("match_name, instagram_handle, sender_name")
     .eq("slug", slug)
     .maybeSingle();
 
   const matchName = link?.match_name ?? "you";
   const handle = (link?.instagram_handle as string | undefined) ?? "";
+  const senderName = (link?.sender_name as string | undefined) ?? "";
 
   return new ImageResponse(
     (
@@ -35,7 +36,7 @@ export default async function Image({ params }: ImageProps) {
           fontFamily: "sans-serif",
         }}
       >
-        {handle && (
+        {(handle || senderName) && (
           <div
             style={{
               display: "flex",
@@ -51,7 +52,11 @@ export default async function Image({ params }: ImageProps) {
             }}
           >
             <span style={{ color: "#8a8378" }}>sent by</span>
-            <span style={{ fontWeight: 700 }}>@{handle}</span>
+            <span style={{ fontWeight: 700 }}>
+              {senderName && handle
+                ? `${senderName} · @${handle}`
+                : senderName || `@${handle}`}
+            </span>
           </div>
         )}
 

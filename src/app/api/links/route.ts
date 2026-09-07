@@ -12,6 +12,8 @@ const LinkBodySchema = z.object({
   available_days: z.array(z.string()).min(1),
   notify_email: z.string().trim().email(),
   instagram_handle: z.string().trim().optional(),
+  sender_name: z.string().trim().max(40).optional(),
+  personal_note: z.string().trim().max(180).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -27,6 +29,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "missing_fields" }, { status: 400 });
   }
   const { match_name, available_days, notify_email } = parsed.data;
+  const sender_name = parsed.data.sender_name ?? "";
+  const personal_note = parsed.data.personal_note ?? "";
   // Optional: an unparseable handle is dropped rather than rejected, so a
   // typo never blocks link creation.
   const instagram_handle = parsed.data.instagram_handle
@@ -65,6 +69,8 @@ export async function POST(request: NextRequest) {
       available_days,
       notify_email,
       instagram_handle,
+      sender_name,
+      personal_note,
       watermark_enabled: !profile?.remove_watermark,
     });
 

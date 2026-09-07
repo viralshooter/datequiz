@@ -12,7 +12,9 @@ async function getLink(slug: string) {
   const admin = createSupabaseAdminClient();
   const { data: link } = await admin
     .from("links")
-    .select("id, slug, match_name, available_days, instagram_handle")
+    .select(
+      "id, slug, match_name, available_days, instagram_handle, sender_name, personal_note"
+    )
     .eq("slug", slug)
     .maybeSingle();
 
@@ -33,10 +35,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!result) return { title: "Yeslink" };
 
   const handle = result.link.instagram_handle as string;
-  const title = `${result.link.match_name}, I've got a question for you 💌`;
-  const description = handle
-    ? `From @${handle} · 30 seconds, no strings attached.`
-    : "30 seconds, no strings attached. Promise. (Almost.)";
+  const senderName = result.link.sender_name as string;
+  const note = result.link.personal_note as string;
+
+  const title = senderName
+    ? `${result.link.match_name}, it's ${senderName} — I've got a question for you 💌`
+    : `${result.link.match_name}, I've got a question for you 💌`;
+
+  const from = handle ? `From @${handle}` : null;
+  const description = [note || null, from, "30 seconds, no strings attached."]
+    .filter(Boolean)
+    .join(" · ");
 
   return {
     title,
@@ -70,6 +79,8 @@ export default async function YeslinkPage({ params }: PageProps) {
       matchName={link.match_name}
       availableDays={link.available_days as string[]}
       instagramHandle={link.instagram_handle as string}
+      senderName={link.sender_name as string}
+      personalNote={link.personal_note as string}
       alreadyAnswered={alreadyAnswered}
     />
   );
