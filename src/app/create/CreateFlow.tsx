@@ -7,7 +7,7 @@ import { useAnonymousSession } from "@/lib/useAnonymousSession";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Paywall } from "@/components/Paywall";
 
-type Step = "name" | "days" | "generating" | "result" | "paywall";
+type Step = "name" | "days" | "about" | "generating" | "result" | "paywall";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -65,7 +65,7 @@ export function CreateFlow() {
       const data = await res.json();
       if (!res.ok) {
         setError(data.error ?? "Something went wrong, please try again.");
-        setStep("days");
+        setStep("about");
         return;
       }
 
@@ -73,7 +73,7 @@ export function CreateFlow() {
       setStep("result");
     } catch {
       setError("Something went wrong, please try again.");
-      setStep("days");
+      setStep("about");
     }
   }
 
@@ -146,25 +146,33 @@ export function CreateFlow() {
               })}
             </div>
 
-            <label className="mt-6 block text-sm font-semibold text-neutral-300">
-              Your email (to notify you the moment she answers)
-            </label>
-            <input
-              type="email"
-              value={notifyEmail}
-              onChange={(e) => setNotifyEmail(e.target.value)}
-              placeholder="you@email.com"
-              className="mt-2 w-full rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
-            />
+            <button
+              type="button"
+              disabled={selectedDays.length === 0}
+              onClick={() => setStep("about")}
+              className="mt-6 w-full rounded-full bg-brand px-8 py-4 text-lg font-bold text-ink shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform active:scale-95 disabled:opacity-40"
+            >
+              Continue →
+            </button>
+          </StepCard>
+        )}
 
-            <label className="mt-6 block text-sm font-semibold text-neutral-300">
-              Your Instagram <span className="font-normal text-neutral-500">(optional)</span>
+        {step === "about" && (
+          <StepCard key="about">
+            <h1 className="text-2xl font-extrabold">Who's asking? 👋</h1>
+            <p className="mt-2 text-neutral-400">
+              So she knows the link is really from you — and so you hear back the second she answers.
+            </p>
+
+            <label className="mt-8 block text-sm font-semibold text-neutral-300">
+              Your Instagram
             </label>
             <div className="relative mt-2">
               <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg text-neutral-500">
                 @
               </span>
               <input
+                autoFocus
                 value={instagramHandle}
                 onChange={(e) => setInstagramHandle(e.target.value)}
                 placeholder="yourhandle"
@@ -175,7 +183,23 @@ export function CreateFlow() {
               />
             </div>
             <p className="mt-2 text-xs text-neutral-500">
-              Shown on her page so she knows it's really you, not spam.
+              She'll see "sent by @{instagramHandle.trim().replace(/^@/, "") || "yourhandle"}" and can
+              tap through to your profile. Optional, but it's what makes the link look real instead of
+              like spam.
+            </p>
+
+            <label className="mt-6 block text-sm font-semibold text-neutral-300">
+              Your email
+            </label>
+            <input
+              type="email"
+              value={notifyEmail}
+              onChange={(e) => setNotifyEmail(e.target.value)}
+              placeholder="you@email.com"
+              className="mt-2 w-full rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
+            />
+            <p className="mt-2 text-xs text-neutral-500">
+              Only used to notify you when she answers. She never sees it.
             </p>
 
             {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
@@ -202,7 +226,7 @@ export function CreateFlow() {
 
         {step === "paywall" && userId && (
           <StepCard key="paywall">
-            <Paywall userId={userId} onCancel={() => setStep("days")} />
+            <Paywall userId={userId} onCancel={() => setStep("about")} />
           </StepCard>
         )}
 
