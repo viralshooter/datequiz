@@ -46,3 +46,7 @@ next-env.d.ts
 # strumenti CLI scaricati localmente (es. stripe.exe), tunnel debug logs
 .tools/
 *.log
+
+# local debugging (screenshots, throwaway scripts)
+/mobile-shots/
+/scripts/

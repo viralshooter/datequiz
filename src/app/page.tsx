@@ -56,9 +56,9 @@ const MINI_STEPS = [
 function Hero() {
   return (
     <section className="mx-auto max-w-6xl px-6 pb-14 pt-6">
-      <div className="grid items-start gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-12">
+      <div className="grid min-w-0 grid-cols-1 items-start gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-12">
         {/* The pitch */}
-        <div className="text-center lg:pt-4 lg:text-left">
+        <div className="min-w-0 text-center lg:pt-4 lg:text-left">
           <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-start">
             <span className="-rotate-2 rounded-full border-2 border-ink bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-ink shadow-[3px_3px_0_0_#1a1a1f]">
               For your Hinge, Tinder & Bumble matches
@@ -119,7 +119,7 @@ function Hero() {
         </div>
 
         {/* The proof: what she sees, then the same trick playable right here */}
-        <div>
+        <div className="min-w-0">
           <p className="text-center text-xs font-black uppercase tracking-widest text-neutral-500">
             👀 This is what lands in her DMs
           </p>
@@ -178,7 +178,7 @@ function BuiltForDatingApps() {
           never turn into a real date.
         </p>
 
-        <div className="mt-12 grid gap-8 sm:grid-cols-3">
+        <div className="mt-12 grid min-w-0 grid-cols-1 gap-8 sm:grid-cols-3">
           {DATING_APP_PROBLEMS.map((item) => (
             <div
               key={item.problem}
@@ -236,7 +236,7 @@ function HowItWorks() {
     <section className="border-t-2 border-ink/10 py-20">
       <div className="mx-auto max-w-4xl px-6">
         <h2 className="text-center text-3xl font-black sm:text-4xl">Three levels, one date</h2>
-        <div className="mt-14 grid gap-10 sm:grid-cols-3">
+        <div className="mt-14 grid min-w-0 grid-cols-1 gap-10 sm:grid-cols-3">
           {STEPS.map((step) => (
             <div
               key={step.title}
@@ -276,7 +276,7 @@ function NoteExamples() {
           who sends a bare URL. Steal the vibe, not the words:
         </p>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+        <div className="mt-12 grid min-w-0 grid-cols-1 gap-6 sm:grid-cols-2">
           {NOTE_EXAMPLES.map((item) => (
             <div
               key={item.note}
@@ -301,7 +301,7 @@ const TRUST_ITEMS = [
 function TrustBar() {
   return (
     <section className="mx-auto max-w-4xl px-6 py-16">
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-3">
         {TRUST_ITEMS.map((item) => (
           <div
             key={item.text}
@@ -327,7 +327,7 @@ function Pricing() {
           The first one's free. The rest you earn.
         </p>
 
-        <div className="mt-12 grid gap-8 sm:grid-cols-3">
+        <div className="mt-12 grid min-w-0 grid-cols-1 gap-8 sm:grid-cols-3">
           <div className="rotate-1 rounded-3xl border-[3px] border-ink bg-brand p-6 text-center shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-1 hover:rotate-0">
             <p className="text-xs font-black uppercase tracking-widest text-ink/70">Starter</p>
             <p className="mt-2 text-4xl font-black">Free</p>

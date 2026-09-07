@@ -18,7 +18,7 @@ export function ActivityGrid({ onConfirm }: ActivityGridProps) {
 
   return (
     <motion.div
-      className="flex min-h-full w-full flex-col items-center justify-center gap-6 px-5 pb-10 pt-12 text-center"
+      className="flex w-full flex-1 flex-col items-center justify-center gap-6 px-5 pb-10 pt-12 text-center"
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
     >

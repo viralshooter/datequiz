@@ -72,7 +72,7 @@ export function LoginForm() {
           <svg width="28" height="28" viewBox="0 0 32 32">
             <path
               d="M9 17l5 5 9-11"
-              stroke="#22c55e"
+              stroke="#1a1a1f"
               strokeWidth="4"
               strokeLinecap="round"
               strokeLinejoin="round"

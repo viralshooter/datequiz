@@ -27,7 +27,7 @@ export function CelebrationScreen() {
   );
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center gap-4 overflow-hidden px-6 text-center">
+    <div className="relative flex w-full flex-1 flex-col items-center justify-center gap-4 overflow-hidden px-6 text-center">
       <motion.div
         className="absolute h-72 w-72 rounded-full bg-brand/25 blur-3xl"
         initial={{ scale: 0, opacity: 0.8 }}
@@ -58,7 +58,10 @@ export function CelebrationScreen() {
         className="text-7xl"
         initial={{ scale: 0, rotate: -15 }}
         animate={{ scale: [0, 1.3, 1], rotate: 0 }}
-        transition={{ type: "spring", stiffness: 260, damping: 12 }}
+        transition={{
+          scale: { duration: 0.5, ease: "easeOut" },
+          rotate: { type: "spring", stiffness: 260, damping: 12 },
+        }}
       >
         🎉
       </motion.div>

@@ -80,7 +80,10 @@ export function TryTheButton() {
             className="text-6xl"
             initial={{ scale: 0, rotate: -20 }}
             animate={{ scale: [0, 1.3, 1], rotate: 0 }}
-            transition={{ type: "spring", stiffness: 260, damping: 12 }}
+            transition={{
+              scale: { duration: 0.5, ease: "easeOut" },
+              rotate: { type: "spring", stiffness: 260, damping: 12 },
+            }}
           >
             🎉
           </motion.div>

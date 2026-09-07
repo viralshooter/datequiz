@@ -56,7 +56,7 @@ export function EvasiveAskOut({ matchName, onYes }: EvasiveAskOutProps) {
   const yesScale = Math.min(YES_GROWTH.base + escapes * YES_GROWTH.step, YES_GROWTH.max);
 
   return (
-    <div ref={containerRef} className="relative h-full w-full overflow-hidden px-6 pt-16 text-center">
+    <div ref={containerRef} className="relative w-full flex-1 overflow-hidden px-6 pt-16 text-center">
       <motion.p
         className="mx-auto max-w-xs text-3xl font-extrabold leading-snug text-neutral-900"
         initial={{ opacity: 0, y: -12 }}
