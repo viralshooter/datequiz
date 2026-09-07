@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -19,13 +19,24 @@ export const metadata: Metadata = {
     "Turn that Hinge, Tinder or Bumble match into an actual date. One link she can't say no to.",
 };
 
+/** viewportFit: "cover" lets the page paint under the notch; the layouts
+ * that sit against a screen edge pad themselves with env(safe-area-inset-*). */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#fff9f2",
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-cream text-ink">{children}</body>
+      <body className="flex min-h-full flex-col overflow-x-hidden bg-cream text-ink">
+        {children}
+      </body>
     </html>
   );
 }

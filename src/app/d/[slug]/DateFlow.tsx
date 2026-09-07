@@ -88,10 +88,10 @@ export function DateFlow({
   const progress = STEP_ORDER.indexOf(step) / (STEP_ORDER.length - 1);
 
   return (
-    <div className="relative mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-gradient-to-b from-cream via-white to-white">
+    <div className="relative mx-auto flex min-h-dvh w-full max-w-md flex-col bg-gradient-to-b from-cream via-white to-white">
       <FloatingBackground />
 
-      <div className="relative z-10 h-1.5 w-full bg-black/5">
+      <div className="sticky top-0 z-20 h-1.5 w-full bg-black/5" style={{ paddingTop: "env(safe-area-inset-top)" }}>
         <motion.div
           className="h-full bg-brand-dark"
           initial={false}
@@ -100,7 +100,10 @@ export function DateFlow({
         />
       </div>
 
-      <div className="relative z-10 flex flex-1 flex-col overflow-hidden">
+      <div
+        className="relative z-10 flex flex-1 flex-col"
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      >
         <AnimatePresence mode="wait">
           {step === "hero" && (
             <StepTransition key="hero">
@@ -213,7 +216,7 @@ function Hero({
 }) {
   return (
     <motion.div
-      className="flex h-full w-full flex-col items-center justify-center gap-6 px-6 text-center"
+      className="flex min-h-full w-full flex-col items-center justify-center gap-6 px-6 py-12 text-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
