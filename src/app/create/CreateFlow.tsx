@@ -149,7 +149,7 @@ export function CreateFlow() {
               type="button"
               disabled={!canContinueFromName}
               onClick={() => setStep("days")}
-              className="mt-6 w-full rounded-full bg-brand px-8 py-4 text-lg font-bold text-ink shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform active:scale-95 disabled:opacity-40"
+              className="mt-6 w-full rounded-full border-2 border-brand bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_rgba(34,197,94,0.4)] transition-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 disabled:opacity-40 disabled:shadow-none"
             >
               Continue →
             </button>
@@ -187,7 +187,7 @@ export function CreateFlow() {
               type="button"
               disabled={selectedDays.length === 0}
               onClick={() => setStep("about")}
-              className="mt-6 w-full rounded-full bg-brand px-8 py-4 text-lg font-bold text-ink shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform active:scale-95 disabled:opacity-40"
+              className="mt-6 w-full rounded-full border-2 border-brand bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_rgba(34,197,94,0.4)] transition-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 disabled:opacity-40 disabled:shadow-none"
             >
               Continue →
             </button>
@@ -255,7 +255,7 @@ export function CreateFlow() {
               type="button"
               disabled={!canGenerate}
               onClick={generateLink}
-              className="mt-6 w-full rounded-full bg-brand px-8 py-4 text-lg font-bold text-ink shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform active:scale-95 disabled:opacity-40"
+              className="mt-6 w-full rounded-full border-2 border-brand bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_rgba(34,197,94,0.4)] transition-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 disabled:opacity-40 disabled:shadow-none"
             >
               Generate link →
             </button>
