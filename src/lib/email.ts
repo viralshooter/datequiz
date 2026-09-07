@@ -15,7 +15,7 @@ export async function sendAnswerNotification({ to, matchName, slug }: AnswerNoti
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return;
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://datequiz-seven.vercel.app";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://yeslink.app";
   const resultUrl = `${siteUrl}/r/${slug}`;
 
   const resend = new Resend(apiKey);
