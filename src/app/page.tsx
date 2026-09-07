@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Nav } from "@/components/Nav";
-import { AmbientBackground } from "@/components/AmbientBackground";
-import { FloatingStickers } from "@/components/FloatingStickers";
+import { PlayfulBackground } from "@/components/PlayfulBackground";
+import { TryTheButton } from "@/components/TryTheButton";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { PRICING_PACKAGES } from "@/config/pricing";
 
@@ -19,18 +19,19 @@ export default async function LandingPage() {
   }
 
   return (
-    <div className="relative min-h-dvh text-white">
-      <AmbientBackground />
-      <FloatingStickers />
+    <div className="relative min-h-dvh text-ink">
+      <PlayfulBackground />
       <div className="relative z-10">
         <AnnouncementBar />
         <Nav />
         <Hero />
         <BuiltForDatingApps />
         <HowItWorks />
+        <NoteExamples />
         <TrustBar />
         <Pricing />
         <Faq />
+        <FinalCta />
         <Footer />
       </div>
     </div>
@@ -39,86 +40,92 @@ export default async function LandingPage() {
 
 function AnnouncementBar() {
   return (
-    <div className="bg-brand px-4 py-2 text-center text-sm font-black text-ink">
+    <div className="border-b-2 border-ink bg-brand px-4 py-2 text-center text-sm font-black text-ink">
       🎁 First link free — no card, no catch
     </div>
   );
 }
 
 const MINI_STEPS = [
-  { emoji: "✍️", label: "Write the link", tint: "border-yellow-300 shadow-[5px_5px_0_0_#fde047]" },
-  { emoji: "👀", label: "She answers", tint: "border-pink-400 shadow-[5px_5px_0_0_#f472b6]" },
-  { emoji: "📬", label: "You find out", tint: "border-brand shadow-[5px_5px_0_0_#22c55e]" },
+  { emoji: "✍️", label: "Write the link", shadow: "shadow-[5px_5px_0_0_#fbbf24]" },
+  { emoji: "👀", label: "She answers", shadow: "shadow-[5px_5px_0_0_#f472b6]" },
+  { emoji: "📬", label: "You find out", shadow: "shadow-[5px_5px_0_0_#22c55e]" },
 ];
 
 function Hero() {
   return (
     <section className="mx-auto flex max-w-3xl flex-col items-center px-6 pb-16 pt-10 text-center">
       <div className="flex flex-wrap items-center justify-center gap-3">
-        <span className="-rotate-2 rounded-full border-2 border-brand bg-brand/15 px-4 py-1.5 text-[11px] font-black uppercase tracking-widest text-brand">
+        <span className="-rotate-2 rounded-full border-2 border-ink bg-white px-4 py-1.5 text-[11px] font-black uppercase tracking-widest text-ink shadow-[3px_3px_0_0_#1a1a1f]">
           For your Hinge, Tinder & Bumble matches
         </span>
-        <span className="rotate-2 rounded-full border-2 border-yellow-300 bg-yellow-300 px-4 py-1.5 text-[11px] font-black uppercase tracking-widest text-ink">
+        <span className="rotate-2 rounded-full border-2 border-ink bg-yellow-300 px-4 py-1.5 text-[11px] font-black uppercase tracking-widest text-ink shadow-[3px_3px_0_0_#1a1a1f]">
           🎁 First link free
         </span>
       </div>
 
       <h1 className="mt-8 text-5xl font-black leading-[0.95] tracking-tight sm:text-7xl">
         Make her{" "}
-        <span className="relative inline-block -rotate-2 rounded-lg bg-yellow-300 px-3 pb-1 text-ink">
+        <span className="relative inline-block -rotate-2 rounded-xl border-2 border-ink bg-yellow-300 px-3 pb-1 shadow-[4px_4px_0_0_#1a1a1f]">
           laugh
         </span>{" "}
         into a yes
       </h1>
 
-      <p className="mt-6 max-w-lg text-lg text-neutral-400">
+      <p className="mt-7 max-w-lg text-lg text-neutral-600">
         That match you've been texting for two weeks? Send one link. She tries to say no — the
         button literally runs away from her finger — and she ends up picking what to do and when.
       </p>
 
-      <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+      <div className="mt-10 w-full">
+        <TryTheButton />
+      </div>
+
+      <div className="mt-10 flex flex-col gap-3 sm:flex-row">
         <Link
           href="/create"
-          className="rounded-full border-2 border-brand bg-brand px-8 py-4 text-lg font-black text-ink shadow-[6px_6px_0_0_rgba(34,197,94,0.4)] transition-transform hover:-translate-y-0.5 hover:rotate-1 active:translate-y-0 active:scale-95"
+          className="rounded-full border-[3px] border-ink bg-brand px-8 py-4 text-lg font-black text-ink shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 hover:rotate-1 active:translate-y-0 active:scale-95"
         >
           Create your first Yeslink free →
         </Link>
         <Link
           href="/login"
-          className="rounded-full border-2 border-white/20 px-8 py-4 text-lg font-bold text-white transition-transform hover:-translate-y-0.5 hover:border-white/40"
+          className="rounded-full border-[3px] border-ink bg-white px-8 py-4 text-lg font-black text-ink shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 hover:-rotate-1 active:translate-y-0"
         >
           I already have an account
         </Link>
       </div>
-      <p className="mt-4 text-sm text-neutral-500">No card required. You only pay if you keep using it.</p>
+      <p className="mt-4 text-sm font-semibold text-neutral-500">
+        No card required. You only pay if you keep using it.
+      </p>
 
-      <p className="mt-10 text-xs font-bold uppercase tracking-widest text-neutral-500">
+      <p className="mt-12 text-xs font-black uppercase tracking-widest text-neutral-500">
         Send it where you already talk
       </p>
       <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
         {["WhatsApp", "Instagram DMs", "iMessage", "Messenger"].map((app) => (
           <span
             key={app}
-            className="rounded-full border border-white/10 bg-ink-2/60 px-3 py-1 text-sm font-semibold text-neutral-300"
+            className="rounded-full border-2 border-ink/15 bg-white px-3 py-1 text-sm font-bold text-neutral-600"
           >
             {app}
           </span>
         ))}
       </div>
 
-      <div className="mt-12 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-4">
+      <div className="mt-10 flex w-full flex-wrap items-center justify-center gap-x-3 gap-y-4">
         {MINI_STEPS.map((step, i) => (
           <div key={step.label} className="flex items-center gap-3">
             <div
-              className={`flex flex-col items-center gap-1 rounded-2xl border-2 bg-ink-2 px-5 py-4 transition-transform hover:-translate-y-1 hover:rotate-2 ${step.tint}`}
+              className={`flex flex-col items-center gap-1 rounded-2xl border-[3px] border-ink bg-white px-5 py-4 transition-transform hover:-translate-y-1 hover:rotate-2 ${step.shadow}`}
             >
               <span className="text-3xl">{step.emoji}</span>
-              <span className="text-xs font-black uppercase tracking-wide text-neutral-200">
+              <span className="text-xs font-black uppercase tracking-wide text-ink">
                 {step.label}
               </span>
             </div>
             {i < MINI_STEPS.length - 1 && (
-              <span className="text-xl font-black text-neutral-600">→</span>
+              <span className="text-xl font-black text-neutral-400">→</span>
             )}
           </div>
         ))}
@@ -134,8 +141,7 @@ const DATING_APP_PROBLEMS = [
     solution:
       "You matched, you chatted, then nothing. A Yeslink restarts it with something she actually has to answer.",
     tilt: "-rotate-1",
-    shadow: "shadow-[6px_6px_0_0_#38bdf8]",
-    border: "border-sky-400",
+    bg: "bg-sky-100",
   },
   {
     emoji: "🌀",
@@ -143,8 +149,7 @@ const DATING_APP_PROBLEMS = [
     solution:
       "That sentence never becomes a plan. This one ends with an activity and a day already picked.",
     tilt: "rotate-1",
-    shadow: "shadow-[6px_6px_0_0_#f472b6]",
-    border: "border-pink-400",
+    bg: "bg-pink-100",
   },
   {
     emoji: "🥱",
@@ -152,19 +157,18 @@ const DATING_APP_PROBLEMS = [
     solution:
       "Her inbox is 20 guys typing \"hey, how's your week going?\". You're the one who sent something she'll screenshot.",
     tilt: "-rotate-1",
-    shadow: "shadow-[6px_6px_0_0_#fde047]",
-    border: "border-yellow-300",
+    bg: "bg-yellow-100",
   },
 ];
 
 function BuiltForDatingApps() {
   return (
-    <section className="border-t border-white/10 py-20">
+    <section className="border-t-2 border-ink/10 py-20">
       <div className="mx-auto max-w-4xl px-6">
         <h2 className="text-center text-3xl font-black sm:text-4xl">
           Built for the apps you're already on
         </h2>
-        <p className="mx-auto mt-3 max-w-xl text-center text-neutral-400">
+        <p className="mx-auto mt-3 max-w-xl text-center text-neutral-600">
           Yeslink is made for Hinge, Tinder and Bumble matches: the ones stuck in the chat that
           never turn into a real date.
         </p>
@@ -173,11 +177,11 @@ function BuiltForDatingApps() {
           {DATING_APP_PROBLEMS.map((item) => (
             <div
               key={item.problem}
-              className={`rounded-3xl border-2 bg-ink-2 p-6 transition-transform hover:-translate-y-1 hover:rotate-0 ${item.tilt} ${item.shadow} ${item.border}`}
+              className={`rounded-3xl border-[3px] border-ink p-6 shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-1 hover:rotate-0 ${item.tilt} ${item.bg}`}
             >
               <div className="text-4xl">{item.emoji}</div>
-              <p className="mt-3 text-lg font-black text-white">{item.problem}</p>
-              <p className="mt-2 text-sm text-neutral-400">{item.solution}</p>
+              <p className="mt-3 text-lg font-black">{item.problem}</p>
+              <p className="mt-2 text-sm text-neutral-700">{item.solution}</p>
             </div>
           ))}
         </div>
@@ -191,41 +195,76 @@ const STEPS = [
     number: "1",
     title: "Write the link",
     description: "Her name, one line only she'd get, the days you're free. Under a minute.",
-    color: "bg-yellow-300 text-ink",
+    color: "bg-yellow-300",
   },
   {
     number: "2",
     title: "You send it to her",
     description:
       "On WhatsApp or IG, wherever you two already talk. She opens it, and the NO runs from her finger.",
-    color: "bg-pink-400 text-ink",
+    color: "bg-pink-400",
   },
   {
     number: "3",
     title: "You cash in",
     description: "You get an email the moment she answers. Zero anxiety over left-on-read texts.",
-    color: "bg-brand text-ink",
+    color: "bg-brand",
   },
 ];
 
 function HowItWorks() {
   return (
-    <section className="border-t border-white/10 bg-ink-2/40 py-20">
+    <section className="border-t-2 border-ink/10 py-20">
       <div className="mx-auto max-w-4xl px-6">
         <h2 className="text-center text-3xl font-black sm:text-4xl">Three levels, one date</h2>
-        <div className="mt-12 grid gap-8 sm:grid-cols-3">
+        <div className="mt-14 grid gap-10 sm:grid-cols-3">
           {STEPS.map((step) => (
             <div
               key={step.title}
-              className="relative rounded-3xl border-2 border-white/15 bg-ink p-6 pt-9 transition-transform hover:-translate-y-1"
+              className="relative rounded-3xl border-[3px] border-ink bg-white p-6 pt-9 shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-1"
             >
               <span
-                className={`absolute -top-5 left-6 flex h-11 w-11 rotate-[-6deg] items-center justify-center rounded-xl text-xl font-black shadow-[3px_3px_0_0_rgba(0,0,0,0.4)] ${step.color}`}
+                className={`absolute -top-6 left-6 flex h-12 w-12 rotate-[-8deg] items-center justify-center rounded-2xl border-[3px] border-ink text-xl font-black text-ink shadow-[3px_3px_0_0_#1a1a1f] ${step.color}`}
               >
                 {step.number}
               </span>
-              <p className="text-lg font-black text-white">{step.title}</p>
-              <p className="mt-2 text-sm text-neutral-400">{step.description}</p>
+              <p className="text-lg font-black">{step.title}</p>
+              <p className="mt-2 text-sm text-neutral-600">{step.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const NOTE_EXAMPLES = [
+  { note: "Still thinking about your take on pineapple pizza. Settle this in person?", tilt: "-rotate-2", bg: "bg-white" },
+  { note: "You said you'd beat me at mini golf. Bold claim. Prove it.", tilt: "rotate-1", bg: "bg-yellow-50" },
+  { note: "I owe you a coffee for that playlist recommendation.", tilt: "rotate-2", bg: "bg-pink-50" },
+  { note: "Our chat has gone three days without a plan. Fixing that now.", tilt: "-rotate-1", bg: "bg-sky-50" },
+];
+
+function NoteExamples() {
+  return (
+    <section className="border-t-2 border-ink/10 py-20">
+      <div className="mx-auto max-w-4xl px-6">
+        <h2 className="text-center text-3xl font-black sm:text-4xl">
+          The one line that does the work
+        </h2>
+        <p className="mx-auto mt-3 max-w-xl text-center text-neutral-600">
+          Every link carries a line only she'd understand. It's what separates you from the guy
+          who sends a bare URL. Steal the vibe, not the words:
+        </p>
+
+        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+          {NOTE_EXAMPLES.map((item) => (
+            <div
+              key={item.note}
+              className={`rounded-3xl rounded-bl-lg border-[3px] border-ink p-6 text-lg font-semibold shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:rotate-0 ${item.tilt} ${item.bg}`}
+            >
+              <span className="mb-2 block text-2xl">💬</span>
+              {item.note}
             </div>
           ))}
         </div>
@@ -247,10 +286,10 @@ function TrustBar() {
         {TRUST_ITEMS.map((item) => (
           <div
             key={item.text}
-            className="flex items-start gap-3 rounded-2xl border-2 border-white/10 bg-ink-2/50 p-4 transition-transform hover:-rotate-1"
+            className="flex items-start gap-3 rounded-2xl border-2 border-ink/15 bg-white/70 p-4 transition-transform hover:-rotate-1"
           >
             <span className="text-2xl">{item.emoji}</span>
-            <p className="text-sm text-neutral-300">{item.text}</p>
+            <p className="text-sm font-medium text-neutral-700">{item.text}</p>
           </div>
         ))}
       </div>
@@ -259,37 +298,33 @@ function TrustBar() {
 }
 
 function Pricing() {
-  const tints = [
-    "border-pink-400 shadow-[6px_6px_0_0_#f472b6]",
-    "border-violet-400 shadow-[6px_6px_0_0_#a78bfa]",
-    "border-sky-400 shadow-[6px_6px_0_0_#38bdf8]",
-  ];
+  const tints = ["bg-pink-100", "bg-violet-100", "bg-sky-100"];
 
   return (
-    <section className="border-t border-white/10 bg-ink-2/40 py-20">
+    <section className="border-t-2 border-ink/10 py-20">
       <div className="mx-auto max-w-4xl px-6">
         <h2 className="text-center text-3xl font-black sm:text-4xl">Pick your power-up</h2>
-        <p className="mt-3 text-center text-neutral-400">
+        <p className="mt-3 text-center text-neutral-600">
           The first one's free. The rest you earn.
         </p>
 
         <div className="mt-12 grid gap-8 sm:grid-cols-3">
-          <div className="rotate-1 rounded-3xl border-2 border-brand bg-brand/15 p-6 text-center shadow-[6px_6px_0_0_#22c55e] transition-transform hover:-translate-y-1 hover:rotate-0">
-            <p className="text-xs font-black uppercase tracking-widest text-brand">Starter</p>
-            <p className="mt-2 text-4xl font-black text-white">Free</p>
-            <p className="mt-1 text-sm text-neutral-400">1 link, no card required</p>
+          <div className="rotate-1 rounded-3xl border-[3px] border-ink bg-brand p-6 text-center shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-1 hover:rotate-0">
+            <p className="text-xs font-black uppercase tracking-widest text-ink/70">Starter</p>
+            <p className="mt-2 text-4xl font-black">Free</p>
+            <p className="mt-1 text-sm font-semibold text-ink/70">1 link, no card required</p>
           </div>
 
           {PRICING_PACKAGES.map((pkg, i) => (
             <div
               key={pkg.id}
-              className={`-rotate-1 rounded-3xl border-2 bg-ink p-6 text-center transition-transform hover:-translate-y-1 hover:rotate-0 ${tints[i % tints.length]}`}
+              className={`-rotate-1 rounded-3xl border-[3px] border-ink p-6 text-center shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-1 hover:rotate-0 ${tints[i % tints.length]}`}
             >
-              <p className="text-xs font-black uppercase tracking-widest text-neutral-400">
+              <p className="text-xs font-black uppercase tracking-widest text-neutral-500">
                 {pkg.label}
               </p>
-              <p className="mt-2 text-4xl font-black text-white">{pkg.priceLabel}</p>
-              <p className="mt-1 text-sm text-neutral-400">{pkg.description}</p>
+              <p className="mt-2 text-4xl font-black">{pkg.priceLabel}</p>
+              <p className="mt-1 text-sm font-medium text-neutral-700">{pkg.description}</p>
             </div>
           ))}
         </div>
@@ -312,6 +347,10 @@ const FAQ_ITEMS = [
     a: "That's the whole point of the design. Your name, your Instagram and a line only she'd understand are on the page before anything else — plus it's obviously playful from the first second.",
   },
   {
+    q: "Can she actually click NO?",
+    a: "Try it above. We'll wait.",
+  },
+  {
     q: 'Can I remove the "made with Yeslink" badge?',
     a: "Yes, the watermark removal package makes it entirely your own page.",
   },
@@ -331,10 +370,10 @@ function Faq() {
         {FAQ_ITEMS.map((item) => (
           <div
             key={item.q}
-            className="rounded-2xl border-2 border-white/10 bg-ink-2 p-5 transition-colors hover:border-white/25"
+            className="rounded-2xl border-[3px] border-ink bg-white p-5 shadow-[4px_4px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5"
           >
-            <p className="font-black text-white">{item.q}</p>
-            <p className="mt-1 text-sm text-neutral-400">{item.a}</p>
+            <p className="font-black">{item.q}</p>
+            <p className="mt-1 text-sm text-neutral-600">{item.a}</p>
           </div>
         ))}
       </div>
@@ -342,15 +381,36 @@ function Faq() {
   );
 }
 
+function FinalCta() {
+  return (
+    <section className="mx-auto max-w-3xl px-6 pb-20">
+      <div className="rounded-[2rem] border-[3px] border-ink bg-brand p-10 text-center shadow-[10px_10px_0_0_#1a1a1f]">
+        <p className="text-3xl font-black leading-tight sm:text-4xl">
+          She's not going to ask you.
+        </p>
+        <p className="mx-auto mt-3 max-w-md font-semibold text-ink/80">
+          Takes a minute. Costs nothing. Worst case she says yes.
+        </p>
+        <Link
+          href="/create"
+          className="mt-7 inline-block rounded-full border-[3px] border-ink bg-white px-8 py-4 text-lg font-black text-ink shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 hover:-rotate-1 active:translate-y-0"
+        >
+          Make your first Yeslink →
+        </Link>
+      </div>
+    </section>
+  );
+}
+
 function Footer() {
   return (
-    <footer className="mx-auto flex max-w-4xl flex-col items-center gap-4 border-t border-white/10 px-6 py-12 text-sm text-neutral-500">
-      <p className="text-base font-black text-neutral-300">Hook her with a laugh 💚</p>
+    <footer className="mx-auto flex max-w-4xl flex-col items-center gap-4 border-t-2 border-ink/10 px-6 py-12 text-sm text-neutral-500">
+      <p className="text-base font-black text-ink">Hook her with a laugh 💚</p>
       <div className="flex gap-4">
-        <Link href="/privacy" className="hover:text-neutral-300">
+        <Link href="/privacy" className="font-semibold hover:text-ink">
           Privacy
         </Link>
-        <Link href="/terms" className="hover:text-neutral-300">
+        <Link href="/terms" className="font-semibold hover:text-ink">
           Terms
         </Link>
       </div>

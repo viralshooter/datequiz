@@ -1,18 +1,18 @@
 import Link from "next/link";
 import { Nav } from "@/components/Nav";
-import { AmbientBackground } from "@/components/AmbientBackground";
+import { PlayfulBackground } from "@/components/PlayfulBackground";
 import { PRICING_PACKAGES } from "@/config/pricing";
 
 export const metadata = { title: "Terms of Service — Yeslink" };
 
 export default function TermsPage() {
   return (
-    <div className="relative min-h-dvh text-white">
-      <AmbientBackground />
+    <div className="relative min-h-dvh text-ink">
+      <PlayfulBackground />
       <div className="relative z-10">
       <Nav />
       <div className="mx-auto max-w-2xl px-6 py-10">
-        <div className="mb-8 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-300">
+        <div className="mb-8 rounded-xl border border-amber-400 bg-amber-100 p-4 text-sm text-amber-900">
           This is a standard draft, not yet reviewed by a lawyer. It should
           be checked and adapted before a real launch.
         </div>
@@ -74,8 +74,8 @@ export default function TermsPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mt-8">
-      <h2 className="text-lg font-bold text-white">{title}</h2>
-      <div className="mt-2 text-sm leading-relaxed text-neutral-400">{children}</div>
+      <h2 className="text-lg font-bold text-ink">{title}</h2>
+      <div className="mt-2 text-sm leading-relaxed text-neutral-600">{children}</div>
     </section>
   );
 }

@@ -113,10 +113,10 @@ export function CreateFlow() {
         {step === "name" && (
           <StepCard key="name">
             <h1 className="text-3xl font-extrabold">Who's the lucky one? 😏</h1>
-            <p className="mt-2 text-neutral-400">
+            <p className="mt-2 text-neutral-600">
               A quick invite: you ask her out, she picks what to do and when.
             </p>
-            <label className="mt-8 block text-sm font-semibold text-neutral-300">
+            <label className="mt-8 block text-sm font-black text-ink">
               What's her name?
             </label>
             <input
@@ -124,10 +124,10 @@ export function CreateFlow() {
               value={matchName}
               onChange={(e) => setMatchName(e.target.value)}
               placeholder="e.g. Emma"
-              className="mt-2 w-full rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
+              className="mt-2 w-full rounded-xl border-[3px] border-ink bg-white px-4 py-3 text-lg text-ink outline-none placeholder:text-neutral-400 focus:border-brand"
             />
 
-            <label className="mt-6 block text-sm font-semibold text-neutral-300">
+            <label className="mt-6 block text-sm font-black text-ink">
               Say something only she'd get
             </label>
             <textarea
@@ -135,7 +135,7 @@ export function CreateFlow() {
               onChange={(e) => setPersonalNote(e.target.value.slice(0, 180))}
               rows={3}
               placeholder="Still thinking about your take on pineapple pizza. Settle this in person?"
-              className="mt-2 w-full resize-none rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-base text-white outline-none placeholder:text-neutral-500 focus:border-brand"
+              className="mt-2 w-full resize-none rounded-xl border-[3px] border-ink bg-white px-4 py-3 text-base text-ink outline-none placeholder:text-neutral-400 focus:border-brand"
             />
             <div className="mt-2 flex items-start justify-between gap-3">
               <p className="text-xs text-neutral-500">
@@ -149,7 +149,7 @@ export function CreateFlow() {
               type="button"
               disabled={!canContinueFromName}
               onClick={() => setStep("days")}
-              className="mt-6 w-full rounded-full border-2 border-brand bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_rgba(34,197,94,0.4)] transition-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 disabled:opacity-40 disabled:shadow-none"
+              className="mt-6 w-full rounded-full border-[3px] border-ink bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 disabled:opacity-40 disabled:shadow-none"
             >
               Continue →
             </button>
@@ -159,7 +159,7 @@ export function CreateFlow() {
         {step === "days" && (
           <StepCard key="days">
             <h1 className="text-2xl font-extrabold">When are you free?</h1>
-            <p className="mt-2 text-neutral-400">
+            <p className="mt-2 text-neutral-600">
               Pick the days to offer her: she'll choose one of these.
             </p>
 
@@ -173,8 +173,8 @@ export function CreateFlow() {
                     onClick={() => toggleDay(day)}
                     className={`rounded-full border-2 px-4 py-2 text-sm font-semibold transition-colors ${
                       active
-                        ? "border-brand bg-brand/15 text-brand"
-                        : "border-white/15 bg-ink-2 text-neutral-400"
+                        ? "border-ink bg-brand text-ink"
+                        : "border-ink/20 bg-white text-neutral-600"
                     }`}
                   >
                     {day}
@@ -187,7 +187,7 @@ export function CreateFlow() {
               type="button"
               disabled={selectedDays.length === 0}
               onClick={() => setStep("about")}
-              className="mt-6 w-full rounded-full border-2 border-brand bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_rgba(34,197,94,0.4)] transition-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 disabled:opacity-40 disabled:shadow-none"
+              className="mt-6 w-full rounded-full border-[3px] border-ink bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 disabled:opacity-40 disabled:shadow-none"
             >
               Continue →
             </button>
@@ -197,11 +197,11 @@ export function CreateFlow() {
         {step === "about" && (
           <StepCard key="about">
             <h1 className="text-2xl font-extrabold">Who's asking? 👋</h1>
-            <p className="mt-2 text-neutral-400">
+            <p className="mt-2 text-neutral-600">
               So she knows the link is really from you — and so you hear back the second she answers.
             </p>
 
-            <label className="mt-8 block text-sm font-semibold text-neutral-300">
+            <label className="mt-8 block text-sm font-black text-ink">
               Your first name
             </label>
             <input
@@ -209,10 +209,10 @@ export function CreateFlow() {
               value={senderName}
               onChange={(e) => setSenderName(e.target.value.slice(0, 40))}
               placeholder="e.g. Marco"
-              className="mt-2 w-full rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
+              className="mt-2 w-full rounded-xl border-[3px] border-ink bg-white px-4 py-3 text-lg text-ink outline-none placeholder:text-neutral-400 focus:border-brand"
             />
 
-            <label className="mt-6 block text-sm font-semibold text-neutral-300">
+            <label className="mt-6 block text-sm font-black text-ink">
               Your Instagram
             </label>
             <div className="relative mt-2">
@@ -226,7 +226,7 @@ export function CreateFlow() {
                 autoCapitalize="none"
                 autoCorrect="off"
                 spellCheck={false}
-                className="w-full rounded-xl border-2 border-white/15 bg-ink-2 py-3 pl-9 pr-4 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
+                className="w-full rounded-xl border-[3px] border-ink bg-white py-3 pl-9 pr-4 text-lg text-ink outline-none placeholder:text-neutral-400 focus:border-brand"
               />
             </div>
             <p className="mt-2 text-xs text-neutral-500">
@@ -235,7 +235,7 @@ export function CreateFlow() {
               like spam.
             </p>
 
-            <label className="mt-6 block text-sm font-semibold text-neutral-300">
+            <label className="mt-6 block text-sm font-black text-ink">
               Your email
             </label>
             <input
@@ -243,7 +243,7 @@ export function CreateFlow() {
               value={notifyEmail}
               onChange={(e) => setNotifyEmail(e.target.value)}
               placeholder="you@email.com"
-              className="mt-2 w-full rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
+              className="mt-2 w-full rounded-xl border-[3px] border-ink bg-white px-4 py-3 text-lg text-ink outline-none placeholder:text-neutral-400 focus:border-brand"
             />
             <p className="mt-2 text-xs text-neutral-500">
               Only used to notify you when she answers. She never sees it.
@@ -255,7 +255,7 @@ export function CreateFlow() {
               type="button"
               disabled={!canGenerate}
               onClick={generateLink}
-              className="mt-6 w-full rounded-full border-2 border-brand bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_rgba(34,197,94,0.4)] transition-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 disabled:opacity-40 disabled:shadow-none"
+              className="mt-6 w-full rounded-full border-[3px] border-ink bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 disabled:opacity-40 disabled:shadow-none"
             >
               Generate link →
             </button>
@@ -266,7 +266,7 @@ export function CreateFlow() {
           <StepCard key="generating">
             <div className="flex flex-col items-center gap-4 py-16 text-center">
               <div className="text-5xl">⚡</div>
-              <p className="font-semibold text-neutral-400">Generating your link…</p>
+              <p className="font-semibold text-neutral-600">Generating your link…</p>
             </div>
           </StepCard>
         )}
@@ -280,16 +280,16 @@ export function CreateFlow() {
         {step === "result" && slug && (
           <StepCard key="result">
             <h1 className="text-2xl font-extrabold">Done. Ball's in her court 🎯</h1>
-            <p className="mt-2 text-neutral-400">
+            <p className="mt-2 text-neutral-600">
               Send this link to {matchName}: she'll see a playful page, then the big question.
             </p>
 
-            <div className="mt-6 rounded-xl border border-white/10 bg-ink-2 p-3">
-              <p className="break-all text-sm font-mono text-neutral-300">{fullLink}</p>
+            <div className="mt-6 rounded-xl border-[3px] border-ink bg-white p-3">
+              <p className="break-all text-sm font-mono text-neutral-700">{fullLink}</p>
             </div>
 
-            <div className="mt-4 rounded-xl border border-amber-500/25 bg-amber-500/10 p-4 text-sm text-amber-200/90">
-              <p className="font-bold text-amber-200">Send it on WhatsApp or IG, not in the app</p>
+            <div className="mt-4 rounded-xl border border-[3px] border-ink bg-amber-100 p-4 text-sm text-amber-900">
+              <p className="font-black text-amber-900">Send it on WhatsApp or IG, not in the app</p>
               <p className="mt-1">
                 Dating apps flag links dropped early in a chat as spam, and the preview doesn't
                 render there anyway. Wait until you've moved to WhatsApp or Instagram — that's
@@ -303,13 +303,13 @@ export function CreateFlow() {
                 href={`https://wa.me/?text=${encodeURIComponent(shareMessage)}`}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-center font-bold text-ink shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform active:scale-95"
+                className="flex items-center justify-center gap-2 rounded-full border-[3px] border-ink bg-brand px-6 py-3 text-center font-black text-ink shadow-[4px_4px_0_0_#1a1a1f] transition-transform active:scale-95"
               >
                 Send on WhatsApp
               </a>
               <a
                 href={`/r/${slug}`}
-                className="rounded-full border-2 border-white/15 px-6 py-3 text-center font-semibold text-neutral-300"
+                className="rounded-full border-[3px] border-ink bg-white px-6 py-3 text-center font-black text-ink shadow-[4px_4px_0_0_#1a1a1f]"
               >
                 Go to the results page
               </a>
@@ -328,6 +328,7 @@ export function CreateFlow() {
 function StepCard({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
+      className="rounded-3xl border-[3px] border-ink bg-white p-6 shadow-[8px_8px_0_0_#1a1a1f] sm:p-8"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
@@ -348,7 +349,7 @@ function CopyButton({ text }: { text: string }) {
         setCopied(true);
         window.setTimeout(() => setCopied(false), 1500);
       }}
-      className="rounded-full border-2 border-white/15 px-6 py-3 font-semibold text-neutral-200 transition-transform active:scale-95"
+      className="rounded-full border-[3px] border-ink bg-white px-6 py-3 font-black text-ink shadow-[4px_4px_0_0_#1a1a1f] transition-transform active:scale-95"
     >
       {copied ? "Copied ✅" : "Copy link"}
     </button>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { AmbientBackground } from "@/components/AmbientBackground";
+import { PlayfulBackground } from "@/components/PlayfulBackground";
 
 export function LoginForm() {
   const searchParams = useSearchParams();
@@ -36,16 +36,16 @@ export function LoginForm() {
   if (sent) {
     return (
       <div className="relative min-h-dvh w-full">
-        <AmbientBackground />
+        <PlayfulBackground />
         <motion.div
-          className="relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 text-center text-white"
+          className="relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 text-center text-ink"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="text-5xl">📬</div>
           <h1 className="mt-4 text-2xl font-extrabold">Check your inbox</h1>
-          <p className="mt-2 text-neutral-400">
-            We sent a link to <strong className="text-white">{email}</strong>. Click it and
+          <p className="mt-2 text-neutral-600">
+            We sent a link to <strong className="text-ink">{email}</strong>. Click it and
             you're in.
           </p>
           <button
@@ -62,13 +62,13 @@ export function LoginForm() {
 
   return (
     <div className="relative min-h-dvh w-full">
-      <AmbientBackground />
+      <PlayfulBackground />
       <motion.div
-        className="relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 text-center text-white"
+        className="relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 text-center text-ink"
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-ink-2">
+        <span className="flex h-14 w-14 items-center justify-center rounded-2xl border-[3px] border-ink bg-brand shadow-[4px_4px_0_0_#1a1a1f]">
           <svg width="28" height="28" viewBox="0 0 32 32">
             <path
               d="M9 17l5 5 9-11"
@@ -81,7 +81,7 @@ export function LoginForm() {
           </svg>
         </span>
         <h1 className="mt-4 text-2xl font-extrabold">Log in to Yeslink</h1>
-        <p className="mt-2 text-neutral-400">No password: we send you a link, you click it, you're in.</p>
+        <p className="mt-2 text-neutral-600">No password: we send you a link, you click it, you're in.</p>
 
         <input
           autoFocus
@@ -89,16 +89,16 @@ export function LoginForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@email.com"
-          className="mt-6 w-full rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
+          className="mt-6 w-full rounded-xl border-[3px] border-ink bg-white px-4 py-3 text-lg text-ink outline-none placeholder:text-neutral-500 focus:border-brand"
         />
 
-        {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
+        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
 
         <button
           type="button"
           disabled={!email.trim() || loading}
           onClick={sendMagicLink}
-          className="mt-4 w-full rounded-full bg-brand px-8 py-4 text-lg font-bold text-ink shadow-[0_0_30px_rgba(34,197,94,0.3)] transition-transform active:scale-95 disabled:opacity-40"
+          className="mt-4 w-full rounded-full border-[3px] border-ink bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_#1a1a1f] transition-transform active:scale-95 disabled:opacity-40"
         >
           {loading ? "One sec…" : "Send magic link →"}
         </button>

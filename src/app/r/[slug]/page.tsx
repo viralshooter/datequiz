@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { AmbientBackground } from "@/components/AmbientBackground";
+import { PlayfulBackground } from "@/components/PlayfulBackground";
 import { ACTIVITIES } from "@/config/content";
 import type { ActivityId } from "@/types/content";
 
@@ -19,7 +19,7 @@ export default async function ResultPage({ params }: PageProps) {
     .maybeSingle();
 
   if (!link) {
-    return <Shell><p className="text-neutral-400">This link doesn't exist anymore.</p></Shell>;
+    return <Shell><p className="text-neutral-600">This link doesn't exist anymore.</p></Shell>;
   }
 
   // No session check here: like /d/[slug], the slug (random and
@@ -36,10 +36,10 @@ export default async function ResultPage({ params }: PageProps) {
     return (
       <Shell>
         <div className="text-5xl">⏳</div>
-        <h1 className="mt-4 text-2xl font-extrabold text-white">
+        <h1 className="mt-4 text-2xl font-extrabold text-ink">
           Waiting for {link.match_name} to answer
         </h1>
-        <p className="mt-2 text-neutral-400">Check back here once she's answered.</p>
+        <p className="mt-2 text-neutral-600">Check back here once she's answered.</p>
       </Shell>
     );
   }
@@ -57,10 +57,10 @@ export default async function ResultPage({ params }: PageProps) {
 
       <div className="mt-3 text-6xl">🎉</div>
 
-      <h1 className="mt-3 text-2xl font-extrabold text-white">She said yes!</h1>
+      <h1 className="mt-3 text-2xl font-extrabold text-ink">She said yes!</h1>
 
-      <div className="mt-6 w-full rounded-2xl border border-white/10 bg-ink-2 p-5 text-left">
-        <p className="text-sm font-semibold text-neutral-400">She's in the mood for</p>
+      <div className="mt-6 w-full rounded-2xl border-[3px] border-ink bg-white p-5 text-left shadow-[5px_5px_0_0_#1a1a1f]">
+        <p className="text-sm font-semibold text-neutral-600">She's in the mood for</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {selectedActivities.map((a) => (
             <span key={a.id} className="rounded-full bg-brand/15 px-3 py-1 text-sm font-semibold text-brand">
@@ -70,8 +70,8 @@ export default async function ResultPage({ params }: PageProps) {
         </div>
       </div>
 
-      <div className="mt-4 w-full rounded-2xl border border-white/10 bg-ink-2 p-5 text-left">
-        <p className="text-sm font-semibold text-neutral-400">Days that work</p>
+      <div className="mt-4 w-full rounded-2xl border-[3px] border-ink bg-white p-5 text-left shadow-[5px_5px_0_0_#1a1a1f]">
+        <p className="text-sm font-semibold text-neutral-600">Days that work</p>
         <ul className="mt-2 flex flex-wrap gap-2">
           {selectedDays.map((day) => (
             <li key={day} className="rounded-full bg-brand/15 px-3 py-1 text-sm font-semibold text-brand">
@@ -90,8 +90,8 @@ export default async function ResultPage({ params }: PageProps) {
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-dvh text-white">
-      <AmbientBackground />
+    <div className="relative min-h-dvh text-ink">
+      <PlayfulBackground />
       <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 py-10 text-center">
         {children}
       </div>
