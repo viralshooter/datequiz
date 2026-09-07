@@ -85,10 +85,10 @@ function Hero() {
       <p className="mt-4 text-sm text-neutral-500">No card required. You only pay if you keep using it.</p>
 
       <p className="mt-8 text-xs uppercase tracking-widest text-neutral-500">
-        Works anywhere you can paste a link
+        Send it where you already talk
       </p>
       <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
-        {["Hinge", "Tinder", "Bumble", "Instagram DMs", "iMessage"].map((app) => (
+        {["WhatsApp", "Instagram DMs", "iMessage", "Messenger"].map((app) => (
           <span
             key={app}
             className="rounded-full border border-white/10 bg-ink-2/60 px-3 py-1 text-sm font-semibold text-neutral-300"
@@ -168,8 +168,9 @@ const STEPS = [
   },
   {
     number: "02",
-    title: "You paste it in the chat",
-    description: "Straight into your Hinge, Tinder or Bumble conversation. She opens it, the NO runs from her finger.",
+    title: "You send it to her",
+    description:
+      "On WhatsApp or IG, wherever you two already talk. She opens it, and the NO runs from her finger.",
   },
   {
     number: "03",
@@ -250,7 +251,7 @@ function Pricing() {
 const FAQ_ITEMS = [
   {
     q: "Does this work with Hinge, Tinder and Bumble?",
-    a: "Yes — that's exactly what it's for. It's just a link, so you paste it into any chat: Hinge, Tinder, Bumble, Instagram DMs, iMessage, wherever you're already talking to her.",
+    a: "That's exactly who it's for — but send it once you've swapped numbers or Instagram, not in the app's own chat. Dating apps flag early external links as spam, and their chats don't show link previews anyway. On WhatsApp or IG she sees your name, your handle and the preview card before she even taps.",
   },
   {
     q: "Does she need to download an app or sign up?",

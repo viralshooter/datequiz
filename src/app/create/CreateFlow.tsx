@@ -93,6 +93,8 @@ export function CreateFlow() {
     setStep("name");
   }
 
+  // Long enough to rule out "hey", short enough not to be a chore.
+  const canContinueFromName = matchName.trim().length > 0 && personalNote.trim().length >= 10;
   const canGenerate = selectedDays.length > 0 && EMAIL_RE.test(notifyEmail.trim()) && !sessionLoading;
 
   // Whatever he already told us goes into the message, so what lands in her
@@ -137,15 +139,15 @@ export function CreateFlow() {
             />
             <div className="mt-2 flex items-start justify-between gap-3">
               <p className="text-xs text-neutral-500">
-                One line from your actual conversation. This is what makes it read as you and not
-                as spam.
+                Pull one thing from your actual conversation. It's the difference between a link
+                that reads as you and one that reads as spam — so we don't let you skip it.
               </p>
               <span className="shrink-0 text-xs text-neutral-600">{personalNote.length}/180</span>
             </div>
 
             <button
               type="button"
-              disabled={!matchName.trim()}
+              disabled={!canContinueFromName}
               onClick={() => setStep("days")}
               className="mt-6 w-full rounded-full bg-brand px-8 py-4 text-lg font-bold text-ink shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-transform active:scale-95 disabled:opacity-40"
             >
