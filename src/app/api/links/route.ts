@@ -4,12 +4,14 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { trackEventServer } from "@/lib/events";
 import { generateSlug } from "@/lib/slug";
+import { normalizeInstagramHandle } from "@/lib/instagram";
 import { PAYMENTS_ENABLED } from "@/lib/flags";
 
 const LinkBodySchema = z.object({
   match_name: z.string().trim().min(1),
   available_days: z.array(z.string()).min(1),
   notify_email: z.string().trim().email(),
+  instagram_handle: z.string().trim().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -25,6 +27,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "missing_fields" }, { status: 400 });
   }
   const { match_name, available_days, notify_email } = parsed.data;
+  // Optional: an unparseable handle is dropped rather than rejected, so a
+  // typo never blocks link creation.
+  const instagram_handle = parsed.data.instagram_handle
+    ? normalizeInstagramHandle(parsed.data.instagram_handle) ?? ""
+    : "";
 
   const supabase = await createSupabaseServerClient();
   const {
@@ -57,6 +64,7 @@ export async function POST(request: NextRequest) {
       match_name,
       available_days,
       notify_email,
+      instagram_handle,
       watermark_enabled: !profile?.remove_watermark,
     });
 

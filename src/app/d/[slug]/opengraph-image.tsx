@@ -14,11 +14,12 @@ export default async function Image({ params }: ImageProps) {
   const admin = createSupabaseAdminClient();
   const { data: link } = await admin
     .from("links")
-    .select("match_name")
+    .select("match_name, instagram_handle")
     .eq("slug", slug)
     .maybeSingle();
 
   const matchName = link?.match_name ?? "you";
+  const handle = (link?.instagram_handle as string | undefined) ?? "";
 
   return new ImageResponse(
     (
@@ -34,7 +35,27 @@ export default async function Image({ params }: ImageProps) {
           fontFamily: "sans-serif",
         }}
       >
-        <div style={{ fontSize: 140, display: "flex", marginBottom: 12 }}>👀</div>
+        {handle && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              marginBottom: 28,
+              padding: "10px 24px",
+              borderRadius: 999,
+              background: "#ffffff",
+              border: "2px solid #e7e2d9",
+              fontSize: 28,
+              color: "#0a0a0b",
+            }}
+          >
+            <span style={{ color: "#8a8378" }}>sent by</span>
+            <span style={{ fontWeight: 700 }}>@{handle}</span>
+          </div>
+        )}
+
+        <div style={{ fontSize: 120, display: "flex", marginBottom: 12 }}>👀</div>
         <div
           style={{
             fontSize: 64,

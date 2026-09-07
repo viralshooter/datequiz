@@ -18,6 +18,7 @@ export function CreateFlow() {
   const [matchName, setMatchName] = useState("");
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [notifyEmail, setNotifyEmail] = useState("");
+  const [instagramHandle, setInstagramHandle] = useState("");
   const [slug, setSlug] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -52,6 +53,7 @@ export function CreateFlow() {
           match_name: matchName.trim(),
           available_days: selectedDays,
           notify_email: notifyEmail.trim(),
+          instagram_handle: instagramHandle.trim(),
         }),
       });
 
@@ -79,6 +81,7 @@ export function CreateFlow() {
     setMatchName("");
     setSelectedDays([]);
     setNotifyEmail("");
+    setInstagramHandle("");
     setSlug(null);
     setError(null);
     setStep("name");
@@ -154,6 +157,27 @@ export function CreateFlow() {
               className="mt-2 w-full rounded-xl border-2 border-white/15 bg-ink-2 px-4 py-3 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
             />
 
+            <label className="mt-6 block text-sm font-semibold text-neutral-300">
+              Your Instagram <span className="font-normal text-neutral-500">(optional)</span>
+            </label>
+            <div className="relative mt-2">
+              <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg text-neutral-500">
+                @
+              </span>
+              <input
+                value={instagramHandle}
+                onChange={(e) => setInstagramHandle(e.target.value)}
+                placeholder="yourhandle"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                className="w-full rounded-xl border-2 border-white/15 bg-ink-2 py-3 pl-9 pr-4 text-lg text-white outline-none placeholder:text-neutral-500 focus:border-brand"
+              />
+            </div>
+            <p className="mt-2 text-xs text-neutral-500">
+              Shown on her page so she knows it's really you, not spam.
+            </p>
+
             {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
 
             <button
@@ -197,7 +221,9 @@ export function CreateFlow() {
               <CopyButton text={fullLink} />
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(
-                  `Hey ${matchName}! I've got a question for you 👀 ${fullLink}`
+                  instagramHandle.trim()
+                    ? `Hey ${matchName}! It's @${instagramHandle.trim().replace(/^@/, "")} — I've got a question for you 👀 ${fullLink}`
+                    : `Hey ${matchName}! I've got a question for you 👀 ${fullLink}`
                 )}`}
                 target="_blank"
                 rel="noreferrer"

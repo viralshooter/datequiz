@@ -9,6 +9,7 @@ import { DayPicker } from "@/components/quiz/DayPicker";
 import { ConfirmSummary } from "@/components/quiz/ConfirmSummary";
 import { DoneScreen } from "@/components/quiz/DoneScreen";
 import { trackEvent } from "@/lib/events";
+import { instagramProfileUrl } from "@/lib/instagram";
 import type { ActivityId } from "@/types/content";
 
 type Step = "hero" | "askOut" | "celebration" | "activities" | "days" | "confirm" | "done";
@@ -19,10 +20,17 @@ interface DateFlowProps {
   slug: string;
   matchName: string;
   availableDays: string[];
+  instagramHandle: string;
   alreadyAnswered: boolean;
 }
 
-export function DateFlow({ slug, matchName, availableDays, alreadyAnswered }: DateFlowProps) {
+export function DateFlow({
+  slug,
+  matchName,
+  availableDays,
+  instagramHandle,
+  alreadyAnswered,
+}: DateFlowProps) {
   const [step, setStep] = useState<Step>(alreadyAnswered ? "done" : "hero");
   const [selectedActivities, setSelectedActivities] = useState<ActivityId[]>([]);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
@@ -92,7 +100,11 @@ export function DateFlow({ slug, matchName, availableDays, alreadyAnswered }: Da
         <AnimatePresence mode="wait">
           {step === "hero" && (
             <StepTransition key="hero">
-              <Hero matchName={matchName} onStart={() => setStep("askOut")} />
+              <Hero
+                matchName={matchName}
+                instagramHandle={instagramHandle}
+                onStart={() => setStep("askOut")}
+              />
             </StepTransition>
           )}
 
@@ -180,13 +192,37 @@ function FloatingBackground() {
   );
 }
 
-function Hero({ matchName, onStart }: { matchName: string; onStart: () => void }) {
+function Hero({
+  matchName,
+  instagramHandle,
+  onStart,
+}: {
+  matchName: string;
+  instagramHandle: string;
+  onStart: () => void;
+}) {
   return (
     <motion.div
       className="flex h-full w-full flex-col items-center justify-center gap-6 px-6 text-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
+      {instagramHandle && (
+        <motion.a
+          href={instagramProfileUrl(instagramHandle)}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-2 rounded-full border border-neutral-200 bg-white/70 px-4 py-2 text-sm font-semibold text-neutral-600 shadow-sm backdrop-blur"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileTap={{ scale: 0.97 }}
+        >
+          <span className="text-neutral-400">sent by</span>
+          <span className="text-neutral-900">@{instagramHandle}</span>
+          <span aria-hidden>↗</span>
+        </motion.a>
+      )}
+
       <motion.div
         className="text-7xl"
         initial={{ scale: 0, rotate: -20 }}

@@ -12,7 +12,7 @@ async function getLink(slug: string) {
   const admin = createSupabaseAdminClient();
   const { data: link } = await admin
     .from("links")
-    .select("id, slug, match_name, available_days")
+    .select("id, slug, match_name, available_days, instagram_handle")
     .eq("slug", slug)
     .maybeSingle();
 
@@ -32,8 +32,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const result = await getLink(slug);
   if (!result) return { title: "Yeslink" };
 
+  const handle = result.link.instagram_handle as string;
   const title = `${result.link.match_name}, I've got a question for you 💌`;
-  const description = "30 seconds, no strings attached. Promise. (Almost.)";
+  const description = handle
+    ? `From @${handle} · 30 seconds, no strings attached.`
+    : "30 seconds, no strings attached. Promise. (Almost.)";
 
   return {
     title,
@@ -66,6 +69,7 @@ export default async function YeslinkPage({ params }: PageProps) {
       slug={slug}
       matchName={link.match_name}
       availableDays={link.available_days as string[]}
+      instagramHandle={link.instagram_handle as string}
       alreadyAnswered={alreadyAnswered}
     />
   );
