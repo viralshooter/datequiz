@@ -6,8 +6,10 @@ import { getUpcomingDayOptions } from "@/lib/dates";
 import { useAnonymousSession } from "@/lib/useAnonymousSession";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Paywall } from "@/components/Paywall";
+import { DEFAULT_MODE, MODE_CARDS } from "@/config/modes";
+import type { LinkMode } from "@/types/flow";
 
-type Step = "name" | "days" | "about" | "generating" | "result" | "paywall";
+type Step = "name" | "days" | "mode" | "about" | "generating" | "result" | "paywall";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -21,6 +23,7 @@ export function CreateFlow() {
   const [instagramHandle, setInstagramHandle] = useState("");
   const [senderName, setSenderName] = useState("");
   const [personalNote, setPersonalNote] = useState("");
+  const [mode, setMode] = useState<LinkMode>(DEFAULT_MODE);
   const [slug, setSlug] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -58,6 +61,7 @@ export function CreateFlow() {
           instagram_handle: instagramHandle.trim(),
           sender_name: senderName.trim(),
           personal_note: personalNote.trim(),
+          mode,
         }),
       });
 
@@ -186,8 +190,47 @@ export function CreateFlow() {
             <button
               type="button"
               disabled={selectedDays.length === 0}
-              onClick={() => setStep("about")}
+              onClick={() => setStep("mode")}
               className="mt-6 w-full rounded-full border-[3px] border-ink bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 disabled:opacity-40 disabled:shadow-none"
+            >
+              Continue →
+            </button>
+          </StepCard>
+        )}
+
+        {step === "mode" && (
+          <StepCard key="mode">
+            <h1 className="text-2xl font-extrabold">Pick her experience 🎛️</h1>
+            <p className="mt-2 text-neutral-600">
+              Three flavours. We&apos;re not telling you what they do.
+            </p>
+
+            <div className="mt-6 flex flex-col gap-3">
+              {MODE_CARDS.map((card) => {
+                const active = mode === card.id;
+                return (
+                  <button
+                    key={card.id}
+                    type="button"
+                    onClick={() => setMode(card.id)}
+                    className={`flex items-center gap-4 rounded-2xl border-[3px] px-5 py-5 text-left transition-transform active:scale-[0.98] ${
+                      active
+                        ? "border-brand-dark shadow-[5px_5px_0_0_#16a34a]"
+                        : "border-ink shadow-[5px_5px_0_0_#1a1a1f]"
+                    } ${card.tint}`}
+                  >
+                    <span className="text-4xl">{card.emoji}</span>
+                    <span className="text-xl font-black text-ink">{card.label}</span>
+                    {active && <span className="ml-auto text-2xl">✅</span>}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setStep("about")}
+              className="mt-6 w-full rounded-full border-[3px] border-ink bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
             >
               Continue →
             </button>

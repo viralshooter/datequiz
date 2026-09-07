@@ -6,6 +6,9 @@ import { trackEventServer } from "@/lib/events";
 import { generateSlug } from "@/lib/slug";
 import { normalizeInstagramHandle } from "@/lib/instagram";
 import { PAYMENTS_ENABLED } from "@/lib/flags";
+import { randomSeed } from "@/lib/prng";
+import { DEFAULT_MODE } from "@/config/modes";
+import { LINK_MODES, type LinkMode } from "@/types/flow";
 
 const LinkBodySchema = z.object({
   match_name: z.string().trim().min(1),
@@ -14,6 +17,7 @@ const LinkBodySchema = z.object({
   instagram_handle: z.string().trim().optional(),
   sender_name: z.string().trim().max(40).optional(),
   personal_note: z.string().trim().min(10).max(180),
+  mode: z.enum(LINK_MODES as [LinkMode, ...LinkMode[]]).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -55,6 +59,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "no_credits" }, { status: 402 });
   }
 
+  const mode = parsed.data.mode ?? DEFAULT_MODE;
+  // Fixed once, here. Everything the recipient flow randomises derives
+  // from it, so her path is reproducible and rare outcomes can't be
+  // farmed by reloading /d/[slug].
+  const seed = randomSeed();
+
   let slug = "";
   let inserted = false;
   let attempts = 0;
@@ -70,6 +80,8 @@ export async function POST(request: NextRequest) {
       instagram_handle,
       sender_name,
       personal_note,
+      seed,
+      mode,
       watermark_enabled: !profile?.remove_watermark,
     });
 
@@ -94,7 +106,7 @@ export async function POST(request: NextRequest) {
   }
 
   const admin = createSupabaseAdminClient();
-  await trackEventServer(admin, "link_created", slug, { match_name });
+  await trackEventServer(admin, "link_created", slug, { match_name, mode });
 
   return NextResponse.json({ slug });
 }

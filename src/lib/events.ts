@@ -4,6 +4,17 @@ export type EventType =
   | "link_created"
   | "link_opened"
   | "answered_yes"
+  // 3-act flow. twist_shown/twist_skipped carry the twist id in metadata:
+  // the ratio between them is what tells us which twists to prune.
+  | "cold_open_variant"
+  | "twist_shown"
+  | "twist_skipped"
+  | "tournament_completed"
+  | "jolly_triggered"
+  | "counter_condition_chosen"
+  | "ending_type"
+  // Kept for historical rows written before the tournament replaced the
+  // flat multi-select.
   | "activities_selected"
   | "badge_clicked"
   | "checkout_started"
@@ -14,7 +25,8 @@ export const EVENT_FUNNEL_ORDER: EventType[] = [
   "link_created",
   "link_opened",
   "answered_yes",
-  "activities_selected",
+  "tournament_completed",
+  "counter_condition_chosen",
   "badge_clicked",
   "checkout_started",
   "purchase_completed",

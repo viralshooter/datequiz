@@ -11,10 +11,19 @@ const STEP_LABELS: Record<EventType, string> = {
   link_created: "Links created",
   link_opened: "Links opened",
   answered_yes: "Said yes",
-  activities_selected: "Activities picked",
+  tournament_completed: "Tournament finished",
+  counter_condition_chosen: "Terms set",
   badge_clicked: "Badge clicks",
   checkout_started: "Checkouts started",
   purchase_completed: "Purchases completed",
+  // Diagnostics rather than funnel steps — the twist_shown/twist_skipped
+  // ratio per id is what says which twists to prune from the deck.
+  cold_open_variant: "Cold opens",
+  twist_shown: "Twists shown",
+  twist_skipped: "Twists skipped",
+  jolly_triggered: "Rare cards drawn",
+  ending_type: "Endings reached",
+  activities_selected: "Activities picked (legacy)",
 };
 
 async function countEvent(

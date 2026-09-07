@@ -8,11 +8,16 @@ import type { ActivityId } from "@/types/content";
 
 export const dynamic = "force-dynamic";
 
+interface AnswerRow {
+  selected_activities: ActivityId[];
+  reveal_activities: boolean | null;
+}
+
 interface LinkRow {
   slug: string;
   match_name: string;
   created_at: string;
-  answers: { selected_activities: ActivityId[] } | { selected_activities: ActivityId[] }[] | null;
+  answers: AnswerRow | AnswerRow[] | null;
 }
 
 export default async function DashboardPage() {
@@ -29,7 +34,7 @@ export default async function DashboardPage() {
     supabase.from("users").select("credits, remove_watermark").eq("id", user.id).maybeSingle(),
     supabase
       .from("links")
-      .select("slug, match_name, created_at, answers(selected_activities)")
+      .select("slug, match_name, created_at, answers(selected_activities, reveal_activities)")
       .eq("creator_id", user.id)
       .order("created_at", { ascending: false }),
     supabase
@@ -64,9 +69,12 @@ export default async function DashboardPage() {
 
           {(links as LinkRow[] | null)?.map((link) => {
             const answerRow = Array.isArray(link.answers) ? link.answers[0] : link.answers;
-            const activities = ACTIVITIES.filter((a) =>
-              (answerRow?.selected_activities ?? []).includes(a.id)
-            );
+            // The blind ending withholds her pick from him until the day,
+            // so it must not leak here either.
+            const sealed = answerRow != null && answerRow.reveal_activities === false;
+            const activities = sealed
+              ? []
+              : ACTIVITIES.filter((a) => (answerRow?.selected_activities ?? []).includes(a.id));
 
             return (
               <div key={link.slug} className="rounded-2xl border-[3px] border-ink bg-white p-4 shadow-[5px_5px_0_0_#1a1a1f]">
@@ -80,6 +88,12 @@ export default async function DashboardPage() {
                     {answerRow ? "Answered" : "Waiting"}
                   </span>
                 </div>
+
+                {sealed && (
+                  <p className="mt-2 text-sm font-semibold text-indigo-700">
+                    🔒 Blind card — sealed until the day
+                  </p>
+                )}
 
                 {activities.length > 0 && (
                   <p className="mt-2 text-sm text-neutral-600">

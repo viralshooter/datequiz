@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { trackEventServer } from "@/lib/events";
+import { DEFAULT_MODE } from "@/config/modes";
+import { isLinkMode } from "@/types/flow";
 import { DateFlow } from "./DateFlow";
 
 interface PageProps {
@@ -13,7 +15,7 @@ async function getLink(slug: string) {
   const { data: link } = await admin
     .from("links")
     .select(
-      "id, slug, match_name, available_days, instagram_handle, sender_name, personal_note"
+      "id, slug, match_name, available_days, instagram_handle, sender_name, personal_note, seed, mode"
     )
     .eq("slug", slug)
     .maybeSingle();
@@ -76,6 +78,8 @@ export default async function YeslinkPage({ params }: PageProps) {
   return (
     <DateFlow
       slug={slug}
+      seed={(link.seed as number) ?? 0}
+      mode={isLinkMode(link.mode) ? link.mode : DEFAULT_MODE}
       matchName={link.match_name}
       availableDays={link.available_days as string[]}
       instagramHandle={link.instagram_handle as string}
