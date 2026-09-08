@@ -7,6 +7,9 @@ export type EventType =
   // 3-act flow. twist_shown/twist_skipped carry the twist id in metadata:
   // the ratio between them is what tells us which twists to prune.
   | "cold_open_variant"
+  // Whether she actually completed the hold before the question, or bailed
+  // out — a new interaction with no telemetry is an invisible drop-off.
+  | "drumroll_completed"
   | "twist_shown"
   | "twist_skipped"
   | "tournament_completed"

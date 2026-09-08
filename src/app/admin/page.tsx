@@ -19,6 +19,7 @@ const STEP_LABELS: Record<EventType, string> = {
   // Diagnostics rather than funnel steps — the twist_shown/twist_skipped
   // ratio per id is what says which twists to prune from the deck.
   cold_open_variant: "Cold opens",
+  drumroll_completed: "Drumroll holds",
   twist_shown: "Twists shown",
   twist_skipped: "Twists skipped",
   jolly_triggered: "Rare cards drawn",

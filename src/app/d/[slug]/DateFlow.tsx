@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ColdOpen } from "@/components/quiz/ColdOpen";
+import { Drumroll } from "@/components/quiz/Drumroll";
 import { EvasiveAskOut } from "@/components/quiz/EvasiveAskOut";
 import { CelebrationScreen } from "@/components/quiz/CelebrationScreen";
 import { Tournament } from "@/components/quiz/Tournament";
@@ -29,6 +30,7 @@ import type {
 type Step =
   | "coldOpen"
   | "hero"
+  | "drumroll"
   | "askOut"
   | "celebration"
   | "twist1"
@@ -45,6 +47,7 @@ type Step =
 const STEP_ORDER: Step[] = [
   "coldOpen",
   "hero",
+  "drumroll",
   "askOut",
   "celebration",
   "twist1",
@@ -255,7 +258,20 @@ export function DateFlow({
                 instagramHandle={instagramHandle}
                 senderName={senderName}
                 personalNote={personalNote}
-                onStart={() => setStep("askOut")}
+                onStart={() => setStep("drumroll")}
+              />
+            </StepTransition>
+          )}
+
+          {step === "drumroll" && (
+            <StepTransition key="drumroll">
+              <Drumroll
+                seed={seed}
+                senderName={senderName}
+                onDone={(held, ms) => {
+                  trackEvent("drumroll_completed", slug, { held, ms });
+                  setStep("askOut");
+                }}
               />
             </StepTransition>
           )}
