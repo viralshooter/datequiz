@@ -7,7 +7,33 @@ import { createServerClient } from "@supabase/ssr";
  * link o updateUser() possono scadere senza rinnovarsi tra una
  * navigazione e l'altra.
  */
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
+
+/**
+ * Send everything to the brand domain.
+ *
+ * Vercel keeps answering on its own *.vercel.app hostname, so a link
+ * created (or opened) from that address would show it to her instead of
+ * yeslink.app. This also rescues links already sent with the old address
+ * rather than leaving them off-brand.
+ *
+ * Trade-off: deployment-specific preview URLs redirect too, so a build
+ * has to be inspected through the real domain once it's promoted.
+ */
+function redirectToCanonicalHost(request: NextRequest): NextResponse | null {
+  if (!SITE_URL) return null;
+
+  const host = request.headers.get("host") ?? "";
+  if (!host.endsWith(".vercel.app")) return null;
+
+  const target = new URL(`${request.nextUrl.pathname}${request.nextUrl.search}`, SITE_URL);
+  return NextResponse.redirect(target, 308);
+}
+
 export async function middleware(request: NextRequest) {
+  const canonical = redirectToCanonicalHost(request);
+  if (canonical) return canonical;
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(

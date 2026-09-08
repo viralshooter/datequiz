@@ -6,6 +6,7 @@ import { getUpcomingDayOptions } from "@/lib/dates";
 import { useAnonymousSession } from "@/lib/useAnonymousSession";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Paywall } from "@/components/Paywall";
+import { canonicalSiteUrl } from "@/lib/siteUrl";
 import { DEFAULT_MODE, MODE_CARDS } from "@/config/modes";
 import type { LinkMode } from "@/types/flow";
 
@@ -28,9 +29,7 @@ export function CreateFlow() {
   const [error, setError] = useState<string | null>(null);
 
   const dayOptions = useMemo(() => getUpcomingDayOptions(14), []);
-  const siteUrl =
-    typeof window !== "undefined" ? window.location.origin : process.env.NEXT_PUBLIC_SITE_URL ?? "";
-  const fullLink = slug ? `${siteUrl}/d/${slug}` : "";
+  const fullLink = slug ? `${canonicalSiteUrl()}/d/${slug}` : "";
 
   function toggleDay(day: string) {
     setSelectedDays((prev) => (prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]));

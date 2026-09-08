@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { PlayfulBackground } from "@/components/PlayfulBackground";
+import { canonicalSiteUrl } from "@/lib/siteUrl";
 
 export function LoginForm() {
   const searchParams = useSearchParams();
@@ -22,7 +23,7 @@ export function LoginForm() {
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+        emailRedirectTo: `${canonicalSiteUrl()}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     });
     setLoading(false);
