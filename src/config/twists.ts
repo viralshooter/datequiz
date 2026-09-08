@@ -13,14 +13,11 @@ import type { LinkMode, TwistDefinition } from "@/types/flow";
  * `weight` biases the seeded priority order; `modes` gates which of his
  * three chosen modes can draw the twist at all.
  */
+// The slow-motion replay used to live here as the highest-weighted twist.
+// It's now a fixed beat immediately after the question (InstantReplay),
+// since it's the payoff for what she just did rather than a surprise —
+// leaving it in the deck as well would show it to her twice.
 export const TWISTS: TwistDefinition[] = [
-  {
-    // Reacts to what she just did, so it lands hardest — weighted highest.
-    id: "SLOW_MO",
-    weight: 5,
-    modes: ["soft", "chaos", "roulette"],
-    isAvailable: (ctx) => ctx.escapes >= 1,
-  },
   {
     id: "REVIEWS",
     weight: 3,

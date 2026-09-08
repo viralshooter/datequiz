@@ -79,8 +79,8 @@ export function shuffle<T>(seed: number, label: string, items: readonly T[]): T[
  * Used instead of a single weighted pick so twist selection can produce a
  * whole priority list up front. A slot then walks that list and takes the
  * first twist that's actually applicable — which keeps the draw seeded
- * even when a twist turns out to be unavailable at runtime (SLOW_MO with
- * zero escapes, say), rather than rerolling into something rarer.
+ * even when a twist turns out to be unavailable at runtime, rather than
+ * rerolling into something rarer.
  */
 export function weightedOrder<T extends { weight: number }>(
   seed: number,

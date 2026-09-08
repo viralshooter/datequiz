@@ -22,9 +22,9 @@ export type ColdOpenVariant =
   | "progress"
   | "typewriter";
 
-export type TwistId = "AD_BREAK" | "REVIEWS" | "SLOW_MO" | "FAKE_CRASH" | "CAPTCHA";
+export type TwistId = "AD_BREAK" | "REVIEWS" | "FAKE_CRASH" | "CAPTCHA";
 
-/** Where a NO escaped to, in % of the ask-out area. Replayed by SLOW_MO. */
+/** Where a NO escaped to, in % of the ask-out area. Replayed by InstantReplay. */
 export interface EscapePoint {
   xPct: number;
   yPct: number;

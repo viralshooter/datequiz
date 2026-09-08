@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ColdOpen } from "@/components/quiz/ColdOpen";
 import { Drumroll } from "@/components/quiz/Drumroll";
 import { EvasiveAskOut } from "@/components/quiz/EvasiveAskOut";
-import { CelebrationScreen } from "@/components/quiz/CelebrationScreen";
+import { InstantReplay } from "@/components/quiz/InstantReplay";
 import { Tournament } from "@/components/quiz/Tournament";
 import { DayPicker } from "@/components/quiz/DayPicker";
 import { CounterCondition } from "@/components/quiz/CounterCondition";
@@ -32,7 +32,7 @@ type Step =
   | "hero"
   | "drumroll"
   | "askOut"
-  | "celebration"
+  | "replay"
   | "twist1"
   | "tournament"
   | "jolly"
@@ -49,7 +49,7 @@ const STEP_ORDER: Step[] = [
   "hero",
   "drumroll",
   "askOut",
-  "celebration",
+  "replay",
   "twist1",
   "tournament",
   "jolly",
@@ -125,16 +125,8 @@ export function DateFlow({
 
   function handleYes() {
     trackEvent("answered_yes", slug, { escapes });
-    setStep("celebration");
+    setStep("replay");
   }
-
-  // Celebration is a beat, not a screen: it hands off on its own.
-  useEffect(() => {
-    if (step !== "celebration") return;
-    const timeout = window.setTimeout(() => openSlot1(), 1800);
-    return () => window.clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step]);
 
   function openSlot1() {
     const id = selectTwist(plan, twistCtxRef.current, []);
@@ -287,9 +279,14 @@ export function DateFlow({
             </StepTransition>
           )}
 
-          {step === "celebration" && (
-            <StepTransition key="celebration">
-              <CelebrationScreen />
+          {step === "replay" && (
+            <StepTransition key="replay">
+              <InstantReplay
+                seed={seed}
+                escapes={escapes}
+                escapeTrail={escapeTrail}
+                onDone={openSlot1}
+              />
             </StepTransition>
           )}
 

@@ -5,12 +5,10 @@ import { AdBreak } from "./AdBreak";
 import { Captcha } from "./Captcha";
 import { FakeCrash } from "./FakeCrash";
 import { Reviews } from "./Reviews";
-import { SlowMo } from "./SlowMo";
 
 const REGISTRY = {
   AD_BREAK: AdBreak,
   REVIEWS: Reviews,
-  SLOW_MO: SlowMo,
   FAKE_CRASH: FakeCrash,
   CAPTCHA: Captcha,
 } as const;

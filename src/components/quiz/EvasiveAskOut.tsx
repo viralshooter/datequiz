@@ -59,6 +59,8 @@ export function EvasiveAskOut({ matchName, seed, onYes, onEscape }: EvasiveAskOu
   const noRef = useRef<HTMLButtonElement>(null);
   const lastEvadeRef = useRef(0);
   const escapesRef = useRef(0);
+  const pointerOriginRef = useRef<{ x: number; y: number } | null>(null);
+  const pointerMovedRef = useRef(false);
 
   const [noPos, setNoPos] = useState<EscapePoint>(START_POSITION);
   const [escapes, setEscapes] = useState(0);
@@ -86,6 +88,20 @@ export function EvasiveAskOut({ matchName, seed, onYes, onEscape }: EvasiveAskOu
 
   useEffect(() => {
     function handleMouseMove(e: MouseEvent) {
+      // The NO animates into place on mount and can slide under a cursor
+      // that never moved, which would score an escape she didn't make —
+      // and cost her the credit for going straight to yes. So nothing
+      // counts until the pointer has actually travelled.
+      const origin = pointerOriginRef.current;
+      if (!origin) {
+        pointerOriginRef.current = { x: e.clientX, y: e.clientY };
+        return;
+      }
+      if (!pointerMovedRef.current) {
+        if (Math.hypot(e.clientX - origin.x, e.clientY - origin.y) < 12) return;
+        pointerMovedRef.current = true;
+      }
+
       const button = noRef.current;
       if (!button) return;
       const rect = button.getBoundingClientRect();
@@ -169,7 +185,10 @@ export function EvasiveAskOut({ matchName, seed, onYes, onEscape }: EvasiveAskOu
         ref={noRef}
         type="button"
         tabIndex={-1}
-        onMouseEnter={evade}
+        onMouseEnter={() => {
+          // Same guard: the button arriving under a still cursor isn't a try.
+          if (pointerMovedRef.current) evade();
+        }}
         onTouchStart={evade}
         onClick={evade}
         animate={{
