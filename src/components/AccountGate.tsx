@@ -6,6 +6,15 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 type Phase = "email" | "code";
 
 /**
+ * Supabase's emailed code isn't always six digits — the email-change flow
+ * on this project sends eight. Clamping the field to six silently ate the
+ * last two and made every verification fail, so accept the range instead
+ * of assuming a length.
+ */
+const MIN_CODE_LENGTH = 6;
+const MAX_CODE_LENGTH = 8;
+
+/**
  * Turns the anonymous session into a real account without leaving the page.
  *
  * This runs at the moment of purchase, so sending someone off to their
@@ -84,7 +93,7 @@ export function AccountGate({
 
   async function verify() {
     const token = code.trim();
-    if (token.length < 6) return;
+    if (token.length < MIN_CODE_LENGTH) return;
     setBusy(true);
     setError(null);
 
@@ -110,7 +119,7 @@ export function AccountGate({
       <div>
         <h1 className="text-2xl font-extrabold text-ink">Check your email 📬</h1>
         <p className="mt-2 text-neutral-600">
-          We sent a 6-digit code to <strong className="text-ink">{email}</strong>. Type it here —
+          We sent a code to <strong className="text-ink">{email}</strong>. Type it here —
           you don&apos;t have to leave this page.
         </p>
 
@@ -118,16 +127,16 @@ export function AccountGate({
           inputMode="numeric"
           autoComplete="one-time-code"
           value={code}
-          onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-          placeholder="123456"
-          className="mt-6 w-full rounded-xl border-[3px] border-ink bg-white px-4 py-3 text-center text-2xl font-black tracking-[0.4em] text-ink outline-none placeholder:text-neutral-300 focus:border-brand"
+          onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, MAX_CODE_LENGTH))}
+          placeholder="········"
+          className="mt-6 w-full rounded-xl border-[3px] border-ink bg-white px-4 py-3 text-center text-2xl font-black tracking-[0.35em] text-ink outline-none placeholder:text-neutral-300 focus:border-brand"
         />
 
         {error && <p className="mt-3 text-sm font-semibold text-red-600">{error}</p>}
 
         <button
           type="button"
-          disabled={busy || code.length < 6}
+          disabled={busy || code.length < MIN_CODE_LENGTH}
           onClick={verify}
           className="mt-4 w-full rounded-full border-[3px] border-ink bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_#1a1a1f] transition-transform active:scale-95 disabled:opacity-40 disabled:shadow-none"
         >
