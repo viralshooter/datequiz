@@ -15,6 +15,18 @@ const MIN_CODE_LENGTH = 6;
 const MAX_CODE_LENGTH = 8;
 
 /**
+ * Supabase's cooldown message already names the wait ("you can only
+ * request this after 52 seconds"), so pass that through rather than
+ * replacing it with a vaguer one of our own.
+ */
+function cooldownMessage(message: string): string {
+  const seconds = message.match(/after (\d+) seconds?/i)?.[1];
+  return seconds
+    ? `A code was just sent. You can ask for another in ${seconds} seconds.`
+    : "Too many requests right now. Give it a minute and try again.";
+}
+
+/**
  * Turns the anonymous session into a real account without leaving the page.
  *
  * This runs at the moment of purchase, so sending someone off to their
@@ -30,14 +42,24 @@ const MAX_CODE_LENGTH = 8;
  */
 export function AccountGate({
   defaultEmail = "",
+  codeAlreadySent = false,
   onVerified,
 }: {
   defaultEmail?: string;
+  /**
+   * True when a confirmation was already sent for this address — creating
+   * a link sends one. Without this the page would ask for an address it
+   * already has and then hit Supabase's per-user cooldown, telling
+   * someone who just received a code that they must wait to get one.
+   */
+  codeAlreadySent?: boolean;
   onVerified: () => void;
 }) {
   const [email, setEmail] = useState(defaultEmail);
   const [code, setCode] = useState("");
-  const [phase, setPhase] = useState<Phase>("email");
+  const [phase, setPhase] = useState<Phase>(
+    codeAlreadySent && defaultEmail ? "code" : "email"
+  );
   // Which verification the code has to be checked against.
   const [flow, setFlow] = useState<"upgrade" | "signin">("upgrade");
   const [busy, setBusy] = useState(false);
@@ -53,18 +75,21 @@ export function AccountGate({
     const { error: upgradeError } = await supabase.auth.updateUser({ email: address });
 
     if (upgradeError) {
-      // Delivery problems must not fall through to sign-in: that would
-      // drop them into a *different* account and orphan the link this
-      // anonymous session is holding. Only "already registered" means the
-      // account genuinely lives elsewhere.
-      const alreadyRegistered = /already|exists|registered/i.test(upgradeError.message);
+      // Rate limiting is checked before anything else: its wording can
+      // contain "already", and mistaking a cooldown for "that address
+      // belongs to someone else" would send them down the sign-in path.
+      if (upgradeError.status === 429) {
+        setError(cooldownMessage(upgradeError.message));
+        setBusy(false);
+        return;
+      }
 
-      if (!alreadyRegistered) {
-        setError(
-          upgradeError.status === 429
-            ? "Too many emails sent from this app right now. Give it a few minutes and try again."
-            : "Couldn't send the code. Check the address and try again."
-        );
+      // Any other delivery problem must not fall through to sign-in
+      // either: that would drop them into a *different* account and
+      // orphan the link this anonymous session is holding. Only an
+      // address that's genuinely taken justifies signing in instead.
+      if (!/already|exists|registered|in use/i.test(upgradeError.message)) {
+        setError("Couldn't send the code. Check the address and try again.");
         setBusy(false);
         return;
       }
@@ -76,7 +101,7 @@ export function AccountGate({
       if (signInError) {
         setError(
           signInError.status === 429
-            ? "Too many emails sent from this app right now. Give it a few minutes and try again."
+            ? cooldownMessage(signInError.message)
             : "Couldn't send the code. Check the address and try again."
         );
         setBusy(false);
@@ -147,17 +172,27 @@ export function AccountGate({
           The email also contains a link — clicking that works just as well.
         </p>
 
-        <button
-          type="button"
-          onClick={() => {
-            setPhase("email");
-            setCode("");
-            setError(null);
-          }}
-          className="mt-4 w-full text-sm font-semibold text-neutral-500"
-        >
-          ← Use a different email
-        </button>
+        <div className="mt-4 flex flex-col gap-2">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={sendCode}
+            className="w-full text-sm font-semibold text-brand disabled:opacity-50"
+          >
+            Send a new code
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setPhase("email");
+              setCode("");
+              setError(null);
+            }}
+            className="w-full text-sm font-semibold text-neutral-500"
+          >
+            ← Use a different email
+          </button>
+        </div>
       </div>
     );
   }

@@ -10,6 +10,9 @@ export function FinishAccount({ pendingEmail }: { pendingEmail: string }) {
     <div className="rounded-3xl border-[3px] border-ink bg-white p-6 shadow-[8px_8px_0_0_#1a1a1f] sm:p-8">
       <AccountGate
         defaultEmail={pendingEmail}
+        // Supabase already sent one when the address was attached, so open
+        // on the code field instead of asking for the address again.
+        codeAlreadySent
         onVerified={() => {
           router.push("/dashboard");
           router.refresh();
