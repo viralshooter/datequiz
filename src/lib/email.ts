@@ -20,7 +20,10 @@ export async function sendAnswerNotification({ to, matchName, slug }: AnswerNoti
 
   const resend = new Resend(apiKey);
   await resend.emails.send({
-    from: "Yeslink <onboarding@resend.dev>",
+    // yeslink.app is verified in Resend, so notifications now come from the
+    // real brand rather than resend.dev's shared sender — which is both
+    // better deliverability and one less reason to look like spam.
+    from: "Yeslink <hey@yeslink.app>",
     to,
     subject: `${matchName} answered! 🎉`,
     html: `
