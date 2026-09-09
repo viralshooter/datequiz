@@ -70,6 +70,7 @@ interface DateFlowProps {
   senderName: string;
   personalNote: string;
   alreadyAnswered: boolean;
+  watermarkEnabled: boolean;
 }
 
 export function DateFlow({
@@ -82,6 +83,7 @@ export function DateFlow({
   senderName,
   personalNote,
   alreadyAnswered,
+  watermarkEnabled,
 }: DateFlowProps) {
   const plan = useMemo(() => buildFlowPlan(seed, mode), [seed, mode]);
 
@@ -365,6 +367,8 @@ export function DateFlow({
                 days={selectedDays}
                 condition={condition}
                 vetoed={vetoed}
+                watermarkEnabled={watermarkEnabled}
+                slug={slug}
               />
             </StepTransition>
           )}

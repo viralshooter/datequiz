@@ -6,6 +6,7 @@ import { PlayfulBackground } from "@/components/PlayfulBackground";
 import { TryTheButton } from "@/components/TryTheButton";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { PRICING_PACKAGES } from "@/config/pricing";
+import { CONTACT_EMAIL } from "@/config/contact";
 
 export default async function LandingPage() {
   const supabase = await createSupabaseServerClient();
@@ -425,13 +426,16 @@ function Footer() {
   return (
     <footer className="mx-auto flex max-w-4xl flex-col items-center gap-4 border-t-2 border-ink/10 px-6 py-12 text-sm text-neutral-500">
       <p className="text-base font-black text-ink">Hook her with a laugh 💚</p>
-      <div className="flex gap-4">
+      <div className="flex flex-wrap items-center justify-center gap-4">
         <Link href="/privacy" className="font-semibold hover:text-ink">
           Privacy
         </Link>
         <Link href="/terms" className="font-semibold hover:text-ink">
           Terms
         </Link>
+        <a href={`mailto:${CONTACT_EMAIL}`} className="font-semibold hover:text-ink">
+          {CONTACT_EMAIL}
+        </a>
       </div>
       <p>© {new Date().getFullYear()} Yeslink</p>
     </footer>

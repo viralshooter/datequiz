@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { PlayfulBackground } from "@/components/PlayfulBackground";
 import { ACTIVITIES } from "@/config/content";
@@ -18,9 +19,9 @@ export default async function ResultPage({ params }: PageProps) {
     .eq("slug", slug)
     .maybeSingle();
 
-  if (!link) {
-    return <Shell><p className="text-neutral-600">This link doesn&apos;t exist anymore.</p></Shell>;
-  }
+  // A real 404 rather than a 200 saying "not found": this page is also
+  // hit by link checkers and mail clients.
+  if (!link) notFound();
 
   // No session check here: like /d/[slug], the slug (random and
   // unguessable) is already the access key. Needed because the link

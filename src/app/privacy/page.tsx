@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Nav } from "@/components/Nav";
 import { PlayfulBackground } from "@/components/PlayfulBackground";
+import { CONTACT_EMAIL } from "@/config/contact";
 
 export const metadata = { title: "Privacy Policy — Yeslink" };
 
@@ -9,65 +10,79 @@ export default function PrivacyPage() {
     <div className="relative min-h-dvh text-ink">
       <PlayfulBackground />
       <div className="relative z-10">
-      <Nav />
-      <div className="mx-auto max-w-2xl px-6 py-10">
-        <div className="mb-8 rounded-xl border border-amber-400 bg-amber-100 p-4 text-sm text-amber-900">
-          This is a standard draft, not yet reviewed by a lawyer. It should
-          be checked and adapted before a real launch.
+        <Nav />
+        <div className="mx-auto max-w-2xl px-6 py-10">
+          <h1 className="text-2xl font-extrabold">Privacy Policy</h1>
+          <p className="mt-1 text-sm text-neutral-500">
+            Last updated: {new Date().toLocaleDateString("en-US")}
+          </p>
+
+          <Section title="Who we are">
+            Yeslink is a service for creating a personalised link inviting someone on a date and
+            collecting their answer. We are the data controller for the data described here, and
+            you can reach us at{" "}
+            <a className="font-semibold text-brand-dark" href={`mailto:${CONTACT_EMAIL}`}>
+              {CONTACT_EMAIL}
+            </a>
+            .
+          </Section>
+
+          <Section title="What we collect from you">
+            <ul className="list-disc space-y-1 pl-5">
+              <li>Your email address — to notify you when someone answers, and as your account.</li>
+              <li>Your first name and Instagram handle, if you enter them, so the invitation looks like it came from you.</li>
+              <li>The name of the person you invite and the note you write to them.</li>
+              <li>Minimal usage events (which steps were reached) with no advertising or cross-site tracking.</li>
+            </ul>
+          </Section>
+
+          <Section title="What we collect from the person you invite">
+            Only the answers they give: which activities they picked, which days work, and the
+            condition they chose. We do not ask them to sign up and we collect no identifying
+            information about them.
+          </Section>
+
+          <Section title="Why we are allowed to hold it">
+            We process this to provide the service you asked for — creating your link, saving the
+            answer and emailing it to you — and to take payment where you buy credits. Usage
+            events are kept on the basis of our legitimate interest in seeing whether the product
+            works.
+          </Section>
+
+          <Section title="Who we share it with">
+            <ul className="list-disc space-y-1 pl-5">
+              <li><strong>Supabase</strong> — database and authentication.</li>
+              <li><strong>Vercel</strong> — application hosting.</li>
+              <li><strong>Stripe</strong> — payment processing. We never see your card details.</li>
+              <li><strong>Resend</strong> — sending email.</li>
+            </ul>
+            We do not sell your data and we do not share it for advertising.
+          </Section>
+
+          <Section title="How long we keep it">
+            Links and answers are kept while your account exists. Ask us to delete your account
+            and we remove them, along with the invitations you created.
+          </Section>
+
+          <Section title="Your rights">
+            You can ask for a copy of your data, ask us to correct it, or ask us to delete it —
+            including everything tied to invitations you sent. Write to{" "}
+            <a className="font-semibold text-brand-dark" href={`mailto:${CONTACT_EMAIL}`}>
+              {CONTACT_EMAIL}
+            </a>{" "}
+            and we will respond within 30 days. If you are in the EU or UK you also have the
+            right to complain to your local data protection authority.
+          </Section>
+
+          <Section title="Cookies">
+            We set only what is needed to keep you signed in. There are no advertising or
+            analytics cookies.
+          </Section>
+
+          <Link href="/" className="mt-10 inline-block text-sm font-semibold text-brand">
+            ← Back to home
+          </Link>
         </div>
-
-        <h1 className="text-2xl font-extrabold">Privacy Policy</h1>
-        <p className="mt-1 text-sm text-neutral-500">Last updated: {new Date().toLocaleDateString("en-US")}</p>
-
-        <Section title="Who we are">
-          Yeslink is a service that lets you create a personalized link to
-          invite someone on a date and collect their answer.
-        </Section>
-
-        <Section title="Data we collect">
-          <ul className="list-disc space-y-1 pl-5">
-            <li>Your email, when you create an account or a link (to notify you of answers).</li>
-            <li>The name you enter for the person you're inviting.</li>
-            <li>The answers given by the invited person (activities picked, days available) — we don't ask her for any identifying data.</li>
-            <li>Minimal technical data tied to using the service (e.g. funnel usage events), with no profiling cookies or third-party ad tracking.</li>
-          </ul>
-        </Section>
-
-        <Section title="Why we collect it">
-          To provide the service (generate links, save answers), send you
-          email notifications when someone answers, handle any payments,
-          and any account-related communication.
-        </Section>
-
-        <Section title="Who we share it with">
-          <ul className="list-disc space-y-1 pl-5">
-            <li><strong>Supabase</strong> — database hosting and authentication.</li>
-            <li><strong>Vercel</strong> — application hosting.</li>
-            <li><strong>Stripe</strong> — payment processing (we never see or store your card details).</li>
-            <li><strong>Resend</strong> — sending notification emails.</li>
-          </ul>
-          We don't sell or share your data with third parties for marketing purposes.
-        </Section>
-
-        <Section title="Retention">
-          We keep data for as long as your account stays active, or as
-          needed for the purposes above.
-        </Section>
-
-        <Section title="Your rights">
-          You can request access to, correction of, or deletion of your
-          data at any time by writing to the contact address listed on
-          the site.
-        </Section>
-
-        <Section title="Contact">
-          For any questions about this policy, reach us through the channels listed on the site.
-        </Section>
-
-        <Link href="/" className="mt-10 inline-block text-sm font-semibold text-brand">
-          ← Back to home
-        </Link>
-      </div>
       </div>
     </div>
   );

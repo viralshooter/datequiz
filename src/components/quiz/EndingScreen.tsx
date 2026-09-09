@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ACTIVITIES } from "@/config/content";
+import { trackEvent } from "@/lib/events";
 import type { ActivityId } from "@/types/content";
 import type { EndingType } from "@/types/flow";
 
@@ -13,6 +14,9 @@ interface EndingScreenProps {
   days: string[];
   condition: string;
   vetoed: ActivityId | null;
+  /** False once he's bought the removal. */
+  watermarkEnabled: boolean;
+  slug: string;
 }
 
 const THEME: Record<EndingType, { card: string; shadow: string; accent: string; kicker: string }> = {
@@ -50,6 +54,8 @@ export function EndingScreen({
   days,
   condition,
   vetoed,
+  watermarkEnabled,
+  slug,
 }: EndingScreenProps) {
   const theme = THEME[endingType];
   const activity = ACTIVITIES.find((a) => a.id === champion)!;
@@ -114,9 +120,21 @@ export function EndingScreen({
           )}
         </div>
 
-        <p className="mt-6 text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">
-          yeslink.app
-        </p>
+        {/* The badge the "remove watermark" package actually removes.
+            It sits inside the card because that card is the thing she
+            screenshots, which is also what makes it the way anyone else
+            ever hears about this. */}
+        {watermarkEnabled && (
+          <a
+            href="https://yeslink.app/?utm_source=yeslink&utm_medium=badge&utm_campaign=ending"
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => trackEvent("badge_clicked", slug)}
+            className="mt-6 inline-block text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400"
+          >
+            made with yeslink.app
+          </a>
+        )}
       </motion.div>
 
       <motion.p

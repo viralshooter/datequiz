@@ -15,7 +15,7 @@ async function getLink(slug: string) {
   const { data: link } = await admin
     .from("links")
     .select(
-      "id, slug, match_name, available_days, instagram_handle, sender_name, personal_note, seed, mode"
+      "id, slug, match_name, available_days, instagram_handle, sender_name, personal_note, seed, mode, watermark_enabled"
     )
     .eq("slug", slug)
     .maybeSingle();
@@ -52,6 +52,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    // The slug is unguessable, but a leaked URL (browser bar, a shared
+    // screenshot, a toolbar that phones home) must not put someone's
+    // private note into a search index.
+    robots: { index: false, follow: false },
     openGraph: {
       title,
       description,
@@ -86,6 +90,7 @@ export default async function YeslinkPage({ params }: PageProps) {
       senderName={link.sender_name as string}
       personalNote={link.personal_note as string}
       alreadyAnswered={alreadyAnswered}
+      watermarkEnabled={link.watermark_enabled !== false}
     />
   );
 }
