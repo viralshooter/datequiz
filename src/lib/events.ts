@@ -23,6 +23,32 @@ export type EventType =
   | "checkout_started"
   | "purchase_completed";
 
+/**
+ * Every event the client is allowed to record.
+ *
+ * Kept separate from the funnel order: /api/events validates against this
+ * list, and when the funnel was narrowed to just the conversion steps it
+ * silently started rejecting all the diagnostic events — the twist
+ * shown/skipped counts that exist specifically to decide what to cut.
+ */
+export const ALL_EVENT_TYPES: EventType[] = [
+  "link_created",
+  "link_opened",
+  "answered_yes",
+  "cold_open_variant",
+  "drumroll_completed",
+  "twist_shown",
+  "twist_skipped",
+  "tournament_completed",
+  "jolly_triggered",
+  "counter_condition_chosen",
+  "ending_type",
+  "activities_selected",
+  "badge_clicked",
+  "checkout_started",
+  "purchase_completed",
+];
+
 /** Ordine canonico del funnel, usato per calcolare i tassi di conversione in /admin. */
 export const EVENT_FUNNEL_ORDER: EventType[] = [
   "link_created",

@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { EVENT_FUNNEL_ORDER, type EventType } from "@/lib/events";
+import { ALL_EVENT_TYPES, type EventType } from "@/lib/events";
 
-const VALID_EVENTS = new Set<EventType>(EVENT_FUNNEL_ORDER);
+// Not the funnel order — that's only the conversion steps, and validating
+// against it silently rejected every diagnostic event the client sends.
+const VALID_EVENTS = new Set<EventType>(ALL_EVENT_TYPES);
 
 export async function POST(request: NextRequest) {
   let body: { event_type?: string; slug?: string; metadata?: Record<string, unknown> };
