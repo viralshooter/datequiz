@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getUpcomingDayOptions } from "@/lib/dates";
 import { useAnonymousSession } from "@/lib/useAnonymousSession";
@@ -8,9 +8,23 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Paywall } from "@/components/Paywall";
 import { canonicalSiteUrl } from "@/lib/siteUrl";
 import { DEFAULT_MODE, MODE_CARDS } from "@/config/modes";
+import {
+  clearCreateDraft,
+  loadCreateDraft,
+  saveCreateDraft,
+  type CreateDraft,
+} from "@/lib/createDraft";
 import type { LinkMode } from "@/types/flow";
 
-type Step = "name" | "days" | "mode" | "about" | "generating" | "result" | "paywall";
+type Step =
+  | "name"
+  | "days"
+  | "mode"
+  | "about"
+  | "generating"
+  | "result"
+  | "paywall"
+  | "awaitingCredits";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -32,11 +46,72 @@ export function CreateFlow() {
   const dayOptions = useMemo(() => getUpcomingDayOptions(14), []);
   const fullLink = slug ? `${canonicalSiteUrl()}/d/${slug}` : "";
 
+  /**
+   * Picks the form back up after the trip to Stripe.
+   *
+   * Read from `window.location` rather than useSearchParams so this page
+   * doesn't need a Suspense boundary just to look at one query param.
+   */
+  useEffect(() => {
+    const checkout = new URLSearchParams(window.location.search).get("checkout");
+    if (!checkout) return;
+
+    // Drop the param so a refresh doesn't replay the return.
+    window.history.replaceState({}, "", "/create");
+
+    const draft = loadCreateDraft();
+    if (!draft) return;
+
+    setMatchName(draft.matchName);
+    setPersonalNote(draft.personalNote);
+    setSelectedDays(draft.selectedDays);
+    setMode(draft.mode);
+    setSenderName(draft.senderName);
+    setInstagramHandle(draft.instagramHandle);
+    setNotifyEmail(draft.notifyEmail);
+
+    if (checkout === "success") {
+      // He paid — finish the job for him rather than showing the form
+      // again with everything already filled in.
+      void generateLink(draft, { waitForCredits: true });
+    } else {
+      // Cancelled: nothing is lost, he lands back on the last step with
+      // his answers intact.
+      setStep("about");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function toggleDay(day: string) {
     setSelectedDays((prev) => (prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]));
   }
 
-  async function generateLink() {
+  function currentDraft(): CreateDraft {
+    return {
+      matchName: matchName.trim(),
+      personalNote: personalNote.trim(),
+      selectedDays,
+      mode,
+      senderName: senderName.trim(),
+      instagramHandle: instagramHandle.trim(),
+      notifyEmail: notifyEmail.trim(),
+    };
+  }
+
+  /**
+   * `draft` is passed explicitly rather than read from state because the
+   * post-payment path restores and submits in the same tick, when the
+   * state updates haven't been applied yet.
+   *
+   * `waitForCredits` is only set on that path: a 402 normally means "show
+   * the paywall", but for someone who has just paid it usually means the
+   * Stripe webhook is still in flight, and bouncing them back to the
+   * packages they already bought would be indefensible.
+   */
+  async function generateLink(
+    draft: CreateDraft = currentDraft(),
+    { waitForCredits = false, attempt = 0 } = {}
+  ) {
     setStep("generating");
     setError(null);
 
@@ -49,7 +124,7 @@ export function CreateFlow() {
       try {
         const supabase = createSupabaseBrowserClient();
         const { error: upgradeError } = await supabase.auth.updateUser({
-          email: notifyEmail.trim(),
+          email: draft.notifyEmail,
         });
         setConfirmationSent(!upgradeError);
       } catch {
@@ -60,18 +135,22 @@ export function CreateFlow() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          match_name: matchName.trim(),
-          available_days: selectedDays,
-          notify_email: notifyEmail.trim(),
-          instagram_handle: instagramHandle.trim(),
-          sender_name: senderName.trim(),
-          personal_note: personalNote.trim(),
-          mode,
+          match_name: draft.matchName,
+          available_days: draft.selectedDays,
+          notify_email: draft.notifyEmail,
+          instagram_handle: draft.instagramHandle,
+          sender_name: draft.senderName,
+          personal_note: draft.personalNote,
+          mode: draft.mode,
         }),
       });
 
       if (res.status === 402) {
-        setStep("paywall");
+        if (waitForCredits && attempt < 4) {
+          await new Promise((r) => window.setTimeout(r, 2000 + attempt * 1000));
+          return generateLink(draft, { waitForCredits, attempt: attempt + 1 });
+        }
+        setStep(waitForCredits ? "awaitingCredits" : "paywall");
         return;
       }
 
@@ -82,6 +161,8 @@ export function CreateFlow() {
         return;
       }
 
+      // The link exists now, so the parked copy has done its job.
+      clearCreateDraft();
       setSlug(data.slug);
       setStep("result");
     } catch {
@@ -303,7 +384,7 @@ export function CreateFlow() {
             <button
               type="button"
               disabled={!canGenerate}
-              onClick={generateLink}
+              onClick={() => generateLink()}
               className="mt-6 w-full rounded-full border-[3px] border-ink bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 disabled:opacity-40 disabled:shadow-none"
             >
               Generate link →
@@ -320,11 +401,40 @@ export function CreateFlow() {
           </StepCard>
         )}
 
+        {/* Paid, but the webhook still hasn't granted the credit. Never
+            send him back to the packages he already bought. */}
+        {step === "awaitingCredits" && (
+          <StepCard key="awaitingCredits">
+            <h1 className="text-2xl font-extrabold">Payment received ✅</h1>
+            <p className="mt-2 text-neutral-600">
+              We&apos;re still confirming it with the payment provider. Nothing is lost — your
+              answers are saved and your link is one tap away.
+            </p>
+
+            <button
+              type="button"
+              onClick={() => generateLink(currentDraft(), { waitForCredits: true })}
+              className="mt-6 w-full rounded-full border-[3px] border-ink bg-brand px-8 py-4 text-lg font-black text-ink shadow-[5px_5px_0_0_#1a1a1f] transition-transform active:scale-95"
+            >
+              Create my link now →
+            </button>
+
+            <a
+              href="/dashboard"
+              className="mt-4 block w-full text-center text-sm font-semibold text-neutral-500"
+            >
+              Check my credits
+            </a>
+          </StepCard>
+        )}
+
         {step === "paywall" && userId && (
           <StepCard key="paywall">
             <Paywall
               hasAccount={!isAnonymous}
               defaultEmail={notifyEmail.trim()}
+              returnTo="/create"
+              onBeforeCheckout={() => saveCreateDraft(currentDraft())}
               onCancel={() => setStep("about")}
             />
           </StepCard>

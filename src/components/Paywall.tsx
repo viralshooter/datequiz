@@ -10,10 +10,20 @@ interface PaywallProps {
   hasAccount: boolean;
   /** Prefills the gate with the address he already typed for notifications. */
   defaultEmail?: string;
+  /** Where Stripe sends him back to. Allowlisted server-side. */
+  returnTo?: string;
+  /** Called before leaving for Stripe, so the draft survives the trip. */
+  onBeforeCheckout?: () => void;
   onCancel: () => void;
 }
 
-export function Paywall({ hasAccount, defaultEmail, onCancel }: PaywallProps) {
+export function Paywall({
+  hasAccount,
+  defaultEmail,
+  returnTo = "/dashboard",
+  onBeforeCheckout,
+  onCancel,
+}: PaywallProps) {
   const [loadingPackage, setLoadingPackage] = useState<PackageId | null>(null);
   const [error, setError] = useState<string | null>(null);
   // The gate is skipped entirely for someone who already has an account.
@@ -23,12 +33,13 @@ export function Paywall({ hasAccount, defaultEmail, onCancel }: PaywallProps) {
     setLoadingPackage(packageId);
     setError(null);
     trackEvent("checkout_started", undefined, { package: packageId });
+    onBeforeCheckout?.();
 
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ package: packageId }),
+        body: JSON.stringify({ package: packageId, return_to: returnTo }),
       });
       const data = await res.json();
 
