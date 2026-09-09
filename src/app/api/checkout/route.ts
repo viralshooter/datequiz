@@ -36,14 +36,25 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "not_authenticated" }, { status: 401 });
   }
 
+  // An anonymous session lives only in this browser's cookie. Credits
+  // bought onto one become unreachable the moment the cookie goes —
+  // different phone, cleared data, private window — and the money is
+  // already taken. Nothing is sold until the account is real.
+  if (user.is_anonymous !== false) {
+    return NextResponse.json({ error: "account_required" }, { status: 403 });
+  }
+
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? request.nextUrl.origin;
   const stripe = getStripeClient();
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${siteUrl}/?checkout=success`,
-    cancel_url: `${siteUrl}/?checkout=cancel`,
+    // Land them somewhere that can actually confirm the purchase. This
+    // used to return to the marketing page, banner and all, which read as
+    // "nothing happened" right after paying.
+    success_url: `${siteUrl}/dashboard?checkout=success`,
+    cancel_url: `${siteUrl}/dashboard?checkout=cancel`,
     metadata: {
       user_id: user.id,
       package: pkg.id,

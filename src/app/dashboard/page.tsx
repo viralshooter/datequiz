@@ -4,6 +4,8 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Nav } from "@/components/Nav";
 import { PlayfulBackground } from "@/components/PlayfulBackground";
 import { ACTIVITIES } from "@/config/content";
+import { accountStateFromUser } from "@/lib/accountState";
+import { CheckoutBanner } from "./CheckoutBanner";
 import type { ActivityId } from "@/types/content";
 
 export const dynamic = "force-dynamic";
@@ -20,15 +22,25 @@ interface LinkRow {
   answers: AnswerRow | AnswerRow[] | null;
 }
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ checkout?: string }>;
+}) {
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user || user.is_anonymous !== false) {
-    redirect("/login?next=/dashboard");
-  }
+  const account = accountStateFromUser(user);
+
+  // Half-finished accounts used to be bounced to /login, where signing in
+  // with the same address would have started a second account and orphaned
+  // their links. Send them to the page that actually finishes the job.
+  if (account.kind === "pending") redirect("/account");
+  if (account.kind !== "active" || !user) redirect("/login?next=/dashboard");
+
+  const checkout = (await searchParams).checkout;
 
   const [{ data: profile }, { data: links }, { data: purchases }] = await Promise.all([
     supabase.from("users").select("credits, remove_watermark").eq("id", user.id).maybeSingle(),
@@ -50,10 +62,24 @@ export default async function DashboardPage() {
       <div className="relative z-10">
         <Nav />
         <div className="mx-auto max-w-2xl px-6 py-8">
+        {(checkout === "success" || checkout === "cancel") && (
+          <CheckoutBanner
+            status={checkout === "success" ? "success" : "cancel"}
+            // "Settled" means the webhook has landed and the credit is real.
+            settled={(purchases ?? []).some((p) => p.status === "completed")}
+          />
+        )}
+
         <h1 className="text-2xl font-extrabold">Your links</h1>
-        <p className="mt-1 text-neutral-600">
-          {user.email} · {profile?.credits ?? 0} credit{profile?.credits === 1 ? "" : "s"} left
-        </p>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <span className="flex items-center gap-2 rounded-full border-2 border-ink/15 bg-white px-3 py-1.5 text-sm">
+            <span className="h-2 w-2 rounded-full bg-brand" />
+            <span className="font-bold text-neutral-700">Signed in as {user.email}</span>
+          </span>
+          <span className="rounded-full bg-brand/15 px-3 py-1.5 text-sm font-black text-brand-dark">
+            {profile?.credits ?? 0} credit{profile?.credits === 1 ? "" : "s"} left
+          </span>
+        </div>
 
         <Link
           href="/create"

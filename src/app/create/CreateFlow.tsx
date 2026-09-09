@@ -15,7 +15,7 @@ type Step = "name" | "days" | "mode" | "about" | "generating" | "result" | "payw
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function CreateFlow() {
-  const { userId, loading: sessionLoading } = useAnonymousSession();
+  const { userId, isAnonymous, loading: sessionLoading } = useAnonymousSession();
 
   const [step, setStep] = useState<Step>("name");
   const [matchName, setMatchName] = useState("");
@@ -25,6 +25,7 @@ export function CreateFlow() {
   const [senderName, setSenderName] = useState("");
   const [personalNote, setPersonalNote] = useState("");
   const [mode, setMode] = useState<LinkMode>(DEFAULT_MODE);
+  const [confirmationSent, setConfirmationSent] = useState(true);
   const [slug, setSlug] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -40,14 +41,19 @@ export function CreateFlow() {
     setError(null);
 
     try {
-      // Best-effort: attach the email to the anonymous session for
-      // future login (magic link). If it fails (e.g. email already
-      // belongs to another account) it must not block link creation.
+      // Attach the email to the anonymous session so the account can be
+      // claimed later. This must never block link creation — but it must
+      // not be swallowed either: supabase-js returns the failure instead
+      // of throwing, so the old catch block never even saw it, and a user
+      // whose confirmation email was never sent was told it had been.
       try {
         const supabase = createSupabaseBrowserClient();
-        await supabase.auth.updateUser({ email: notifyEmail.trim() });
+        const { error: upgradeError } = await supabase.auth.updateUser({
+          email: notifyEmail.trim(),
+        });
+        setConfirmationSent(!upgradeError);
       } catch {
-        // ignorato volutamente
+        setConfirmationSent(false);
       }
 
       const res = await fetch("/api/links", {
@@ -288,7 +294,8 @@ export function CreateFlow() {
               className="mt-2 w-full rounded-xl border-[3px] border-ink bg-white px-4 py-3 text-lg text-ink outline-none placeholder:text-neutral-400 focus:border-brand"
             />
             <p className="mt-2 text-xs text-neutral-500">
-              Only used to notify you when she answers. She never sees it.
+              We email you the second she answers — and this is also your account, so your links
+              are still here on any other phone. She never sees it.
             </p>
 
             {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
@@ -315,7 +322,11 @@ export function CreateFlow() {
 
         {step === "paywall" && userId && (
           <StepCard key="paywall">
-            <Paywall userId={userId} onCancel={() => setStep("about")} />
+            <Paywall
+              hasAccount={!isAnonymous}
+              defaultEmail={notifyEmail.trim()}
+              onCancel={() => setStep("about")}
+            />
           </StepCard>
         )}
 
@@ -356,6 +367,35 @@ export function CreateFlow() {
                 Go to the results page
               </a>
             </div>
+
+            {/* Not a wall — the free link is already done. Just the one
+                moment he's most receptive to being told his account is
+                half-finished, instead of finding out at the paywall. */}
+            {isAnonymous && (
+              <div className="mt-6 rounded-2xl border-[3px] border-ink bg-white p-4 shadow-[4px_4px_0_0_#1a1a1f]">
+                <p className="font-black text-ink">Keep this link on your account</p>
+                <p className="mt-1 text-sm text-neutral-600">
+                  {confirmationSent ? (
+                    <>
+                      We sent a confirmation to{" "}
+                      <strong className="text-ink">{notifyEmail.trim()}</strong>. Confirm it and
+                      your links follow you to any phone.
+                    </>
+                  ) : (
+                    <>
+                      We couldn&apos;t send the confirmation email just now. Your link is safe —
+                      claim your account here when you&apos;re ready.
+                    </>
+                  )}
+                </p>
+                <a
+                  href="/account"
+                  className="mt-3 inline-block rounded-full border-[3px] border-ink bg-brand px-5 py-2.5 text-sm font-black text-ink shadow-[3px_3px_0_0_#1a1a1f]"
+                >
+                  Confirm my email →
+                </a>
+              </div>
+            )}
 
             <button type="button" onClick={reset} className="mt-6 w-full text-sm font-semibold text-brand">
               + Create another link

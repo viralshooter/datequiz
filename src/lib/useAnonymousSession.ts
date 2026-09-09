@@ -5,6 +5,8 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 interface AnonymousSessionState {
   userId: string | null;
+  /** False once the session is a confirmed account rather than a cookie. */
+  isAnonymous: boolean;
   loading: boolean;
   error: string | null;
 }
@@ -17,6 +19,7 @@ interface AnonymousSessionState {
 export function useAnonymousSession(): AnonymousSessionState {
   const [state, setState] = useState<AnonymousSessionState>({
     userId: null,
+    isAnonymous: true,
     loading: true,
     error: null,
   });
@@ -27,18 +30,25 @@ export function useAnonymousSession(): AnonymousSessionState {
 
     async function ensureSession() {
       const { data } = await supabase.auth.getSession();
-      let userId = data.session?.user?.id ?? null;
+      let user = data.session?.user ?? null;
 
-      if (!userId) {
+      if (!user) {
         const { data: signInData, error } = await supabase.auth.signInAnonymously();
         if (error) {
-          if (!cancelled) setState({ userId: null, loading: false, error: error.message });
+          if (!cancelled)
+            setState({ userId: null, isAnonymous: true, loading: false, error: error.message });
           return;
         }
-        userId = signInData.user?.id ?? null;
+        user = signInData.user ?? null;
       }
 
-      if (!cancelled) setState({ userId, loading: false, error: null });
+      if (!cancelled)
+        setState({
+          userId: user?.id ?? null,
+          isAnonymous: user?.is_anonymous !== false,
+          loading: false,
+          error: null,
+        });
     }
 
     ensureSession();
