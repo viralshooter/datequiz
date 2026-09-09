@@ -23,6 +23,13 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 function redirectToCanonicalHost(request: NextRequest): NextResponse | null {
   if (!SITE_URL) return null;
 
+  // Never redirect API routes. They're either called by our own pages with
+  // relative URLs — already on the right host — or by an external service
+  // registered against a fixed URL. Stripe does not follow redirects when
+  // delivering webhooks: it records a 308 as a failed delivery, which
+  // silently stops credits from ever being granted after a payment.
+  if (request.nextUrl.pathname.startsWith("/api/")) return null;
+
   const host = request.headers.get("host") ?? "";
   if (!host.endsWith(".vercel.app")) return null;
 
