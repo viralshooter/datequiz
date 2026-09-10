@@ -9,6 +9,15 @@ import { PAYMENTS_ENABLED } from "@/lib/flags";
 import { randomSeed } from "@/lib/prng";
 import { DEFAULT_MODE } from "@/config/modes";
 import { LINK_MODES, type LinkMode } from "@/types/flow";
+import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
+
+// Keyed by IP rather than by session: an anonymous session costs nothing
+// to create, so limiting per-session would cap nothing — someone abusing
+// this just opens a new one. Generous enough for a real person sending
+// several invites in a sitting; well below what scripting this at scale
+// would need.
+const LINK_CREATE_LIMIT = 8;
+const LINK_CREATE_WINDOW_SECONDS = 60 * 60;
 
 const LinkBodySchema = z.object({
   match_name: z.string().trim().min(1),
@@ -21,6 +30,18 @@ const LinkBodySchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const admin = createSupabaseAdminClient();
+  const ip = getClientIp(request);
+  const withinLimit = await checkRateLimit(
+    admin,
+    `links:create:${ip}`,
+    LINK_CREATE_LIMIT,
+    LINK_CREATE_WINDOW_SECONDS
+  );
+  if (!withinLimit) {
+    return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+  }
+
   let rawBody: unknown;
   try {
     rawBody = await request.json();
@@ -105,7 +126,6 @@ export async function POST(request: NextRequest) {
       .eq("id", user.id);
   }
 
-  const admin = createSupabaseAdminClient();
   await trackEventServer(admin, "link_created", slug, { match_name, mode });
 
   return NextResponse.json({ slug });

@@ -50,3 +50,6 @@ next-env.d.ts
 # local debugging (screenshots, throwaway scripts)
 /mobile-shots/
 /scripts/
+
+# local supabase CLI cache
+supabase/.temp/

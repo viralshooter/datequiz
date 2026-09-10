@@ -21,7 +21,7 @@ export function AdminLogin() {
     });
 
     if (!res.ok) {
-      setError("Wrong password.");
+      setError(res.status === 429 ? "Too many attempts. Try again in a few minutes." : "Wrong password.");
       setLoading(false);
       return;
     }

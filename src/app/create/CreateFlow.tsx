@@ -156,7 +156,11 @@ export function CreateFlow() {
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Something went wrong, please try again.");
+        setError(
+          res.status === 429
+            ? "You're creating links faster than we allow right now. Give it a bit and try again."
+            : data.error ?? "Something went wrong, please try again."
+        );
         setStep("about");
         return;
       }
