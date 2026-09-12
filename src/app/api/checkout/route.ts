@@ -4,6 +4,7 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getStripeClient } from "@/lib/stripe";
 import { getPackageById } from "@/config/pricing";
 import { PAYMENTS_ENABLED } from "@/lib/flags";
+import { attributionCookieValue, persistAttribution } from "@/lib/attributionServer";
 
 const RETURN_DESTINATIONS = new Set(["/dashboard", "/create"]);
 
@@ -73,12 +74,18 @@ export async function POST(request: NextRequest) {
   });
 
   const admin = createSupabaseAdminClient();
+  await persistAttribution(admin, user.id, attributionCookieValue(request.cookies));
+
   await admin.from("purchases").insert({
     user_id: user.id,
     package: pkg.id,
     stripe_session_id: session.id,
     status: "pending",
     credits_granted: pkg.credits,
+    // Recorded from what we charged today, not looked up later: revenue
+    // reports must not change retroactively when a price does.
+    amount_cents: pkg.priceCents,
+    currency: "usd",
   });
 
   return NextResponse.json({ url: session.url });

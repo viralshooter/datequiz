@@ -10,6 +10,7 @@ import { randomSeed } from "@/lib/prng";
 import { DEFAULT_MODE } from "@/config/modes";
 import { LINK_MODES, type LinkMode } from "@/types/flow";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
+import { attributionCookieValue, persistAttribution } from "@/lib/attributionServer";
 
 // Keyed by IP rather than by session: an anonymous session costs nothing
 // to create, so limiting per-session would cap nothing — someone abusing
@@ -125,6 +126,10 @@ export async function POST(request: NextRequest) {
       .update({ credits: (profile?.credits ?? 1) - 1 })
       .eq("id", user.id);
   }
+
+  // After the link exists, not before: this is bookkeeping, and it must not
+  // sit between the credit check and the insert.
+  await persistAttribution(admin, user.id, attributionCookieValue(request.cookies));
 
   await trackEventServer(admin, "link_created", slug, { match_name, mode });
 

@@ -1,5 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import {
+  ATTRIBUTION_COOKIE,
+  ATTRIBUTION_MAX_AGE,
+  attributionFromUrl,
+  serializeAttribution,
+  type Attribution,
+} from "@/lib/attribution";
 
 /**
  * Rinfresca il cookie di sessione Supabase su ogni richiesta (pattern
@@ -37,9 +44,28 @@ function redirectToCanonicalHost(request: NextRequest): NextResponse | null {
   return NextResponse.redirect(target, 308);
 }
 
+/**
+ * Records which campaign sent someone here, first touch wins.
+ *
+ * Done in middleware rather than in a client component so it survives a
+ * visitor who lands and immediately leaves — by the time they come back to
+ * actually create a link, the URL no longer carries the tags. First touch
+ * because the question is which ad found this person, not which page they
+ * happened to reload last.
+ */
+function pendingAttribution(request: NextRequest): Attribution | null {
+  if (request.cookies.get(ATTRIBUTION_COOKIE)) return null;
+  return attributionFromUrl(request.nextUrl, request.headers.get("referer"));
+}
+
 export async function middleware(request: NextRequest) {
   const canonical = redirectToCanonicalHost(request);
   if (canonical) return canonical;
+
+  // Worked out up front but written at the very end: refreshing the Supabase
+  // session replaces `response` wholesale, which would throw away any cookie
+  // set on the original object.
+  const attribution = pendingAttribution(request);
 
   let response = NextResponse.next({ request });
 
@@ -63,6 +89,16 @@ export async function middleware(request: NextRequest) {
   );
 
   await supabase.auth.getUser();
+
+  if (attribution) {
+    response.cookies.set(ATTRIBUTION_COOKIE, serializeAttribution(attribution), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: ATTRIBUTION_MAX_AGE,
+    });
+  }
 
   return response;
 }
