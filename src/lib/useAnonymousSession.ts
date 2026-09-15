@@ -11,6 +11,33 @@ interface AnonymousSessionState {
   error: string | null;
 }
 
+const ATTRIBUTION_CLAIMED_KEY = "yeslink:attr-claimed";
+
+/**
+ * Tells the server to stamp the campaign cookie onto this session.
+ *
+ * The cookie is httpOnly and deliberately unreadable here, so the browser can
+ * only ask. Waiting until a link was created meant everyone who arrived from
+ * an ad and stopped short counted as no campaign at all.
+ *
+ * Once per tab, and never allowed to fail loudly: this is bookkeeping and
+ * must not disturb someone trying to write an invite.
+ */
+async function claimAttribution(): Promise<void> {
+  try {
+    if (sessionStorage.getItem(ATTRIBUTION_CLAIMED_KEY)) return;
+    sessionStorage.setItem(ATTRIBUTION_CLAIMED_KEY, "1");
+  } catch {
+    // Private mode or blocked storage: worth one extra request, not a crash.
+  }
+
+  try {
+    await fetch("/api/attribution", { method: "POST", keepalive: true });
+  } catch {
+    // offline or blocked — the campaign label is not worth an error here
+  }
+}
+
 /**
  * Garantisce che "lui" abbia una sessione (auth anonima Supabase)
  * prima di generare un link. Nessun form di login: la sessione è
@@ -49,6 +76,8 @@ export function useAnonymousSession(): AnonymousSessionState {
           loading: false,
           error: null,
         });
+
+      if (user) void claimAttribution();
     }
 
     ensureSession();
