@@ -53,6 +53,16 @@ function redirectToCanonicalHost(request: NextRequest): NextResponse | null {
  * because the question is which ad found this person, not which page they
  * happened to reload last.
  */
+function setAttributionCookie(response: NextResponse, attribution: Attribution): void {
+  response.cookies.set(ATTRIBUTION_COOKIE, serializeAttribution(attribution), {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: ATTRIBUTION_MAX_AGE,
+  });
+}
+
 function pendingAttribution(request: NextRequest): Attribution | null {
   if (request.cookies.get(ATTRIBUTION_COOKIE)) return null;
   return attributionFromUrl(request.nextUrl, request.headers.get("referer"));
@@ -68,6 +78,19 @@ export async function middleware(request: NextRequest) {
   const attribution = pendingAttribution(request);
 
   let response = NextResponse.next({ request });
+
+  // No auth cookie means there is no session to refresh and nobody to
+  // redirect, so skip Supabase entirely. This is the path every visitor
+  // arriving from an ad takes, and it's the difference between the landing
+  // page being served from the CDN and it waiting on an auth round-trip.
+  const hasAuthCookie = request.cookies
+    .getAll()
+    .some((cookie) => cookie.name.startsWith("sb-"));
+
+  if (!hasAuthCookie) {
+    if (attribution) setAttributionCookie(response, attribution);
+    return response;
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -88,17 +111,19 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (attribution) {
-    response.cookies.set(ATTRIBUTION_COOKIE, serializeAttribution(attribution), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: ATTRIBUTION_MAX_AGE,
-    });
+  // Someone with a real account has no use for the "first link free" pitch.
+  // This used to live in the landing page itself, which meant the page had
+  // to be rendered per request just to decide — the redirect happens here so
+  // the page can stay static for everyone else.
+  if (user?.is_anonymous === false && request.nextUrl.pathname === "/") {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
+
+  if (attribution) setAttributionCookie(response, attribution);
 
   return response;
 }

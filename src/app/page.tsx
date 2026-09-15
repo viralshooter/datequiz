@@ -1,31 +1,23 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { AppScreens } from "@/components/AppScreens";
-import { Nav } from "@/components/Nav";
+import { NavMarketing } from "@/components/NavMarketing";
 import { PlayfulBackground } from "@/components/PlayfulBackground";
 import { TryTheButton } from "@/components/TryTheButton";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { PRICING_PACKAGES } from "@/config/pricing";
 import { CONTACT_EMAIL } from "@/config/contact";
 
-export default async function LandingPage() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // Anyone with a real account shouldn't see the "first link free"
-  // pitch again: send them straight to their dashboard.
-  if (user && user.is_anonymous === false) {
-    redirect("/dashboard");
-  }
-
+/**
+ * Static on purpose. This is the page paid traffic lands on, and reading the
+ * session here made it impossible to cache: every ad click waited on a
+ * server render plus an auth round-trip. Sending account holders to their
+ * dashboard now happens in the middleware, which already has the session.
+ */
+export default function LandingPage() {
   return (
     <div className="relative min-h-dvh text-ink">
       <PlayfulBackground />
       <div className="relative z-10">
-        <AnnouncementBar />
-        <Nav />
+        <NavMarketing />
         <Hero />
         <BuiltForDatingApps />
         <HowItWorks />
@@ -36,14 +28,6 @@ export default async function LandingPage() {
         <FinalCta />
         <Footer />
       </div>
-    </div>
-  );
-}
-
-function AnnouncementBar() {
-  return (
-    <div className="border-b-2 border-ink bg-brand px-4 py-2 text-center text-sm font-black text-ink">
-      🎁 First link free — no card, no catch
     </div>
   );
 }
@@ -60,16 +44,17 @@ function Hero() {
       <div className="grid min-w-0 grid-cols-1 items-start gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-12">
         {/* The pitch */}
         <div className="min-w-0 text-center lg:pt-4 lg:text-left">
+          {/* One badge, not two: "first link free" was being said here and
+              again in the banner above, spending a line of a phone screen to
+              repeat itself. It now lives under the button, where it answers
+              the objection at the moment of the tap. */}
           <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-start">
             <span className="-rotate-2 rounded-full border-2 border-ink bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-ink shadow-[3px_3px_0_0_#1a1a1f]">
               For your Hinge, Tinder & Bumble matches
             </span>
-            <span className="rotate-2 rounded-full border-2 border-ink bg-yellow-300 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-ink shadow-[3px_3px_0_0_#1a1a1f]">
-              🎁 First link free
-            </span>
           </div>
 
-          <h1 className="mt-6 text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl">
+          <h1 className="mt-5 text-4xl font-black leading-[0.95] tracking-tight sm:text-6xl">
             Make her{" "}
             <span className="relative inline-block -rotate-2 rounded-xl border-2 border-ink bg-yellow-300 px-3 pb-1 shadow-[4px_4px_0_0_#1a1a1f]">
               laugh
@@ -77,9 +62,32 @@ function Hero() {
             into a yes
           </h1>
 
-          <p className="mx-auto mt-6 max-w-md text-base text-neutral-600 sm:text-lg lg:mx-0">
+          <p className="mx-auto mt-4 max-w-md text-base text-neutral-600 sm:text-lg lg:mx-0">
             Send her one link. The NO button runs away from her finger, and she ends up picking
             what you two do and when.
+          </p>
+
+          {/* Directly under the pitch. It used to sit below the three step
+              chips, which on a phone put the only thing worth tapping just
+              off the bottom of the screen. */}
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
+            <Link
+              href="/create"
+              className="rounded-full border-[3px] border-ink bg-brand px-7 py-4 text-base font-black text-ink shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 hover:rotate-1 active:translate-y-0 active:scale-95"
+            >
+              Create your first Yeslink free →
+            </Link>
+            {/* Hidden on phones, where the nav already offers "Log in" and a
+                second full-width button costs more than it earns. */}
+            <Link
+              href="/login"
+              className="hidden rounded-full border-[3px] border-ink bg-white px-7 py-4 text-base font-black text-ink shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 hover:-rotate-1 active:translate-y-0 sm:block"
+            >
+              I already have an account
+            </Link>
+          </div>
+          <p className="mt-3 text-sm font-semibold text-neutral-500">
+            🎁 First link free. No card required.
           </p>
 
           <div className="mt-7 flex flex-wrap items-center justify-center gap-x-2 gap-y-3 lg:justify-start">
@@ -99,24 +107,6 @@ function Hero() {
               </div>
             ))}
           </div>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
-            <Link
-              href="/create"
-              className="rounded-full border-[3px] border-ink bg-brand px-7 py-4 text-base font-black text-ink shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 hover:rotate-1 active:translate-y-0 active:scale-95"
-            >
-              Create your first Yeslink free →
-            </Link>
-            <Link
-              href="/login"
-              className="rounded-full border-[3px] border-ink bg-white px-7 py-4 text-base font-black text-ink shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 hover:-rotate-1 active:translate-y-0"
-            >
-              I already have an account
-            </Link>
-          </div>
-          <p className="mt-3 text-sm font-semibold text-neutral-500">
-            No card required. You only pay if you keep using it.
-          </p>
         </div>
 
         {/* The proof: what she sees, then the same trick playable right here */}
