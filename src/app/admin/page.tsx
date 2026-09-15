@@ -101,6 +101,31 @@ export default async function AdminPage({
     .eq("event_type", "notification_failed")
     .gte("created_at", since);
 
+  // "Getting him to /create": a separate mini-funnel from the his→her one
+  // below. It exists because the only signal that used to exist — an
+  // anonymous-session row — is created on /create itself, which can't tell
+  // "never clicked" apart from "clicked, and the page failed him."
+  const ctaSteps = [
+    { type: "landing_cta_clicked" as const, label: "Clicked \"Create a link\"" },
+    { type: "create_page_loaded" as const, label: "/create loaded" },
+    { type: "link_created" as const, label: "Link created" },
+  ];
+  const ctaCounts = await Promise.all(
+    ctaSteps.map(async (step) => {
+      const { count } = await admin
+        .from("events")
+        .select("id", { count: "exact", head: true })
+        .eq("event_type", step.type)
+        .gte("created_at", since);
+      return { ...step, count: count ?? 0 };
+    })
+  );
+  const { count: sessionFailures } = await admin
+    .from("events")
+    .select("id", { count: "exact", head: true })
+    .eq("event_type", "anonymous_session_failed")
+    .gte("created_at", since);
+
   const revenueCents = (revenue.data ?? []).reduce(
     (total, row) => total + (row.amount_cents ?? 0),
     0
@@ -168,6 +193,54 @@ export default async function AdminPage({
         <StatTile label="New signups" value={String(signups.count ?? 0)} />
         <StatTile label="Links created" value={String(linksCreated)} />
       </div>
+
+      <SectionTitle>Getting him to /create</SectionTitle>
+      <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
+        Where he drops off between landing on the site and finishing a link.
+        Separate from the funnel below, which starts only once a link exists.
+      </p>
+
+      <div className="mt-4 flex flex-col gap-4">
+        {ctaCounts.map((step, i) => {
+          const prev = i > 0 ? ctaCounts[i - 1].count : null;
+          const pctOfPrev = prev ? Math.round((step.count / (prev || 1)) * 100) : null;
+          const widthPct = Math.max(
+            (step.count / Math.max(ctaCounts[0].count, 1)) * 100,
+            step.count > 0 ? 3 : 0
+          );
+          return (
+            <div key={step.type}>
+              <div className="flex items-baseline justify-between text-sm">
+                <span className="font-semibold" style={{ color: "var(--text-primary)" }}>
+                  {step.label}
+                </span>
+                <span style={{ color: "var(--text-secondary)" }}>
+                  {step.count}
+                  {pctOfPrev !== null && (
+                    <span style={{ color: "var(--muted)" }}> · {pctOfPrev}% of previous</span>
+                  )}
+                </span>
+              </div>
+              <div
+                className="mt-1.5 h-3 w-full overflow-hidden rounded-full"
+                style={{ background: "var(--gridline)" }}
+              >
+                <div
+                  className="h-full rounded-full"
+                  style={{ width: `${widthPct}%`, background: "var(--series-1)" }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {(sessionFailures ?? 0) > 0 && (
+        <p className="mt-3 text-sm font-semibold" style={{ color: "#b45309" }}>
+          {sessionFailures} of those visits hit a connection problem on /create — often an
+          in-app browser (TikTok, Instagram) blocking the sign-in call.
+        </p>
+      )}
 
       <SectionTitle>By campaign</SectionTitle>
       <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>

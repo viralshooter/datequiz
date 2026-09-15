@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { getUpcomingDayOptions } from "@/lib/dates";
 import { useAnonymousSession } from "@/lib/useAnonymousSession";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { trackEvent } from "@/lib/events";
 import { Paywall } from "@/components/Paywall";
 import { canonicalSiteUrl } from "@/lib/siteUrl";
 import { DEFAULT_MODE, MODE_CARDS } from "@/config/modes";
@@ -29,7 +30,21 @@ type Step =
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function CreateFlow() {
-  const { userId, isAnonymous, loading: sessionLoading } = useAnonymousSession();
+  const {
+    userId,
+    isAnonymous,
+    loading: sessionLoading,
+    stuck: sessionStuck,
+    error: sessionError,
+    retry: retrySession,
+  } = useAnonymousSession();
+
+  // Once per mount: distinguishes "he never reached this page" from
+  // "he reached it and something here failed" — the two look identical from
+  // outside if nothing marks that the page itself loaded.
+  useEffect(() => {
+    trackEvent("create_page_loaded");
+  }, []);
 
   const [step, setStep] = useState<Step>("name");
   const [matchName, setMatchName] = useState("");
@@ -201,8 +216,27 @@ export function CreateFlow() {
     .filter(Boolean)
     .join(" ");
 
+  const showConnectionTrouble = (sessionStuck || Boolean(sessionError)) && step !== "result";
+
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-6 py-10">
+      {showConnectionTrouble && (
+        <div className="mb-6 rounded-2xl border-[3px] border-ink bg-yellow-100 p-4 shadow-[4px_4px_0_0_#1a1a1f]">
+          <p className="text-sm font-black text-ink">Trouble connecting</p>
+          <p className="mt-1 text-sm text-neutral-700">
+            If you opened this from TikTok, Instagram, or another app, its built-in browser
+            sometimes blocks part of the page. Try the button below, or open this link in Safari
+            or Chrome instead.
+          </p>
+          <button
+            type="button"
+            onClick={retrySession}
+            className="mt-3 rounded-full border-2 border-ink bg-white px-4 py-2 text-sm font-black text-ink"
+          >
+            Try again
+          </button>
+        </div>
+      )}
       <AnimatePresence mode="wait">
         {step === "name" && (
           <StepCard key="name">

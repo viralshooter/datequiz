@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AppScreens } from "@/components/AppScreens";
 import { NavMarketing } from "@/components/NavMarketing";
 import { PlayfulBackground } from "@/components/PlayfulBackground";
+import { TrackedCtaLink } from "@/components/TrackedCtaLink";
 import { TryTheButton } from "@/components/TryTheButton";
 import { PRICING_PACKAGES } from "@/config/pricing";
 import { CONTACT_EMAIL } from "@/config/contact";
@@ -71,12 +72,12 @@ function Hero() {
               chips, which on a phone put the only thing worth tapping just
               off the bottom of the screen. */}
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
-            <Link
+            <TrackedCtaLink
               href="/create"
               className="rounded-full border-[3px] border-ink bg-brand px-7 py-4 text-base font-black text-ink shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 hover:rotate-1 active:translate-y-0 active:scale-95"
             >
               Create your first Yeslink free →
-            </Link>
+            </TrackedCtaLink>
             {/* Hidden on phones, where the nav already offers "Log in" and a
                 second full-width button costs more than it earns. */}
             <Link
@@ -401,12 +402,12 @@ function FinalCta() {
         <p className="mx-auto mt-3 max-w-md font-semibold text-ink/80">
           Takes a minute. Costs nothing. Worst case she says yes.
         </p>
-        <Link
+        <TrackedCtaLink
           href="/create"
           className="mt-7 inline-block rounded-full border-[3px] border-ink bg-white px-8 py-4 text-lg font-black text-ink shadow-[6px_6px_0_0_#1a1a1f] transition-transform hover:-translate-y-0.5 hover:-rotate-1 active:translate-y-0"
         >
           Make your first Yeslink →
-        </Link>
+        </TrackedCtaLink>
       </div>
     </section>
   );

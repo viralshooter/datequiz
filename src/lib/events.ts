@@ -24,7 +24,19 @@ export type EventType =
   | "purchase_completed"
   // An answer saved but its notification email rejected — recorded so a
   // exhausted sending quota is visible instead of silent.
-  | "notification_failed";
+  | "notification_failed"
+  // The "getting him to /create" mini-funnel, separate from the his→her
+  // funnel above: it exists to answer "did he click through, and did the
+  // page actually work" for someone arriving from an ad, not to measure the
+  // product itself.
+  | "landing_cta_clicked"
+  | "create_page_loaded"
+  // The anonymous sign-in that /create depends on calls a third-party
+  // domain (Supabase), which some in-app browsers (TikTok, Instagram) are
+  // known to block or stall — turning the final button into a dead, silent
+  // control with no error anywhere. Recorded so that failure stops being
+  // invisible.
+  | "anonymous_session_failed";
 
 /**
  * Every event the client is allowed to record.
@@ -51,6 +63,9 @@ export const ALL_EVENT_TYPES: EventType[] = [
   "checkout_started",
   "purchase_completed",
   "notification_failed",
+  "landing_cta_clicked",
+  "create_page_loaded",
+  "anonymous_session_failed",
 ];
 
 /** Ordine canonico del funnel, usato per calcolare i tassi di conversione in /admin. */
