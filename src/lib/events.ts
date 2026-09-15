@@ -21,7 +21,10 @@ export type EventType =
   | "activities_selected"
   | "badge_clicked"
   | "checkout_started"
-  | "purchase_completed";
+  | "purchase_completed"
+  // An answer saved but its notification email rejected — recorded so a
+  // exhausted sending quota is visible instead of silent.
+  | "notification_failed";
 
 /**
  * Every event the client is allowed to record.
@@ -47,6 +50,7 @@ export const ALL_EVENT_TYPES: EventType[] = [
   "badge_clicked",
   "checkout_started",
   "purchase_completed",
+  "notification_failed",
 ];
 
 /** Ordine canonico del funnel, usato per calcolare i tassi di conversione in /admin. */

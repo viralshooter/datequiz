@@ -14,10 +14,15 @@ import { attributionCookieValue, persistAttribution } from "@/lib/attributionSer
 
 // Keyed by IP rather than by session: an anonymous session costs nothing
 // to create, so limiting per-session would cap nothing — someone abusing
-// this just opens a new one. Generous enough for a real person sending
-// several invites in a sitting; well below what scripting this at scale
-// would need.
-const LINK_CREATE_LIMIT = 8;
+// this just opens a new one.
+//
+// Deliberately loose. Mobile carriers put hundreds of subscribers behind a
+// single address, so with paid traffic arriving mostly from phones a tight
+// per-IP cap rejects real customers who simply share a carrier with someone
+// who came before them. Turning away a paying user costs far more than the
+// handful of extra rows an abuser gets, and the real brake on volume is
+// that only the first link is free — everything after it has to be paid for.
+const LINK_CREATE_LIMIT = 40;
 const LINK_CREATE_WINDOW_SECONDS = 60 * 60;
 
 const LinkBodySchema = z.object({

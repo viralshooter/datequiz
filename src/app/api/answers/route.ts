@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { sendAnswerNotification } from "@/lib/email";
+import { trackEventServer } from "@/lib/events";
 import { ACTIVITIES } from "@/config/content";
 import { COUNTER_CONDITIONS } from "@/config/twists";
 import type { ActivityId } from "@/types/content";
@@ -101,14 +102,19 @@ export async function POST(request: NextRequest) {
   }
 
   if (link.notify_email) {
-    try {
-      await sendAnswerNotification({
-        to: link.notify_email,
-        matchName: link.match_name,
-        slug,
-      });
-    } catch (err) {
-      console.error("Failed to send answer notification email", err);
+    const sent = await sendAnswerNotification({
+      to: link.notify_email,
+      matchName: link.match_name,
+      slug,
+    });
+
+    // Recorded in the database, not just the console: a send that fails means
+    // someone said yes and he will never hear about it, and nobody reads
+    // serverless logs. /admin surfaces these so a dead sending quota is
+    // noticed the same day rather than whenever the silence gets suspicious.
+    if (!sent.ok) {
+      console.error("answer notification failed", sent.reason);
+      await trackEventServer(admin, "notification_failed", slug, { reason: sent.reason });
     }
   }
 

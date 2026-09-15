@@ -93,6 +93,14 @@ export default async function AdminPage({
     admin.rpc("campaign_report", { p_since: since }),
   ]);
 
+  // Loud on purpose. Every one of these is someone who said yes to a date
+  // that the other person was never told about.
+  const { count: failedNotifications } = await admin
+    .from("events")
+    .select("id", { count: "exact", head: true })
+    .eq("event_type", "notification_failed")
+    .gte("created_at", since);
+
   const revenueCents = (revenue.data ?? []).reduce(
     (total, row) => total + (row.amount_cents ?? 0),
     0
@@ -138,6 +146,21 @@ export default async function AdminPage({
           );
         })}
       </div>
+
+      {(failedNotifications ?? 0) > 0 && (
+        <div
+          className="mt-6 rounded-xl border-2 p-4"
+          style={{ borderColor: "#dc2626", background: "#fef2f2" }}
+        >
+          <p className="text-sm font-bold" style={{ color: "#991b1b" }}>
+            {failedNotifications} notification email{failedNotifications === 1 ? "" : "s"} failed to send
+          </p>
+          <p className="mt-1 text-sm" style={{ color: "#7f1d1d" }}>
+            That many people answered without the sender ever being told. Check
+            the Resend dashboard for the sending quota.
+          </p>
+        </div>
+      )}
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatTile label="Revenue" value={money(revenueCents)} accent />
