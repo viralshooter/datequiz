@@ -29,6 +29,11 @@ export type EventType =
   // funnel above: it exists to answer "did he click through, and did the
   // page actually work" for someone arriving from an ad, not to measure the
   // product itself.
+  // A campaign-tagged visit that actually reached the site, recorded
+  // server-side. The ad platform's click count is charged on the tap, before
+  // the page has loaded or been abandoned; the gap between the two is the
+  // only way to see how much of the spend never arrives.
+  | "ad_landing"
   | "landing_cta_clicked"
   | "create_page_loaded"
   // The anonymous sign-in that /create depends on calls a third-party
@@ -63,6 +68,7 @@ export const ALL_EVENT_TYPES: EventType[] = [
   "checkout_started",
   "purchase_completed",
   "notification_failed",
+  "ad_landing",
   "landing_cta_clicked",
   "create_page_loaded",
   "anonymous_session_failed",

@@ -106,6 +106,7 @@ export default async function AdminPage({
   // anonymous-session row — is created on /create itself, which can't tell
   // "never clicked" apart from "clicked, and the page failed him."
   const ctaSteps = [
+    { type: "ad_landing" as const, label: "Arrived from a campaign" },
     { type: "landing_cta_clicked" as const, label: "Clicked \"Create a link\"" },
     { type: "create_page_loaded" as const, label: "/create loaded" },
     { type: "link_created" as const, label: "Link created" },
@@ -197,7 +198,10 @@ export default async function AdminPage({
       <SectionTitle>Getting him to /create</SectionTitle>
       <p className="mt-1 text-xs" style={{ color: "var(--muted)" }}>
         Where he drops off between landing on the site and finishing a link.
-        Separate from the funnel below, which starts only once a link exists.
+        Compare the first row against the click count the ad platform reports:
+        a tap is charged before the page loads, so the difference is spend
+        that never arrived. Separate from the funnel below, which starts only
+        once a link exists.
       </p>
 
       <div className="mt-4 flex flex-col gap-4">

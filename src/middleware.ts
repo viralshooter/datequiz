@@ -1,5 +1,6 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, type NextRequest, type NextFetchEvent } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { recordAdLanding } from "@/lib/adLanding";
 import {
   ATTRIBUTION_COOKIE,
   ATTRIBUTION_MAX_AGE,
@@ -68,7 +69,7 @@ function pendingAttribution(request: NextRequest): Attribution | null {
   return attributionFromUrl(request.nextUrl, request.headers.get("referer"));
 }
 
-export async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest, event: NextFetchEvent) {
   const canonical = redirectToCanonicalHost(request);
   if (canonical) return canonical;
 
@@ -76,6 +77,16 @@ export async function middleware(request: NextRequest) {
   // session replaces `response` wholesale, which would throw away any cookie
   // set on the original object.
   const attribution = pendingAttribution(request);
+
+  // One row per campaign-tagged arrival, counted here because this is the
+  // only code that runs for every visitor — the page itself is static and
+  // served from the CDN. waitUntil keeps it off the critical path, so the
+  // measurement costs the visitor nothing.
+  if (attribution?.utm_source) {
+    event.waitUntil(
+      recordAdLanding(attribution, request.headers.get("user-agent") ?? "")
+    );
+  }
 
   let response = NextResponse.next({ request });
 
