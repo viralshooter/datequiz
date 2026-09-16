@@ -111,19 +111,33 @@ export default async function AdminPage({
     { type: "create_page_loaded" as const, label: "/create loaded" },
     { type: "link_created" as const, label: "Link created" },
   ];
+  // Arrivals are pulled in full and filtered here rather than in the query.
+  // A SQL `bot != true` drops rows where the flag is absent — NULL compares
+  // to nothing — which would have silently hidden every arrival recorded
+  // before the flag existed, including the only real visitors so far.
+  const { data: landingRows } = await admin
+    .from("events")
+    .select("metadata")
+    .eq("event_type", "ad_landing")
+    .gte("created_at", since)
+    .limit(2000);
+  const humanLandings = (landingRows ?? []).filter(
+    (row) => (row.metadata as { bot?: boolean } | null)?.bot !== true
+  );
+
   const ctaCounts = await Promise.all(
     ctaSteps.map(async (step) => {
-      // Arrivals are filtered to real browsers. Crawlers hitting the raw
-      // template URL outnumbered people six to one on the first night, and
-      // counting them makes the arrival number worse than useless — it
-      // would say the page converts at 3% when it converts at 0%.
-      const query = admin
+      // Crawlers hitting the raw template URL outnumbered people six to one
+      // on the first night; counting them would make this row say the page
+      // converts at 3% when it converts at 0%.
+      if (step.type === "ad_landing") {
+        return { ...step, count: humanLandings.length };
+      }
+      const { count } = await admin
         .from("events")
         .select("id", { count: "exact", head: true })
         .eq("event_type", step.type)
         .gte("created_at", since);
-      if (step.type === "ad_landing") query.not("metadata->>bot", "eq", "true");
-      const { count } = await query;
       return { ...step, count: count ?? 0 };
     })
   );
@@ -131,16 +145,9 @@ export default async function AdminPage({
   // Where the ads are actually being delivered — the answer to "is this a
   // bad landing page or the wrong audience", which no other view here can
   // distinguish.
-  const { data: landingRows } = await admin
-    .from("events")
-    .select("metadata")
-    .eq("event_type", "ad_landing")
-    .not("metadata->>bot", "eq", "true")
-    .gte("created_at", since)
-    .limit(1000);
   const byCountry = new Map<string, number>();
-  for (const row of landingRows ?? []) {
-    const country = (row.metadata as { country?: string } | null)?.country ?? "??";
+  for (const row of humanLandings) {
+    const country = (row.metadata as { country?: string } | null)?.country ?? "unknown";
     byCountry.set(country, (byCountry.get(country) ?? 0) + 1);
   }
   const countryRows = [...byCountry.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
