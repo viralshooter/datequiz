@@ -64,6 +64,17 @@ function setAttributionCookie(response: NextResponse, attribution: Attribution):
   });
 }
 
+/** Vercel percent-encodes the city header, so "Lagos" is fine but anything
+ *  with a space or an accent arrives mangled unless it's decoded. */
+function decodeCity(raw: string | null): string | null {
+  if (!raw) return null;
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
 function pendingAttribution(request: NextRequest): Attribution | null {
   if (request.cookies.get(ATTRIBUTION_COOKIE)) return null;
   return attributionFromUrl(request.nextUrl, request.headers.get("referer"));
@@ -84,7 +95,11 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
   // measurement costs the visitor nothing.
   if (attribution?.utm_source) {
     event.waitUntil(
-      recordAdLanding(attribution, request.headers.get("user-agent") ?? "")
+      recordAdLanding(attribution, {
+        userAgent: request.headers.get("user-agent") ?? "",
+        country: request.headers.get("x-vercel-ip-country"),
+        city: decodeCity(request.headers.get("x-vercel-ip-city")),
+      })
     );
   }
 

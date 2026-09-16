@@ -113,14 +113,37 @@ export default async function AdminPage({
   ];
   const ctaCounts = await Promise.all(
     ctaSteps.map(async (step) => {
-      const { count } = await admin
+      // Arrivals are filtered to real browsers. Crawlers hitting the raw
+      // template URL outnumbered people six to one on the first night, and
+      // counting them makes the arrival number worse than useless — it
+      // would say the page converts at 3% when it converts at 0%.
+      const query = admin
         .from("events")
         .select("id", { count: "exact", head: true })
         .eq("event_type", step.type)
         .gte("created_at", since);
+      if (step.type === "ad_landing") query.not("metadata->>bot", "eq", "true");
+      const { count } = await query;
       return { ...step, count: count ?? 0 };
     })
   );
+
+  // Where the ads are actually being delivered — the answer to "is this a
+  // bad landing page or the wrong audience", which no other view here can
+  // distinguish.
+  const { data: landingRows } = await admin
+    .from("events")
+    .select("metadata")
+    .eq("event_type", "ad_landing")
+    .not("metadata->>bot", "eq", "true")
+    .gte("created_at", since)
+    .limit(1000);
+  const byCountry = new Map<string, number>();
+  for (const row of landingRows ?? []) {
+    const country = (row.metadata as { country?: string } | null)?.country ?? "??";
+    byCountry.set(country, (byCountry.get(country) ?? 0) + 1);
+  }
+  const countryRows = [...byCountry.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
   const { count: sessionFailures } = await admin
     .from("events")
     .select("id", { count: "exact", head: true })
@@ -238,6 +261,25 @@ export default async function AdminPage({
           );
         })}
       </div>
+
+      {countryRows.length > 0 && (
+        <div className="mt-5">
+          <p className="text-xs font-semibold" style={{ color: "var(--text-secondary)" }}>
+            Where those arrivals came from
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {countryRows.map(([country, count]) => (
+              <span
+                key={country}
+                className="rounded-full border px-3 py-1 text-xs font-semibold"
+                style={{ borderColor: "var(--border)", color: "var(--text-primary)" }}
+              >
+                {country} · {count}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {(sessionFailures ?? 0) > 0 && (
         <p className="mt-3 text-sm font-semibold" style={{ color: "#b45309" }}>
